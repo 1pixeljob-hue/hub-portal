@@ -33,3 +33,5 @@ jobs:
           server-dir: /home/gtxjozdehosting/public_html/hubportal.1pixel.vn/
           local-dir: ./dist/ 
           dangerous-clean-slate: false
+          port: 21
+          protocol: ftp
