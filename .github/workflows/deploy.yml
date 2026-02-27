@@ -34,4 +34,5 @@ jobs:
           local-dir: ./dist/ 
           dangerous-clean-slate: false
           port: 21
-          protocol: ftp
+          protocol: ftps
+          security: strict
