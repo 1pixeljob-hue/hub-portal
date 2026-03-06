@@ -78,18 +78,68 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    if (categoryInput) {
-        let prevCategoryValue = categoryInput.value !== '__custom__' ? categoryInput.value : '';
-        categoryInput.addEventListener('change', (e) => {
-            if (e.target.value === '__custom__') {
-                // Open Category Modal
-                document.getElementById('add-category-modal').classList.add('active');
-                // Revert select back to previous safe state
-                e.target.value = prevCategoryValue || (e.target.options[0] ? e.target.options[0].value : '');
-            } else {
-                prevCategoryValue = e.target.value;
-                updatePreview();
+    // Custom Category Select Logic
+    const catSelectBtn = document.getElementById('category-select-btn');
+    const catSelectMenu = document.getElementById('category-select-menu');
+    const catSelectText = document.getElementById('category-select-text');
+    const catSelectIcon = document.getElementById('category-select-icon');
+    const catHiddenInput = document.getElementById('link-category');
+    const catOptions = document.querySelectorAll('.custom-select-option');
+
+    if (catSelectBtn && catSelectMenu && catHiddenInput) {
+        let prevCategoryValue = catHiddenInput.value;
+
+        // Khởi tạo text hiển thị theo giá trị mặc định lúc load
+        const activeOption = document.querySelector(`.custom-select-option[data-value="${prevCategoryValue}"]`);
+        if (activeOption) {
+            catSelectText.textContent = activeOption.innerText.trim();
+        }
+
+        function openSelectMenu() {
+            catSelectMenu.classList.remove('opacity-0', 'invisible', '-translate-y-2');
+            catSelectMenu.classList.add('opacity-100', 'visible', 'translate-y-0');
+            if (catSelectIcon) catSelectIcon.style.transform = 'rotate(180deg)';
+        }
+
+        function closeSelectMenu() {
+            catSelectMenu.classList.add('opacity-0', 'invisible', '-translate-y-2');
+            catSelectMenu.classList.remove('opacity-100', 'visible', 'translate-y-0');
+            if (catSelectIcon) catSelectIcon.style.transform = 'rotate(0deg)';
+        }
+
+        // Toggle menu
+        catSelectBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const isOpen = catSelectMenu.classList.contains('opacity-100');
+            if (isOpen) closeSelectMenu();
+            else openSelectMenu();
+        });
+
+        // Close when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!catSelectBtn.contains(e.target) && !catSelectMenu.contains(e.target)) {
+                closeSelectMenu();
             }
+        });
+
+        // Option click
+        catOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                const value = option.getAttribute('data-value');
+                const label = option.innerText.trim().replace('+ Tạo danh mục mới...', '').trim() || 'New Category...';
+
+                if (value === '__custom__') {
+                    // Mở modal tạo danh mục mới
+                    document.getElementById('add-category-modal').classList.add('active');
+                } else {
+                    // Update value
+                    catHiddenInput.value = value;
+                    catSelectText.textContent = label;
+                    prevCategoryValue = value;
+                    updatePreview();
+                }
+                closeSelectMenu();
+            });
         });
     }
 

@@ -373,21 +373,27 @@ endif; ?>
                                         <span class="material-symbols-outlined text-[14px]">add_circle</span> New
                                     </button>
                                 </div>
-                                <div class="relative">
-                                    <select id="link-category" class="w-full appearance-none bg-surface-light-highlight dark:bg-surface-dark-highlight border-2 border-transparent focus:border-indigo-500 rounded-xl pl-4 pr-10 py-3.5 text-sm outline-none transition-all shadow-inner text-text-primary-light dark:text-white font-medium cursor-pointer">
-                                        <?php foreach ($categories as $key => $cat): ?>
-                                            <option value="<?php echo htmlspecialchars($key); ?>" data-color="<?php echo htmlspecialchars($cat['baseColor']); ?>">
+                                <div class="relative custom-select-container">
+                                    <button type="button" id="category-select-btn" class="w-full flex items-center justify-between text-left appearance-none bg-surface-light-highlight dark:bg-surface-dark-highlight border-2 border-transparent focus:border-indigo-500 focus:ring-[3px] focus:ring-indigo-500/20 rounded-xl pl-4 pr-3 py-3 text-sm outline-none transition-all shadow-inner text-text-primary-light dark:text-white font-medium cursor-pointer relative z-10">
+                                        <span id="category-select-text">Select Category...</span>
+                                        <span class="material-symbols-outlined text-[20px] text-text-secondary-light transition-transform duration-200" id="category-select-icon">expand_more</span>
+                                    </button>
+                                    
+                                    <div id="category-select-menu" class="absolute z-[100] top-full left-0 w-full mt-1.5 bg-white dark:bg-surface-dark border border-indigo-500/30 rounded-xl shadow-2xl opacity-0 invisible transform -translate-y-2 transition-all duration-200 overflow-hidden">
+                                        <ul class="max-h-60 overflow-y-auto custom-scrollbar p-1.5 space-y-0.5 bg-surface-light-highlight/20 dark:bg-surface-dark-highlight/20 backdrop-blur-md">
+                                            <?php foreach ($categories as $key => $cat): ?>
+                                            <li class="custom-select-option px-3 py-2 rounded-lg text-sm font-medium text-text-primary-light dark:text-text-primary-dark hover:bg-indigo-500 hover:text-white dark:hover:bg-indigo-600 dark:hover:text-white cursor-pointer flex items-center gap-2 transition-all" data-value="<?php echo htmlspecialchars($key); ?>">
+                                                <span class="material-symbols-outlined text-[18px] opacity-70"><?php echo htmlspecialchars($cat['icon']); ?></span> 
                                                 <?php echo htmlspecialchars($cat['name']); ?>
-                                            </option>
-                                        <?php
+                                            </li>
+                                            <?php
 endforeach; ?>
-                                        <option value="__custom__" class="font-bold text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30">
-                                            + Tạo danh mục mới...
-                                        </option>
-                                    </select>
-                                    <div class="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none text-text-secondary-light">
-                                        <span class="material-symbols-outlined text-[20px]">expand_more</span>
+                                            <li class="custom-select-option mt-1.5 pt-1.5 border-t border-border-light dark:border-border-dark px-3 py-2 rounded-lg text-sm font-bold text-indigo-600 dark:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-500/20 cursor-pointer flex items-center gap-2 transition-all" data-value="__custom__">
+                                                <span class="material-symbols-outlined text-[16px]">add</span> + Tạo danh mục mới...
+                                            </li>
+                                        </ul>
                                     </div>
+                                    <input type="hidden" id="link-category" name="theme" value="<?php echo htmlspecialchars(array_key_first($categories) ?? 'indigo'); ?>">
                                 </div>
                             </div>
                             <div class="group">
