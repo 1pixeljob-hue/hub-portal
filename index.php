@@ -123,12 +123,12 @@ foreach ($links as $link) {
             
             <div class="flex flex-1 flex-col overflow-y-auto py-6 px-4 custom-scrollbar">
                 <div class="mb-6">
-                    <p class="px-3 mb-2 text-xs font-bold uppercase tracking-wider text-text-secondary-light dark:text-text-secondary-dark/70">Overview</p>
+                    <p class="px-3 mb-2 text-xs font-bold uppercase tracking-wider text-text-secondary-light dark:text-text-secondary-dark/70">Tổng quan</p>
                     <nav class="space-y-1">
                         <button class="category-filter active group flex w-full items-center justify-between rounded-xl px-3 py-2.5 text-sm font-medium transition-all hover:bg-surface-light-highlight dark:hover:bg-surface-dark-highlight" data-filter="all">
                             <div class="flex items-center gap-3 text-text-primary-light dark:text-text-primary-dark">
                                 <span class="material-symbols-outlined text-[20px] text-indigo-500 dark:text-indigo-400">dashboard</span>
-                                All Links
+                                Tất cả liên kết
                             </div>
                             <span class="flex h-6 min-w-[24px] items-center justify-center rounded-full bg-indigo-100 px-2 text-xs font-bold text-indigo-700 dark:bg-indigo-500/20 dark:text-indigo-300"><?php echo $totalLinks; ?></span>
                         </button>
@@ -137,8 +137,8 @@ foreach ($links as $link) {
                 
                 <div>
                     <div class="flex items-center justify-between px-3 mb-2">
-                        <p class="text-xs font-bold uppercase tracking-wider text-text-secondary-light dark:text-text-secondary-dark/70">Categories</p>
-                        <button onclick="document.getElementById('add-category-modal').classList.add('active')" class="text-text-secondary-light hover:text-indigo-500 dark:hover:text-indigo-400 transition-colors" title="Add new category">
+                        <p class="text-xs font-bold uppercase tracking-wider text-text-secondary-light dark:text-text-secondary-dark/70">Danh Mục</p>
+                        <button onclick="document.getElementById('add-category-modal').classList.add('active')" class="text-text-secondary-light hover:text-indigo-500 dark:hover:text-indigo-400 transition-colors" title="Thêm danh mục mới">
                             <span class="material-symbols-outlined text-[16px]">add_circle</span>
                         </button>
                     </div>
@@ -183,7 +183,7 @@ endforeach; ?>
                         <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-text-secondary-light dark:text-text-secondary-dark group-focus-within:text-indigo-500 transition-colors">
                             <span class="material-symbols-outlined text-[20px]">search</span>
                         </div>
-                        <input id="link-search" class="block w-full rounded-full border-2 border-transparent bg-surface-light-highlight dark:bg-surface-dark-highlight py-2 pl-10 pr-3 text-sm text-text-primary-light dark:text-white placeholder-text-secondary-light dark:placeholder-text-secondary-dark focus:border-indigo-500 focus:bg-white dark:focus:bg-surface-dark focus:outline-none focus:ring-0 transition-all shadow-inner" placeholder="Search links, tags..." type="text"/>
+                        <input id="link-search" class="block w-full rounded-full border-2 border-transparent bg-surface-light-highlight dark:bg-surface-dark-highlight py-2 pl-10 pr-3 text-sm text-text-primary-light dark:text-white placeholder-text-secondary-light dark:placeholder-text-secondary-dark focus:border-indigo-500 focus:bg-white dark:focus:bg-surface-dark focus:outline-none focus:ring-0 transition-all shadow-inner" placeholder="Tìm liên kết, thẻ..." type="text"/>
                     </div>
                 </div>
                 <div class="flex items-center gap-3">
@@ -192,11 +192,11 @@ endforeach; ?>
                     </button>
                     <button class="flex items-center gap-2 rounded-lg bg-surface-light-highlight dark:bg-surface-dark-highlight border border-border-light/50 dark:border-border-dark/50 px-3.5 py-2 text-sm font-semibold text-text-primary-light dark:text-white hover:border-indigo-500/50 dark:hover:border-indigo-500/50 hover:text-indigo-600 dark:hover:text-indigo-400 hover:shadow-sm transition-all" onclick="document.getElementById('add-category-modal').classList.add('active')">
                         <span class="material-symbols-outlined text-[18px]">create_new_folder</span>
-                        Category
+                        Danh Mục
                     </button>
                     <button class="flex items-center gap-2 rounded-lg bg-gradient-to-r from-indigo-500 to-purple-600 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40 hover:scale-[1.02] transition-all" onclick="document.getElementById('add-modal').classList.add('active')">
                         <span class="material-symbols-outlined text-[20px]">add</span>
-                        New Link
+                        Thêm Liên Kết
                     </button>
                 </div>
             </header>
@@ -207,8 +207,8 @@ endforeach; ?>
                     <div class="relative mb-8 overflow-hidden rounded-2xl p-[2px] bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 shadow-xl shadow-purple-500/10">
                         <div class="relative flex flex-col md:flex-row md:items-end justify-between gap-4 rounded-2xl bg-white/90 dark:bg-surface-dark/90 backdrop-blur-xl p-6 md:p-8">
                             <div class="z-10">
-                                <h2 id="greeting-text" class="text-3xl md:text-4xl font-extrabold tracking-tight bg-gradient-to-r from-indigo-600 to-pink-500 bg-clip-text text-transparent dark:from-indigo-400 dark:to-pink-400 drop-shadow-sm">Good morning, Boss</h2>
-                                <p class="text-text-secondary-light dark:text-text-secondary-dark mt-2 font-medium">Manage your portal links efficiently.</p>
+                                <h2 id="greeting-text" class="text-3xl md:text-4xl font-extrabold tracking-tight bg-gradient-to-r from-indigo-600 to-pink-500 bg-clip-text text-transparent dark:from-indigo-400 dark:to-pink-400 drop-shadow-sm">Chào buổi sáng, Sếp</h2>
+                                <p class="text-text-secondary-light dark:text-text-secondary-dark mt-2 font-medium">Quản lý các liên kết của bạn hiệu quả.</p>
                             </div>
                             <div class="z-10 flex items-center gap-3 rounded-xl bg-surface-light-highlight/50 dark:bg-surface-dark-highlight/50 p-3 backdrop-blur-md border border-white/20 dark:border-white/5">
                                 <span id="clock-display" class="text-4xl font-light tracking-tight text-text-primary-light dark:text-white tabular-nums">00:00</span>
@@ -223,8 +223,8 @@ endforeach; ?>
                                 <div class="mb-4 flex h-20 w-20 items-center justify-center rounded-3xl bg-surface-light-highlight dark:bg-surface-dark-highlight shadow-inner">
                                     <span class="material-symbols-outlined text-4xl text-text-secondary-light/40 dark:text-text-secondary-dark/40">link_off</span>
                                 </div>
-                                <h3 class="text-xl font-bold text-text-primary-light dark:text-white mb-2">No Links Found</h3>
-                                <p class="text-text-secondary-light dark:text-text-secondary-dark max-w-sm">You haven't added any portal links yet. Click "Add New Link" to get started.</p>
+                                <h3 class="text-xl font-bold text-text-primary-light dark:text-white mb-2">Chưa Có Liên Kết Nào</h3>
+                                <p class="text-text-secondary-light dark:text-text-secondary-dark max-w-sm">Bạn chưa thêm liên kết nào. Bấm "Thêm Liên Kết" ở góc trên để bắt đầu.</p>
                             </div>
                         <?php
 else: ?>
@@ -263,12 +263,12 @@ else: ?>
                                                     <div id="menu-<?php echo $link['id']; ?>" class="action-menu hidden absolute right-0 mt-1 w-36 origin-top-right rounded-lg bg-white dark:bg-surface-dark shadow-xl ring-1 ring-black/5 dark:ring-white/10 overflow-hidden z-30 border border-border-light dark:border-border-dark">
                                                         <button class="flex w-full items-center gap-2 px-3 py-2 text-sm text-text-primary-light dark:text-text-primary-dark hover:bg-surface-light-highlight dark:hover:bg-surface-dark-highlight transition-colors" onclick="window.copyUrl('<?php echo htmlspecialchars($link['url'], ENT_QUOTES); ?>'); window.toggleMenu('menu-<?php echo $link['id']; ?>', event)">
                                                             <span class="material-symbols-outlined text-[18px]">content_copy</span>
-                                                            Copy Link
+                                                            Sao chép
                                                         </button>
                                                         <div class="h-px w-full bg-border-light dark:bg-border-dark border-0"></div>
                                                         <button class="flex w-full items-center gap-2 px-3 py-2 text-sm text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors" onclick="window.deleteLink('<?php echo $link['id']; ?>')">
                                                             <span class="material-symbols-outlined text-[18px]">delete</span>
-                                                            Delete
+                                                            Xóa
                                                         </button>
                                                     </div>
                                                 </div>
@@ -288,7 +288,7 @@ else: ?>
                                         </div>
                                         <div class="mt-4 border-t border-border-light dark:border-white/5 pt-4 relative z-10">
                                             <a class="refined-btn flex w-full items-center justify-center gap-2 rounded-lg bg-surface-light-highlight dark:bg-surface-dark-highlight py-2 text-sm font-medium text-text-primary-light dark:text-white transition-all opacity-40 group-hover:opacity-100 bg-white/10 backdrop-blur-sm" href="<?php echo htmlspecialchars($link['url']); ?>" target="_blank">
-                                                Open Link
+                                                Mở Liên Kết
                                                 <span class="material-symbols-outlined text-[16px]">open_in_new</span>
                                             </a>
                                         </div>
@@ -315,7 +315,7 @@ endif; ?>
                 
                 <h3 class="text-sm font-bold uppercase tracking-wider text-text-secondary-light dark:text-text-secondary-dark mb-6 relative z-10 flex items-center gap-2">
                     <span class="material-symbols-outlined text-[18px]">visibility</span>
-                    Live Preview
+                    Xem Trước
                 </h3>
                 
                 <div class="flex-1 flex items-center justify-center relative z-10">
@@ -334,7 +334,7 @@ endif; ?>
                                         </button>
                                     </div>
                                 </div>
-                                <h3 class="mb-1 text-lg font-bold text-text-primary-light dark:text-white" id="preview-title">New Link</h3>
+                                <h3 class="mb-1 text-lg font-bold text-text-primary-light dark:text-white" id="preview-title">Liên Kết Mới</h3>
                                 <p class="mb-4 truncate text-sm text-text-secondary-light dark:text-text-secondary-dark" id="preview-url">example.com</p>
                                 <div class="flex flex-wrap gap-2 mt-auto" id="preview-tags-container">
                                     <span class="rounded-full bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600 dark:text-indigo-400 border-indigo-200/50 dark:border-indigo-800/30 px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wide border">WORK</span>
@@ -350,8 +350,8 @@ endif; ?>
                 <form id="add-link-form" onsubmit="window.submitForm(event)" class="h-full flex flex-col">
                     <div class="px-8 py-6 border-b border-border-light/50 dark:border-border-dark/50 flex justify-between items-center">
                         <div>
-                            <h3 class="text-2xl font-bold text-text-primary-light dark:text-white">Add New Link</h3>
-                            <p class="text-sm text-text-secondary-light tracking-wide mt-1">Create a beautiful card for your portal.</p>
+                            <h3 class="text-2xl font-bold text-text-primary-light dark:text-white">Thêm Liên Kết Mới</h3>
+                            <p class="text-sm text-text-secondary-light tracking-wide mt-1">Tạo một thẻ tùy chỉnh mới cho bảng điều khiển.</p>
                         </div>
                         <button type="button" class="rounded-full p-2 text-text-secondary-light hover:bg-surface-light-highlight dark:hover:bg-surface-dark-highlight transition-colors" onclick="document.getElementById('add-modal').classList.remove('active')">
                             <span class="material-symbols-outlined text-[24px]">close</span>
@@ -360,12 +360,12 @@ endif; ?>
                     
                     <div class="p-8 space-y-6 flex-1 overflow-y-visible">
                         <div class="group">
-                            <label class="block text-sm font-bold text-text-primary-light dark:text-text-primary-dark mb-2 group-focus-within:text-indigo-500 transition-colors">Title <span class="text-red-500">*</span></label>
-                            <input id="link-title" class="w-full bg-surface-light-highlight dark:bg-surface-dark-highlight border-2 border-transparent focus:border-indigo-500 rounded-xl px-4 py-3.5 text-sm outline-none transition-all shadow-inner text-text-primary-light dark:text-white font-medium placeholder-text-secondary-light/60" required placeholder="e.g. My Awesome Workspace" type="text"/>
+                            <label class="block text-sm font-bold text-text-primary-light dark:text-text-primary-dark mb-2 group-focus-within:text-indigo-500 transition-colors">Tiêu Đề (Title) <span class="text-red-500">*</span></label>
+                            <input id="link-title" class="w-full bg-surface-light-highlight dark:bg-surface-dark-highlight border-2 border-transparent focus:border-indigo-500 rounded-xl px-4 py-3.5 text-sm outline-none transition-all shadow-inner text-text-primary-light dark:text-white font-medium placeholder-text-secondary-light/60" required placeholder="vd: Không gian làm việc..." type="text"/>
                         </div>
                         
                         <div class="group">
-                            <label class="block text-sm font-bold text-text-primary-light dark:text-text-primary-dark mb-2 group-focus-within:text-indigo-500 transition-colors">URL Address <span class="text-red-500">*</span></label>
+                            <label class="block text-sm font-bold text-text-primary-light dark:text-text-primary-dark mb-2 group-focus-within:text-indigo-500 transition-colors">Đường Dẫn URL <span class="text-red-500">*</span></label>
                             <div class="relative">
                                 <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                                     <span class="material-symbols-outlined text-[18px] text-text-secondary-light">link</span>
@@ -376,10 +376,10 @@ endif; ?>
                         
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                             <div class="group">
-                                <label class="block text-sm font-bold text-text-primary-light dark:text-text-primary-dark mb-2 group-focus-within:text-indigo-500 transition-colors">Category Theme</label>
+                                <label class="block text-sm font-bold text-text-primary-light dark:text-text-primary-dark mb-2 group-focus-within:text-indigo-500 transition-colors">Danh Mục</label>
                                 <div class="relative custom-select-container">
                                     <button type="button" id="category-select-btn" class="w-full flex items-center justify-between text-left appearance-none bg-surface-light-highlight dark:bg-surface-dark-highlight border-2 border-transparent focus:border-indigo-500 focus:ring-[3px] focus:ring-indigo-500/20 rounded-xl pl-4 pr-3 py-3 text-sm outline-none transition-all shadow-inner text-text-primary-light dark:text-white font-medium cursor-pointer relative z-10">
-                                        <span id="category-select-text">Select Category...</span>
+                                        <span id="category-select-text">Chọn Danh Mục...</span>
                                         <span class="material-symbols-outlined text-[20px] text-text-secondary-light transition-transform duration-200" id="category-select-icon">expand_more</span>
                                     </button>
                                     
@@ -398,15 +398,15 @@ endforeach; ?>
                                 </div>
                             </div>
                             <div class="group">
-                                <label class="block text-sm font-bold text-text-primary-light dark:text-text-primary-dark mb-2 group-focus-within:text-indigo-500 transition-colors">Tags</label>
-                                <input id="link-tags" class="w-full bg-surface-light-highlight dark:bg-surface-dark-highlight border-2 border-transparent focus:border-indigo-500 rounded-xl px-4 py-3.5 text-sm outline-none transition-all shadow-inner text-text-primary-light dark:text-white font-medium placeholder-text-secondary-light/60" placeholder="e.g. dev, design, tool"/>
+                                <label class="block text-sm font-bold text-text-primary-light dark:text-text-primary-dark mb-2 group-focus-within:text-indigo-500 transition-colors">Thẻ Phân Loại (Tags)</label>
+                                <input id="link-tags" class="w-full bg-surface-light-highlight dark:bg-surface-dark-highlight border-2 border-transparent focus:border-indigo-500 rounded-xl px-4 py-3.5 text-sm outline-none transition-all shadow-inner text-text-primary-light dark:text-white font-medium placeholder-text-secondary-light/60" placeholder="vd: dev, design, tool..."/>
                             </div>
                         </div>
                     </div>
                     
                     <div class="bg-surface-light-highlight/50 dark:bg-surface-dark-highlight/20 px-8 py-5 flex items-center justify-end gap-3 mt-auto border-t border-border-light/50 dark:border-border-dark/50">
-                        <button class="px-6 py-2.5 text-sm font-bold text-text-secondary-light dark:text-text-secondary-dark hover:text-text-primary-light dark:hover:text-white transition-colors" onclick="document.getElementById('add-modal').classList.remove('active')" type="button">Cancel</button>
-                        <button class="bg-gradient-to-r from-indigo-500 to-purple-600 px-8 py-2.5 rounded-xl text-sm font-bold text-white shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40 hover:-translate-y-0.5 transition-all" type="submit">Publish Link</button>
+                        <button class="px-6 py-2.5 text-sm font-bold text-text-secondary-light dark:text-text-secondary-dark hover:text-text-primary-light dark:hover:text-white transition-colors" onclick="document.getElementById('add-modal').classList.remove('active')" type="button">Trở Về</button>
+                        <button class="bg-gradient-to-r from-indigo-500 to-purple-600 px-8 py-2.5 rounded-xl text-sm font-bold text-white shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40 hover:-translate-y-0.5 transition-all" type="submit">Lưu Liên Kết</button>
                     </div>
                 </form>
             </div>
@@ -423,8 +423,8 @@ endforeach; ?>
                 <div class="px-8 py-6 border-b border-border-light/50 dark:border-border-dark/50 flex justify-between items-center relative">
                     <div class="absolute top-0 left-0 h-1 w-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500"></div>
                     <div>
-                        <h3 class="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-pink-500 bg-clip-text text-transparent dark:from-indigo-400 dark:to-pink-400 drop-shadow-sm">New Category</h3>
-                        <p class="text-sm text-text-secondary-light tracking-wide mt-1">Organize your links beautifully.</p>
+                        <h3 class="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-pink-500 bg-clip-text text-transparent dark:from-indigo-400 dark:to-pink-400 drop-shadow-sm">Danh Mục Mới</h3>
+                        <p class="text-sm text-text-secondary-light tracking-wide mt-1">Phân loại hiển thị cho giao diện trực quan.</p>
                     </div>
                     <button type="button" class="rounded-full p-2 text-text-secondary-light hover:bg-surface-light-highlight dark:hover:bg-surface-dark-highlight transition-colors" onclick="document.getElementById('add-category-modal').classList.remove('active')">
                         <span class="material-symbols-outlined text-[24px]">close</span>
@@ -432,26 +432,26 @@ endforeach; ?>
                 </div>
                 <div class="p-8 space-y-6 flex-1">
                     <div class="group">
-                        <label class="block text-sm font-bold text-text-primary-light dark:text-text-primary-dark mb-2 group-focus-within:text-indigo-500 transition-colors">Category Name <span class="text-red-500">*</span></label>
-                        <input id="cat-title" class="w-full bg-surface-light-highlight dark:bg-surface-dark-highlight border-2 border-transparent focus:border-indigo-500 rounded-xl px-4 py-3.5 text-sm outline-none transition-all shadow-inner text-text-primary-light dark:text-white font-medium placeholder-text-secondary-light/60" required placeholder="e.g. Design, API..." type="text"/>
+                        <label class="block text-sm font-bold text-text-primary-light dark:text-text-primary-dark mb-2 group-focus-within:text-indigo-500 transition-colors">Tên Danh Mục <span class="text-red-500">*</span></label>
+                        <input id="cat-title" class="w-full bg-surface-light-highlight dark:bg-surface-dark-highlight border-2 border-transparent focus:border-indigo-500 rounded-xl px-4 py-3.5 text-sm outline-none transition-all shadow-inner text-text-primary-light dark:text-white font-medium placeholder-text-secondary-light/60" required placeholder="vd: Thiết Kế, Phần Mềm..." type="text"/>
                     </div>
                     <div class="grid grid-cols-2 gap-6">
                         <div class="group">
-                            <label class="block text-sm font-bold text-text-primary-light dark:text-text-primary-dark mb-2 group-focus-within:text-indigo-500 transition-colors">Icon (Material)</label>
-                            <input id="cat-icon" class="w-full bg-surface-light-highlight dark:bg-surface-dark-highlight border-2 border-transparent focus:border-indigo-500 rounded-xl px-4 py-3.5 text-sm outline-none transition-all shadow-inner text-text-primary-light dark:text-white font-medium placeholder-text-secondary-light/60" placeholder="e.g. code, star" value="folder" type="text"/>
-                            <p class="text-[11px] font-bold text-indigo-500 hover:text-indigo-600 transition-colors mt-2"><a href="https://fonts.google.com/icons" target="_blank" class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">open_in_new</span> Google Icons</a></p>
+                            <label class="block text-sm font-bold text-text-primary-light dark:text-text-primary-dark mb-2 group-focus-within:text-indigo-500 transition-colors">Mã Biểu Tượng</label>
+                            <input id="cat-icon" class="w-full bg-surface-light-highlight dark:bg-surface-dark-highlight border-2 border-transparent focus:border-indigo-500 rounded-xl px-4 py-3.5 text-sm outline-none transition-all shadow-inner text-text-primary-light dark:text-white font-medium placeholder-text-secondary-light/60" placeholder="vd: code, star..." value="folder" type="text"/>
+                            <p class="text-[11px] font-bold text-indigo-500 hover:text-indigo-600 transition-colors mt-2"><a href="https://fonts.google.com/icons" target="_blank" class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">open_in_new</span> Thư Viện Biểu Tượng</a></p>
                         </div>
                         <div class="group">
-                            <label class="block text-sm font-bold text-text-primary-light dark:text-text-primary-dark mb-2 group-focus-within:text-indigo-500 transition-colors">Color Theme</label>
+                            <label class="block text-sm font-bold text-text-primary-light dark:text-text-primary-dark mb-2 group-focus-within:text-indigo-500 transition-colors">Màu Sắc</label>
                             <div class="relative">
                                 <select id="cat-color" class="w-full appearance-none bg-surface-light-highlight dark:bg-surface-dark-highlight border-2 border-transparent focus:border-indigo-500 rounded-xl pl-4 pr-10 py-3.5 text-sm outline-none transition-all shadow-inner text-text-primary-light dark:text-white font-medium cursor-pointer">
-                                    <option value="indigo">Indigo</option>
-                                    <option value="purple">Purple</option>
-                                    <option value="pink">Pink</option>
-                                    <option value="emerald">Emerald</option>
-                                    <option value="rose">Rose</option>
-                                    <option value="amber">Amber</option>
-                                    <option value="cyan">Cyan</option>
+                                    <option value="indigo">Chàm (Indigo)</option>
+                                    <option value="purple">Tím Đậm (Purple)</option>
+                                    <option value="pink">Hồng Đậm (Pink)</option>
+                                    <option value="emerald">Ngọc Bích (Emerald)</option>
+                                    <option value="rose">Đỏ Hồng (Rose)</option>
+                                    <option value="amber">Hổ Phách (Amber)</option>
+                                    <option value="cyan">Xanh Lơ (Cyan)</option>
                                 </select>
                                 <div class="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none text-text-secondary-light">
                                     <span class="material-symbols-outlined text-[20px]">expand_more</span>
@@ -461,8 +461,8 @@ endforeach; ?>
                     </div>
                 </div>
                 <div class="bg-surface-light-highlight/30 dark:bg-surface-dark-highlight/20 border-t border-border-light/50 dark:border-border-dark/50 px-8 py-5 flex items-center justify-end gap-3 mt-auto">
-                    <button class="px-6 py-2.5 text-sm font-bold text-text-secondary-light dark:text-text-secondary-dark hover:text-text-primary-light dark:hover:text-white transition-colors" onclick="document.getElementById('add-category-modal').classList.remove('active')" type="button">Cancel</button>
-                    <button class="bg-gradient-to-r from-indigo-500 to-purple-600 px-8 py-2.5 rounded-xl text-sm font-bold text-white shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40 hover:-translate-y-0.5 transition-all" type="submit">Publish Category</button>
+                    <button class="px-6 py-2.5 text-sm font-bold text-text-secondary-light dark:text-text-secondary-dark hover:text-text-primary-light dark:hover:text-white transition-colors" onclick="document.getElementById('add-category-modal').classList.remove('active')" type="button">Hủy</button>
+                    <button class="bg-gradient-to-r from-indigo-500 to-purple-600 px-8 py-2.5 rounded-xl text-sm font-bold text-white shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40 hover:-translate-y-0.5 transition-all" type="submit">Lưu Danh Mục</button>
                 </div>
             </form>
         </div>

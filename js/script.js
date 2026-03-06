@@ -10,11 +10,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (clockDisplay) clockDisplay.textContent = `${hours}:${minutes}`;
 
-        let greeting = 'Good morning';
-        if (hours >= 12 && hours < 18) greeting = 'Good afternoon';
-        else if (hours >= 18) greeting = 'Good evening';
+        let greeting = 'Chào buổi sáng';
+        if (hours >= 12 && hours < 18) greeting = 'Chào buổi chiều';
+        else if (hours >= 18) greeting = 'Chào buổi tối';
 
-        if (greetingText) greetingText.textContent = `${greeting}, Alex`;
+        if (greetingText) greetingText.textContent = `${greeting}, Sếp`;
     }
 
     updateTime();
@@ -35,12 +35,12 @@ document.addEventListener('DOMContentLoaded', () => {
             htmlElement.classList.remove('dark');
             localStorage.setItem('theme', 'light');
             updateThemeIcon('dark_mode');
-            if (window.showToast) window.showToast('Switched to Light Mode', 'success');
+            if (window.showToast) window.showToast('Giao diện Sáng đã bật', 'success');
         } else {
             htmlElement.classList.add('dark');
             localStorage.setItem('theme', 'dark');
             updateThemeIcon('light_mode');
-            if (window.showToast) window.showToast('Switched to Dark Mode', 'success');
+            if (window.showToast) window.showToast('Giao diện Tối đã bật', 'success');
         }
     });
 
@@ -166,7 +166,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
 
-            if (window.showToast) window.showToast(`Filtered by ${filterName}`, 'success');
+            if (window.showToast) window.showToast(`Lọc theo: ${filterName}`, 'success');
         });
     });
 
@@ -186,9 +186,9 @@ window.toggleMenu = function (menuId, event) {
 
 window.copyUrl = function (url) {
     navigator.clipboard.writeText(url).then(() => {
-        if (window.showToast) window.showToast('Link copied to clipboard!');
+        if (window.showToast) window.showToast('Đã sao chép liên kết!');
     }).catch(err => {
-        if (window.showToast) window.showToast('Failed to copy', 'error');
+        if (window.showToast) window.showToast('Sao chép thất bại', 'error');
     });
 };
 
@@ -214,7 +214,7 @@ window.showToast = function (message, type = 'success') {
 };
 
 window.deleteLink = function (id) {
-    if (!confirm("Are you sure you want to delete this link?")) return;
+    if (!confirm("Bạn có chắc chắn muốn xóa liên kết này không?")) return;
 
     fetch(`api/links.php?id=${id}`, {
         method: 'DELETE'
@@ -229,13 +229,13 @@ window.deleteLink = function (id) {
                     card.style.opacity = '0';
                     setTimeout(() => card.remove(), 300);
                 }
-                showToast('Link deleted successfully');
+                showToast('Xóa liên kết thành công');
             } else {
-                showToast(data.error || 'Failed to delete', 'error');
+                showToast(data.error || 'Xóa thất bại', 'error');
             }
         })
         .catch(err => {
-            showToast('Network error occurred', 'error');
+            showToast('Lỗi kết nối mạng', 'error');
         });
 };
 
@@ -279,7 +279,7 @@ window.submitForm = function (event) {
         .then(res => res.json())
         .then(data => {
             if (data.success) {
-                showToast('Link added successfully!');
+                showToast('Thêm liên kết mới thành công!');
                 document.getElementById('add-modal').classList.remove('active');
                 document.getElementById('add-link-form').reset();
                 // In a real SPA, we'd inject the new card HTML here.
@@ -288,11 +288,11 @@ window.submitForm = function (event) {
                     window.location.reload();
                 }, 800);
             } else {
-                showToast(data.error || 'Failed to add', 'error');
+                showToast(data.error || 'Thêm liên kết thất bại', 'error');
             }
         })
         .catch(err => {
-            showToast('Network error occurred', 'error');
+            showToast('Lỗi kết nối mạng', 'error');
         });
 };
 
@@ -325,19 +325,19 @@ window.submitCategoryForm = function (event) {
         })
         .then(data => {
             if (data.success) {
-                showToast('Category created successfully!');
+                showToast('Tạo danh mục mới thành công!');
                 document.getElementById('add-category-modal').classList.remove('active');
                 document.getElementById('add-category-form').reset();
                 setTimeout(() => {
                     window.location.reload();
                 }, 800);
             } else {
-                showToast(data.error || 'Failed to create category', 'error');
+                showToast(data.error || 'Tạo danh mục thất bại', 'error');
             }
         })
         .catch(err => {
             console.error('Submit Error:', err);
-            showToast(err.message || 'Operation failed', 'error');
+            showToast(err.message || 'Thao tác không thành công', 'error');
         });
 };
 
@@ -354,7 +354,7 @@ window.updatePreview = function () {
     const pTagsContainer = document.getElementById('preview-tags-container');
     const pGradient = document.getElementById('preview-gradient');
 
-    if (pTitle) pTitle.textContent = titleInput || 'New Link';
+    if (pTitle) pTitle.textContent = titleInput || 'Liên Kết Mới';
 
     if (pUrl) {
         try {
