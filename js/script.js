@@ -126,18 +126,14 @@ document.addEventListener('DOMContentLoaded', () => {
         catOptions.forEach(option => {
             option.addEventListener('click', () => {
                 const value = option.getAttribute('data-value');
-                const label = option.innerText.trim().replace('+ Tạo danh mục mới...', '').trim() || 'New Category...';
+                const label = option.innerText.trim();
 
-                if (value === '__custom__') {
-                    // Mở modal tạo danh mục mới
-                    document.getElementById('add-category-modal').classList.add('active');
-                } else {
-                    // Update value
-                    catHiddenInput.value = value;
-                    catSelectText.textContent = label;
-                    prevCategoryValue = value;
-                    updatePreview();
-                }
+                // Update value
+                catHiddenInput.value = value;
+                catSelectText.textContent = label;
+                prevCategoryValue = value;
+                updatePreview();
+
                 closeSelectMenu();
             });
         });

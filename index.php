@@ -353,7 +353,7 @@ endif; ?>
                         </button>
                     </div>
                     
-                    <div class="p-8 space-y-6 flex-1 overflow-y-auto custom-scrollbar">
+                    <div class="p-8 space-y-6 flex-1 overflow-y-visible">
                         <div class="group">
                             <label class="block text-sm font-bold text-text-primary-light dark:text-text-primary-dark mb-2 group-focus-within:text-indigo-500 transition-colors">Title <span class="text-red-500">*</span></label>
                             <input id="link-title" class="w-full bg-surface-light-highlight dark:bg-surface-dark-highlight border-2 border-transparent focus:border-indigo-500 rounded-xl px-4 py-3.5 text-sm outline-none transition-all shadow-inner text-text-primary-light dark:text-white font-medium placeholder-text-secondary-light/60" required placeholder="e.g. My Awesome Workspace" type="text"/>
@@ -378,7 +378,7 @@ endif; ?>
                                         <span class="material-symbols-outlined text-[20px] text-text-secondary-light transition-transform duration-200" id="category-select-icon">expand_more</span>
                                     </button>
                                     
-                                    <div id="category-select-menu" class="absolute z-[100] top-full left-0 w-full mt-1.5 bg-white dark:bg-surface-dark border border-indigo-500/30 rounded-xl shadow-2xl opacity-0 invisible transform -translate-y-2 transition-all duration-200 overflow-hidden">
+                                    <div id="category-select-menu" class="absolute z-[100] bottom-full left-0 w-full mb-1.5 bg-white dark:bg-surface-dark border border-indigo-500/30 rounded-xl shadow-2xl opacity-0 invisible transform translate-y-2 transition-all duration-200 overflow-hidden origin-bottom">
                                         <ul class="max-h-60 overflow-y-auto custom-scrollbar p-1.5 space-y-0.5 bg-surface-light-highlight/20 dark:bg-surface-dark-highlight/20 backdrop-blur-md">
                                             <?php foreach ($categories as $key => $cat): ?>
                                             <li class="custom-select-option px-3 py-2 rounded-lg text-sm font-medium text-text-primary-light dark:text-text-primary-dark hover:bg-indigo-500 hover:text-white dark:hover:bg-indigo-600 dark:hover:text-white cursor-pointer flex items-center gap-2 transition-all" data-value="<?php echo htmlspecialchars($key); ?>">
@@ -387,9 +387,6 @@ endif; ?>
                                             </li>
                                             <?php
 endforeach; ?>
-                                            <li class="custom-select-option mt-1.5 pt-1.5 border-t border-border-light dark:border-border-dark px-3 py-2 rounded-lg text-sm font-bold text-indigo-600 dark:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-500/20 cursor-pointer flex items-center gap-2 transition-all" data-value="__custom__">
-                                                <span class="material-symbols-outlined text-[16px]">add</span> + Tạo danh mục mới...
-                                            </li>
                                         </ul>
                                     </div>
                                     <input type="hidden" id="link-category" name="theme" value="<?php echo htmlspecialchars(array_key_first($categories) ?? 'indigo'); ?>">
