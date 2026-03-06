@@ -88,13 +88,22 @@ document.addEventListener('DOMContentLoaded', () => {
     const catHiddenInput = document.getElementById('link-category');
     const catOptions = document.querySelectorAll('.custom-select-option');
 
+    // Chỉ lấy text thuần, bỏ qua chữ từ icon span (Material Symbols)
+    function getOptionLabel(el) {
+        let text = '';
+        el.childNodes.forEach(node => {
+            if (node.nodeType === Node.TEXT_NODE) text += node.textContent;
+        });
+        return text.trim();
+    }
+
     if (catSelectBtn && catSelectMenu && catHiddenInput) {
         let prevCategoryValue = catHiddenInput.value;
 
         // Khởi tạo text hiển thị theo giá trị mặc định lúc load
         const activeOption = document.querySelector(`.custom-select-option[data-value="${prevCategoryValue}"]`);
         if (activeOption) {
-            catSelectText.textContent = activeOption.innerText.trim();
+            catSelectText.textContent = getOptionLabel(activeOption);
         }
 
         function openSelectMenu() {
@@ -128,7 +137,7 @@ document.addEventListener('DOMContentLoaded', () => {
         catOptions.forEach(option => {
             option.addEventListener('click', () => {
                 const value = option.getAttribute('data-value');
-                const label = option.innerText.trim();
+                const label = getOptionLabel(option);
                 const color = option.getAttribute('data-color') || 'indigo';
 
                 // Update value
@@ -255,7 +264,7 @@ window.editLink = function (link, event) {
     catInput.value = link.theme;
     const activeOption = document.querySelector(`.custom-select-option[data-value="${link.theme}"]`);
     if (activeOption) {
-        catText.textContent = activeOption.innerText.trim();
+        catText.textContent = getOptionLabel(activeOption);
         catInput.setAttribute('data-color', activeOption.getAttribute('data-color') || 'indigo');
     }
 
@@ -328,7 +337,8 @@ window.openAddLinkModal = function () {
     if (targetOption) {
         document.getElementById('link-category').value = targetOption.getAttribute('data-value');
         document.getElementById('link-category').setAttribute('data-color', targetOption.getAttribute('data-color') || 'indigo');
-        document.getElementById('category-select-text').textContent = targetOption.innerText.trim();
+        const catDisplayText = document.getElementById('category-select-text');
+        if (catDisplayText) catDisplayText.textContent = getOptionLabel(targetOption);
     }
 
     window.updatePreview();
@@ -359,7 +369,7 @@ window.submitForm = function (event) {
     if (tagsArr.length === 0) {
         const catText = document.getElementById('category-select-text');
         const catColor = categoryInput ? (categoryInput.getAttribute('data-color') || 'indigo') : 'indigo';
-        if (catText) tagsArr.push({ name: catText.innerText.trim(), type: 'primary', color: catColor });
+        if (catText) tagsArr.push({ name: catText.textContent.trim(), type: 'primary', color: catColor });
     }
 
     const payload = {
