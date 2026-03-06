@@ -303,7 +303,13 @@ window.submitCategoryForm = function (event) {
         },
         body: JSON.stringify(payload)
     })
-        .then(res => res.json())
+        .then(async res => {
+            const data = await res.json();
+            if (!res.ok) {
+                throw new Error(data.error || 'Server returned ' + res.status);
+            }
+            return data;
+        })
         .then(data => {
             if (data.success) {
                 showToast('Category created successfully!');
@@ -317,7 +323,8 @@ window.submitCategoryForm = function (event) {
             }
         })
         .catch(err => {
-            showToast('Network error occurred', 'error');
+            console.error('Submit Error:', err);
+            showToast(err.message || 'Operation failed', 'error');
         });
 };
 
