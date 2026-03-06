@@ -58,6 +58,41 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    // 4. Live Preview Logic
+    const titleInput = document.getElementById('link-title');
+    const urlInput = document.getElementById('link-url');
+    const categoryInput = document.getElementById('link-category');
+    const tagsInput = document.getElementById('link-tags');
+
+    if (titleInput) titleInput.addEventListener('input', updatePreview);
+    if (urlInput) urlInput.addEventListener('input', updatePreview);
+    if (categoryInput) categoryInput.addEventListener('change', updatePreview);
+    if (tagsInput) tagsInput.addEventListener('input', updatePreview);
+
+    // 5. Category Filtering
+    const filterBtns = document.querySelectorAll('.category-filter');
+    const linkCards = document.querySelectorAll('.filter-item');
+
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            // Update active state
+            filterBtns.forEach(b => b.classList.remove('active', 'bg-surface-light-highlight', 'dark:bg-surface-dark-highlight'));
+            btn.classList.add('active', 'bg-surface-light-highlight', 'dark:bg-surface-dark-highlight');
+
+            const filterValue = btn.getAttribute('data-filter');
+
+            linkCards.forEach(card => {
+                if (filterValue === 'all' || card.getAttribute('data-category') === filterValue) {
+                    card.style.display = 'block';
+                    setTimeout(() => card.style.opacity = '1', 50);
+                } else {
+                    card.style.opacity = '0';
+                    setTimeout(() => card.style.display = 'none', 300);
+                }
+            });
+        });
+    });
+
 });
 
 // Global functions for inline HTML events
@@ -172,22 +207,60 @@ window.submitForm = function (event) {
 };
 
 window.updatePreview = function () {
-    const urlInput = document.getElementById('link-url').value;
-    const titleInput = document.getElementById('link-title').value;
+    const titleInput = document.getElementById('link-title')?.value || '';
+    const urlInput = document.getElementById('link-url')?.value || '';
+    const category = document.getElementById('link-category')?.value || 'indigo';
+    const tagsInput = document.getElementById('link-tags')?.value || '';
 
-    const purl = document.getElementById('preview-url-text');
-    const ptitle = document.getElementById('preview-title-text');
+    // Elements
+    const pTitle = document.getElementById('preview-title');
+    const pUrl = document.getElementById('preview-url');
+    const pInitial = document.getElementById('preview-initial');
+    const pTagsContainer = document.getElementById('preview-tags-container');
+    const pGradient = document.getElementById('preview-gradient');
 
-    if (purl) {
+    if (pTitle) pTitle.textContent = titleInput || 'New Link';
+
+    if (pUrl) {
         try {
-            const domain = new URL(urlInput).hostname;
-            purl.textContent = domain;
+            pUrl.textContent = urlInput ? new URL(urlInput).hostname : 'example.com';
         } catch (e) {
-            purl.textContent = urlInput || 'example.com';
+            pUrl.textContent = urlInput || 'example.com';
         }
     }
 
-    if (ptitle) {
-        ptitle.textContent = titleInput || 'Example Website - The Best Resources';
+    if (pInitial) {
+        pInitial.textContent = titleInput ? titleInput.charAt(0).toUpperCase() : 'N';
+        // Update gradient color based on category
+        const gradiens = {
+            'indigo': 'from-indigo-500 to-indigo-600',
+            'purple': 'from-purple-500 to-purple-600',
+            'pink': 'from-pink-500 to-pink-600',
+            'emerald': 'from-emerald-500 to-emerald-600'
+        };
+        const gradClass = gradiens[category] || gradiens['indigo'];
+        pInitial.className = `text-2xl font-black bg-gradient-to-br ${gradClass} bg-clip-text text-transparent`;
+        if (pGradient) pGradient.className = `absolute top-0 left-0 h-1.5 w-full bg-gradient-to-r ${gradClass} rounded-t-xl z-20`;
+    }
+
+    if (pTagsContainer) {
+        let tagsArr = tagsInput.split(',').map(t => t.trim()).filter(Boolean);
+        if (tagsArr.length === 0) {
+            const catSelect = document.getElementById('link-category');
+            if (catSelect) tagsArr.push(catSelect.options[catSelect.selectedIndex].text.split(' ')[0]);
+        }
+
+        const tagClasses = {
+            'indigo': 'bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600 dark:text-indigo-400 border-indigo-200/50 dark:border-indigo-800/30',
+            'purple': 'bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400 border-purple-200/50 dark:border-purple-800/30',
+            'pink': 'bg-pink-50 dark:bg-pink-900/20 text-pink-600 dark:text-pink-400 border-pink-200/50 dark:border-pink-800/30',
+            'emerald': 'bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 border-emerald-200/50 dark:border-emerald-800/30'
+        };
+
+        pTagsContainer.innerHTML = tagsArr.slice(0, 3).map(tag => `
+            <span class="rounded-full ${tagClasses[category]} px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wide border">
+                ${tag}
+            </span>
+        `).join('');
     }
 };

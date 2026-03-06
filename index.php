@@ -16,6 +16,25 @@ function getTags($tagStr)
 {
     return json_decode($tagStr, true) ?? [];
 }
+
+// Calculate Categories Count
+$categories = [
+    'indigo' => ['name' => 'Work', 'icon' => 'work', 'count' => 0, 'color' => 'text-indigo-500 bg-indigo-50 dark:bg-indigo-500/10', 'activeBg' => 'bg-indigo-500', 'activeText' => 'text-white'],
+    'purple' => ['name' => 'Personal', 'icon' => 'person', 'count' => 0, 'color' => 'text-purple-500 bg-purple-50 dark:bg-purple-500/10', 'activeBg' => 'bg-purple-500', 'activeText' => 'text-white'],
+    'pink' => ['name' => 'Social', 'icon' => 'forum', 'count' => 0, 'color' => 'text-pink-500 bg-pink-50 dark:bg-pink-500/10', 'activeBg' => 'bg-pink-500', 'activeText' => 'text-white'],
+    'emerald' => ['name' => 'Research', 'icon' => 'science', 'count' => 0, 'color' => 'text-emerald-500 bg-emerald-50 dark:bg-emerald-500/10', 'activeBg' => 'bg-emerald-500', 'activeText' => 'text-white']
+];
+
+$totalLinks = 0;
+foreach ($links as $link) {
+    // We roughly use theme as the category indicator for simplicity
+    $theme = $link['theme'] ?? 'indigo';
+    if (!isset($categories[$theme])) {
+        $theme = 'indigo'; // default fallback
+    }
+    $categories[$theme]['count']++;
+    $totalLinks++;
+}
 ?>
 <!DOCTYPE html>
 <html class="dark" lang="en">
@@ -84,23 +103,60 @@ function getTags($tagStr)
     <div class="fixed inset-0 pointer-events-none bg-mesh-vibrant z-0 opacity-100 dark:opacity-40"></div>
     <div class="flex h-screen w-full relative z-10">
         <!-- Sidebar -->
-        <aside class="hidden md:flex w-64 flex-col border-r border-border-light/50 dark:border-border-dark/50 bg-surface-light/80 dark:bg-surface-dark/80 backdrop-blur-md transition-colors duration-300">
-            <div class="flex h-16 items-center gap-3 px-6 border-b border-border-light/50 dark:border-border-dark/50">
-                <div class="flex items-center justify-center rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 p-1.5 shadow-lg shadow-indigo-500/20">
-                    <span class="material-symbols-outlined text-[24px] text-white">link</span>
+        <aside class="hidden md:flex w-72 flex-col border-r border-border-light/80 dark:border-border-dark/80 bg-surface-light/80 dark:bg-surface-dark/80 backdrop-blur-xl transition-colors duration-300 z-20">
+            <div class="flex h-20 items-center gap-4 px-6 border-b border-border-light/50 dark:border-border-dark/50">
+                <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 shadow-lg shadow-purple-500/20">
+                    <span class="material-symbols-outlined text-[24px] text-white">webhook</span>
                 </div>
-                <h1 class="text-lg font-bold tracking-tight bg-gradient-to-r from-indigo-600 to-pink-500 bg-clip-text text-transparent dark:from-indigo-400 dark:to-pink-400">Link Manager</h1>
+                <h1 class="text-xl font-bold tracking-tight bg-gradient-to-r from-indigo-600 to-pink-500 bg-clip-text text-transparent dark:from-indigo-400 dark:to-pink-400">Hub Portal</h1>
             </div>
-            <div class="flex flex-1 flex-col justify-between overflow-y-auto p-4">
-                <nav class="flex flex-col gap-1">
-                    <div class="px-2 py-2">
-                        <p class="text-xs font-semibold uppercase tracking-wider text-text-secondary-light dark:text-text-secondary-dark">Dashboard</p>
+            
+            <div class="flex flex-1 flex-col overflow-y-auto py-6 px-4 custom-scrollbar">
+                <div class="mb-6">
+                    <p class="px-3 mb-2 text-xs font-bold uppercase tracking-wider text-text-secondary-light dark:text-text-secondary-dark/70">Overview</p>
+                    <nav class="space-y-1">
+                        <button class="category-filter active group flex w-full items-center justify-between rounded-xl px-3 py-2.5 text-sm font-medium transition-all hover:bg-surface-light-highlight dark:hover:bg-surface-dark-highlight" data-filter="all">
+                            <div class="flex items-center gap-3 text-text-primary-light dark:text-text-primary-dark">
+                                <span class="material-symbols-outlined text-[20px] text-indigo-500 dark:text-indigo-400">dashboard</span>
+                                All Links
+                            </div>
+                            <span class="flex h-6 min-w-[24px] items-center justify-center rounded-full bg-indigo-100 px-2 text-xs font-bold text-indigo-700 dark:bg-indigo-500/20 dark:text-indigo-300"><?php echo $totalLinks; ?></span>
+                        </button>
+                    </nav>
+                </div>
+                
+                <div>
+                    <p class="px-3 mb-2 text-xs font-bold uppercase tracking-wider text-text-secondary-light dark:text-text-secondary-dark/70">Categories</p>
+                    <nav class="space-y-1" id="category-nav">
+                        <?php foreach ($categories as $key => $cat): ?>
+                        <button class="category-filter group flex w-full items-center justify-between rounded-xl px-3 py-2.5 text-sm font-medium transition-all hover:bg-surface-light-highlight dark:hover:bg-surface-dark-highlight" data-filter="<?php echo $key; ?>">
+                            <div class="flex items-center gap-3 text-text-secondary-light dark:text-text-secondary-dark group-hover:text-text-primary-light dark:group-hover:text-text-primary-dark transition-colors">
+                                <div class="flex h-7 w-7 items-center justify-center rounded-lg <?php echo $cat['color']; ?> shadow-sm">
+                                    <span class="material-symbols-outlined text-[16px]"><?php echo $cat['icon']; ?></span>
+                                </div>
+                                <?php echo htmlspecialchars($cat['name']); ?>
+                            </div>
+                            <?php if ($cat['count'] > 0): ?>
+                            <span class="flex h-5 min-w-[20px] items-center justify-center rounded-full bg-border-light dark:bg-border-dark px-1.5 text-[10px] font-bold text-text-secondary-light dark:text-text-secondary-dark group-hover:bg-indigo-100 group-hover:text-indigo-700 dark:group-hover:bg-indigo-500/20 dark:group-hover:text-indigo-300 transition-colors">
+                                <?php echo $cat['count']; ?>
+                            </span>
+                            <?php
+    endif; ?>
+                        </button>
+                        <?php
+endforeach; ?>
+                    </nav>
+                </div>
+            </div>
+            
+            <div class="mt-auto border-t border-border-light/50 dark:border-border-dark/50 p-4">
+                <div class="rounded-2xl border border-indigo-100 dark:border-indigo-500/20 bg-gradient-to-b from-indigo-50/50 to-white dark:from-indigo-500/5 dark:to-surface-dark p-4 shadow-sm">
+                    <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-indigo-100 text-indigo-600 dark:bg-indigo-500/20 dark:text-indigo-400">
+                        <span class="material-symbols-outlined text-[20px]">bolt</span>
                     </div>
-                    <a class="group flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-white bg-gradient-to-r from-indigo-500 to-purple-600 shadow-md shadow-indigo-500/20 transition-all hover:shadow-lg hover:shadow-indigo-500/30 hover:scale-[1.02]" href="#">
-                        <span class="material-symbols-outlined text-[20px]">dashboard</span>
-                        All Links
-                    </a>
-                </nav>
+                    <h4 class="mb-1 text-sm font-bold text-text-primary-light dark:text-text-primary-dark">Pro Workspace</h4>
+                    <p class="text-xs text-text-secondary-light dark:text-text-secondary-dark">Manage all your essential portals and links effortlessly.</p>
+                </div>
             </div>
         </aside>
 
@@ -142,26 +198,42 @@ function getTags($tagStr)
                     </div>
 
                     <!-- Grid of Links -->
-                    <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3" id="links-container">
+                    <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4" id="links-container">
                         <?php if (empty($links)): ?>
-                            <div class="col-span-full py-12 text-center">
-                                <span class="material-symbols-outlined text-6xl text-text-secondary-light/30">link_off</span>
-                                <p class="mt-4 text-text-secondary-light">No links found. Start by adding one!</p>
+                            <div class="col-span-full py-16 text-center flex flex-col items-center justify-center">
+                                <div class="mb-4 flex h-20 w-20 items-center justify-center rounded-3xl bg-surface-light-highlight dark:bg-surface-dark-highlight shadow-inner">
+                                    <span class="material-symbols-outlined text-4xl text-text-secondary-light/40 dark:text-text-secondary-dark/40">link_off</span>
+                                </div>
+                                <h3 class="text-xl font-bold text-text-primary-light dark:text-white mb-2">No Links Found</h3>
+                                <p class="text-text-secondary-light dark:text-text-secondary-dark max-w-sm">You haven't added any portal links yet. Click "Add New Link" to get started.</p>
                             </div>
                         <?php
 else: ?>
-                            <?php foreach ($links as $link): ?>
-                                <div class="group interactive-card link-card" data-id="<?php echo $link['id']; ?>">
+                            <?php foreach ($links as $link):
+        $cardTheme = $link['theme'] ?? 'indigo';
+        // Determine gradient colors based on theme
+        $gradients = [
+            'indigo' => 'from-indigo-500 to-indigo-600 hover:shadow-indigo-500/20 text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/20 border-indigo-100 dark:border-indigo-800/30',
+            'purple' => 'from-purple-500 to-purple-600 hover:shadow-purple-500/20 text-purple-600 dark:text-purple-400 bg-purple-50 dark:bg-purple-900/20 border-purple-100 dark:border-purple-800/30',
+            'pink' => 'from-pink-500 to-pink-600 hover:shadow-pink-500/20 text-pink-600 dark:text-pink-400 bg-pink-50 dark:bg-pink-900/20 border-pink-100 dark:border-pink-800/30',
+            'emerald' => 'from-emerald-500 to-emerald-600 hover:shadow-emerald-500/20 text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 border-emerald-100 dark:border-emerald-800/30'
+        ];
+        $gClass = $gradients[$cardTheme] ?? $gradients['indigo'];
+        // Splitting into color specific parts for tags
+        preg_match('/text-([a-z]+)-600/', $gClass, $matches);
+        $colorName = $matches[1] ?? 'indigo';
+?>
+                                <div class="group interactive-card link-card filter-item transition-all duration-300 transform" data-id="<?php echo $link['id']; ?>" data-category="<?php echo $cardTheme; ?>">
                                     <div class="interactive-card-inner flex flex-col justify-between p-5">
-                                        <div class="absolute top-0 left-0 h-1 w-full bg-gradient-to-r from-indigo-400 to-purple-500 opacity-0 group-hover:opacity-100 transition-opacity rounded-t-xl z-10"></div>
+                                        <div class="absolute top-0 left-0 h-1.5 w-full bg-gradient-to-r <?php echo preg_replace('/hover:shadow-.*?\s.*/', '', $gClass); ?> opacity-0 group-hover:opacity-100 transition-opacity rounded-t-xl z-10"></div>
                                         <div>
-                                            <div class="mb-4 flex items-start justify-between">
-                                                <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-white dark:bg-surface-dark-highlight p-2 border border-border-light/50 dark:border-white/5 shadow-sm relative z-10">
+                                            <div class="mb-5 flex items-start justify-between">
+                                                <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-white dark:bg-surface-dark-highlight p-2 border border-border-light/80 dark:border-white/10 shadow-sm relative z-10 overflow-hidden shrink-0 group-hover:scale-105 transition-transform">
                                                     <?php if ($link['logoUrl']): ?>
-                                                        <img src="<?php echo htmlspecialchars($link['logoUrl']); ?>" class="h-8 w-8" alt="Logo">
+                                                        <img src="<?php echo htmlspecialchars($link['logoUrl']); ?>" class="h-10 w-10 object-contain" alt="Logo">
                                                     <?php
         else: ?>
-                                                        <span class="text-xl font-bold bg-gradient-to-br from-indigo-500 to-purple-600 bg-clip-text text-transparent"><?php echo htmlspecialchars($link['initial']); ?></span>
+                                                        <span class="text-2xl font-black bg-gradient-to-br <?php echo preg_replace('/hover:shadow-.*?\s.*/', '', $gClass); ?> bg-clip-text text-transparent"><?php echo htmlspecialchars($link['initial']); ?></span>
                                                     <?php
         endif; ?>
                                                 </div>
@@ -179,9 +251,11 @@ else: ?>
                                             </div>
                                             <h3 class="mb-1 text-lg font-bold text-text-primary-light dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors"><?php echo htmlspecialchars($link['title']); ?></h3>
                                             <p class="mb-4 truncate text-sm text-text-secondary-light dark:text-text-secondary-dark"><?php echo htmlspecialchars(parse_url($link['url'], PHP_URL_HOST)); ?></p>
-                                            <div class="flex flex-wrap gap-2">
-                                                <?php foreach (getTags($link['tags']) as $tag): ?>
-                                                    <span class="rounded-full bg-indigo-50 dark:bg-indigo-900/20 px-2.5 py-1 text-xs font-semibold text-indigo-600 dark:text-indigo-400 border border-indigo-100 dark:border-indigo-800/30">
+                                            <div class="flex flex-wrap gap-2 mt-auto">
+                                                <?php foreach (getTags($link['tags']) as $tag):
+            // use tag color style matching card theme
+?>
+                                                    <span class="rounded-full <?php echo "bg-{$colorName}-50 dark:bg-{$colorName}-900/20 text-{$colorName}-600 dark:text-{$colorName}-400 border-{$colorName}-200/50 dark:border-{$colorName}-800/30"; ?> px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wide border">
                                                         <?php echo htmlspecialchars($tag['name'] ?? $tag); ?>
                                                     </span>
                                                 <?php
@@ -206,42 +280,104 @@ endif; ?>
         </main>
     </div>
 
-    <!-- Add Link Modal -->
+    <!-- Add Link Modal (Side-by-side Layout) -->
     <div class="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 opacity-0 pointer-events-none transition-all duration-300" id="add-modal">
-        <div class="bg-surface-light dark:bg-surface-dark w-full max-w-lg rounded-2xl shadow-2xl border border-border-light/50 dark:border-border-dark/50 overflow-hidden transform scale-95 transition-all duration-300 modal-content">
-            <form id="add-link-form" onsubmit="window.submitForm(event)">
-                <div class="px-6 py-5 border-b border-border-light/50 dark:border-border-dark/50">
-                    <h3 class="text-xl font-bold text-text-primary-light dark:text-white">Add New Link</h3>
-                </div>
-                <div class="p-6 space-y-4">
-                    <div>
-                        <label class="block text-sm font-semibold mb-2">Title</label>
-                        <input id="link-title" class="w-full bg-surface-light-highlight dark:bg-surface-dark-highlight border border-border-light dark:border-border-dark rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary outline-none" required placeholder="My Website" type="text"/>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-semibold mb-2">URL</label>
-                        <input id="link-url" class="w-full bg-surface-light-highlight dark:bg-surface-dark-highlight border border-border-light dark:border-border-dark rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary outline-none" required placeholder="https://example.com" type="url"/>
-                    </div>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-sm font-semibold mb-2">Category</label>
-                            <select id="link-category" class="w-full bg-surface-light-highlight dark:bg-surface-dark-highlight border border-border-light dark:border-border-dark rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary outline-none">
-                                <option value="indigo">Work</option>
-                                <option value="purple">Personal</option>
-                                <option value="pink">Social</option>
-                            </select>
+        <div class="bg-surface-light dark:bg-surface-dark w-full max-w-4xl rounded-3xl shadow-2xl border border-border-light/50 dark:border-border-dark/50 overflow-hidden transform scale-95 transition-all duration-300 modal-content flex flex-col md:flex-row">
+            
+            <!-- Left Side: Live Preview -->
+            <div class="w-full md:w-5/12 bg-surface-light-highlight/50 dark:bg-black/20 p-8 flex flex-col border-b md:border-b-0 md:border-r border-border-light/50 dark:border-border-dark/50 relative overflow-hidden">
+                <div class="absolute inset-0 bg-mesh-vibrant opacity-20 pointer-events-none"></div>
+                <div class="absolute inset-0 bg-gradient-to-b from-transparent to-surface-light/80 dark:to-surface-dark/80 pointer-events-none"></div>
+                
+                <h3 class="text-sm font-bold uppercase tracking-wider text-text-secondary-light dark:text-text-secondary-dark mb-6 relative z-10 flex items-center gap-2">
+                    <span class="material-symbols-outlined text-[18px]">visibility</span>
+                    Live Preview
+                </h3>
+                
+                <div class="flex-1 flex items-center justify-center relative z-10">
+                    <!-- The Preview Card -->
+                    <div class="w-full interactive-card" id="preview-card-container">
+                        <div class="interactive-card-inner flex flex-col justify-between p-5 bg-white dark:bg-surface-dark/90 transition-all duration-300" id="preview-card-inner">
+                            <div class="absolute top-0 left-0 h-1.5 w-full bg-gradient-to-r from-indigo-500 to-indigo-600 rounded-t-xl z-20" id="preview-gradient"></div>
+                            <div>
+                                <div class="mb-5 flex items-start justify-between">
+                                    <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-white dark:bg-surface-dark-highlight p-2 border border-border-light/80 dark:border-white/10 shadow-sm relative z-10 overflow-hidden shrink-0">
+                                        <span class="text-2xl font-black bg-gradient-to-br from-indigo-500 to-indigo-600 bg-clip-text text-transparent" id="preview-initial">N</span>
+                                    </div>
+                                    <div class="relative z-20">
+                                        <button type="button" class="rounded-lg p-1.5 text-text-secondary-light dark:text-text-secondary-dark opacity-50 cursor-not-allowed">
+                                            <span class="material-symbols-outlined text-[20px]">more_vert</span>
+                                        </button>
+                                    </div>
+                                </div>
+                                <h3 class="mb-1 text-lg font-bold text-text-primary-light dark:text-white" id="preview-title">New Link</h3>
+                                <p class="mb-4 truncate text-sm text-text-secondary-light dark:text-text-secondary-dark" id="preview-url">example.com</p>
+                                <div class="flex flex-wrap gap-2 mt-auto" id="preview-tags-container">
+                                    <span class="rounded-full bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600 dark:text-indigo-400 border-indigo-200/50 dark:border-indigo-800/30 px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wide border">WORK</span>
+                                </div>
+                            </div>
                         </div>
-                        <div>
-                            <label class="block text-sm font-semibold mb-2">Tags (Comma separated)</label>
-                            <input id="link-tags" class="w-full bg-surface-light-highlight dark:bg-surface-dark-highlight border border-border-light dark:border-border-dark rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary outline-none" placeholder="dev, tools"/>
-                        </div>
                     </div>
                 </div>
-                <div class="bg-surface-light-highlight/30 dark:bg-black/20 px-6 py-4 flex items-center justify-end gap-3">
-                    <button class="px-5 py-2.5 text-sm font-semibold text-text-secondary-light" onclick="document.getElementById('add-modal').classList.remove('active')" type="button">Cancel</button>
-                    <button class="bg-gradient-to-r from-indigo-500 to-purple-600 px-6 py-2.5 rounded-xl text-sm font-bold text-white shadow-lg shadow-indigo-500/25 hover:scale-[1.02] transition-all" type="submit">Add Link</button>
-                </div>
-            </form>
+            </div>
+
+            <!-- Right Side: Input Form -->
+            <div class="w-full md:w-7/12 flex flex-col">
+                <form id="add-link-form" onsubmit="window.submitForm(event)" class="h-full flex flex-col">
+                    <div class="px-8 py-6 border-b border-border-light/50 dark:border-border-dark/50 flex justify-between items-center">
+                        <div>
+                            <h3 class="text-2xl font-bold text-text-primary-light dark:text-white">Add New Link</h3>
+                            <p class="text-sm text-text-secondary-light tracking-wide mt-1">Create a beautiful card for your portal.</p>
+                        </div>
+                        <button type="button" class="rounded-full p-2 text-text-secondary-light hover:bg-surface-light-highlight dark:hover:bg-surface-dark-highlight transition-colors" onclick="document.getElementById('add-modal').classList.remove('active')">
+                            <span class="material-symbols-outlined text-[24px]">close</span>
+                        </button>
+                    </div>
+                    
+                    <div class="p-8 space-y-6 flex-1 overflow-y-auto custom-scrollbar">
+                        <div class="group">
+                            <label class="block text-sm font-bold text-text-primary-light dark:text-text-primary-dark mb-2 group-focus-within:text-indigo-500 transition-colors">Title <span class="text-red-500">*</span></label>
+                            <input id="link-title" class="w-full bg-surface-light-highlight dark:bg-surface-dark-highlight border-2 border-transparent focus:border-indigo-500 rounded-xl px-4 py-3.5 text-sm outline-none transition-all shadow-inner text-text-primary-light dark:text-white font-medium placeholder-text-secondary-light/60" required placeholder="e.g. My Awesome Workspace" type="text"/>
+                        </div>
+                        
+                        <div class="group">
+                            <label class="block text-sm font-bold text-text-primary-light dark:text-text-primary-dark mb-2 group-focus-within:text-indigo-500 transition-colors">URL Address <span class="text-red-500">*</span></label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                    <span class="material-symbols-outlined text-[18px] text-text-secondary-light">link</span>
+                                </div>
+                                <input id="link-url" class="w-full bg-surface-light-highlight dark:bg-surface-dark-highlight border-2 border-transparent focus:border-indigo-500 rounded-xl pl-11 pr-4 py-3.5 text-sm outline-none transition-all shadow-inner text-text-primary-light dark:text-white font-medium placeholder-text-secondary-light/60" required placeholder="https://..." type="url"/>
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                            <div class="group">
+                                <label class="block text-sm font-bold text-text-primary-light dark:text-text-primary-dark mb-2 group-focus-within:text-indigo-500 transition-colors">Category Theme</label>
+                                <div class="relative">
+                                    <select id="link-category" class="w-full appearance-none bg-surface-light-highlight dark:bg-surface-dark-highlight border-2 border-transparent focus:border-indigo-500 rounded-xl pl-4 pr-10 py-3.5 text-sm outline-none transition-all shadow-inner text-text-primary-light dark:text-white font-medium cursor-pointer">
+                                        <option value="indigo">Work (Indigo)</option>
+                                        <option value="purple">Personal (Purple)</option>
+                                        <option value="pink">Social (Pink)</option>
+                                        <option value="emerald">Research (Emerald)</option>
+                                    </select>
+                                    <div class="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none text-text-secondary-light">
+                                        <span class="material-symbols-outlined text-[20px]">expand_more</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="group">
+                                <label class="block text-sm font-bold text-text-primary-light dark:text-text-primary-dark mb-2 group-focus-within:text-indigo-500 transition-colors">Tags</label>
+                                <input id="link-tags" class="w-full bg-surface-light-highlight dark:bg-surface-dark-highlight border-2 border-transparent focus:border-indigo-500 rounded-xl px-4 py-3.5 text-sm outline-none transition-all shadow-inner text-text-primary-light dark:text-white font-medium placeholder-text-secondary-light/60" placeholder="e.g. dev, design, tool"/>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-surface-light-highlight/50 dark:bg-surface-dark-highlight/20 px-8 py-5 flex items-center justify-end gap-3 mt-auto border-t border-border-light/50 dark:border-border-dark/50">
+                        <button class="px-6 py-2.5 text-sm font-bold text-text-secondary-light dark:text-text-secondary-dark hover:text-text-primary-light dark:hover:text-white transition-colors" onclick="document.getElementById('add-modal').classList.remove('active')" type="button">Cancel</button>
+                        <button class="bg-gradient-to-r from-indigo-500 to-purple-600 px-8 py-2.5 rounded-xl text-sm font-bold text-white shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40 hover:-translate-y-0.5 transition-all" type="submit">Publish Link</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 
