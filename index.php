@@ -186,13 +186,17 @@ endforeach; ?>
                         <input id="link-search" class="block w-full rounded-full border-2 border-transparent bg-surface-light-highlight dark:bg-surface-dark-highlight py-2 pl-10 pr-3 text-sm text-text-primary-light dark:text-white placeholder-text-secondary-light dark:placeholder-text-secondary-dark focus:border-indigo-500 focus:bg-white dark:focus:bg-surface-dark focus:outline-none focus:ring-0 transition-all shadow-inner" placeholder="Search links, tags..." type="text"/>
                     </div>
                 </div>
-                <div class="flex items-center gap-4">
+                <div class="flex items-center gap-3">
                     <button class="relative rounded-lg p-2 text-text-secondary-light dark:text-text-secondary-dark hover:bg-surface-light-highlight dark:hover:bg-surface-dark-highlight hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors" id="theme-toggle" title="Toggle Theme">
                         <span class="material-symbols-outlined text-[24px]">light_mode</span>
                     </button>
+                    <button class="flex items-center gap-2 rounded-lg bg-surface-light-highlight dark:bg-surface-dark-highlight border border-border-light/50 dark:border-border-dark/50 px-3.5 py-2 text-sm font-semibold text-text-primary-light dark:text-white hover:border-indigo-500/50 dark:hover:border-indigo-500/50 hover:text-indigo-600 dark:hover:text-indigo-400 hover:shadow-sm transition-all" onclick="document.getElementById('add-category-modal').classList.add('active')">
+                        <span class="material-symbols-outlined text-[18px]">create_new_folder</span>
+                        Category
+                    </button>
                     <button class="flex items-center gap-2 rounded-lg bg-gradient-to-r from-indigo-500 to-purple-600 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40 hover:scale-[1.02] transition-all" onclick="document.getElementById('add-modal').classList.add('active')">
                         <span class="material-symbols-outlined text-[20px]">add</span>
-                        Add New Link
+                        New Link
                     </button>
                 </div>
             </header>
@@ -367,12 +371,7 @@ endif; ?>
                         
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                             <div class="group">
-                                <div class="flex justify-between items-center mb-2">
-                                    <label class="block text-sm font-bold text-text-primary-light dark:text-text-primary-dark group-focus-within:text-indigo-500 transition-colors">Category Theme</label>
-                                    <button type="button" onclick="document.getElementById('add-category-modal').classList.add('active')" class="text-[11px] uppercase tracking-wider font-bold text-indigo-500 hover:text-indigo-600 dark:text-indigo-400 dark:hover:text-indigo-300 transition-colors flex items-center gap-1">
-                                        <span class="material-symbols-outlined text-[14px]">add_circle</span> New
-                                    </button>
-                                </div>
+                                <label class="block text-sm font-bold text-text-primary-light dark:text-text-primary-dark mb-2 group-focus-within:text-indigo-500 transition-colors">Category Theme</label>
                                 <div class="relative custom-select-container">
                                     <button type="button" id="category-select-btn" class="w-full flex items-center justify-between text-left appearance-none bg-surface-light-highlight dark:bg-surface-dark-highlight border-2 border-transparent focus:border-indigo-500 focus:ring-[3px] focus:ring-indigo-500/20 rounded-xl pl-4 pr-3 py-3 text-sm outline-none transition-all shadow-inner text-text-primary-light dark:text-white font-medium cursor-pointer relative z-10">
                                         <span id="category-select-text">Select Category...</span>
