@@ -346,18 +346,20 @@ window.submitForm = function (event) {
     }
 
     const title = document.getElementById('link-title').value;
-    const category = document.getElementById('link-category').value;
+    const categoryInput = document.getElementById('link-category');
+    const categoryId = categoryInput ? categoryInput.value : 'indigo';
     const tagsInput = document.getElementById('link-tags').value;
 
     // Parse tags (simple split by comma)
     const tagsArr = tagsInput.split(',').filter(t => t.trim() !== '').map(t => {
-        return { name: t.trim(), type: 'primary', color: category };
+        return { name: t.trim(), type: 'primary', color: categoryId };
     });
 
     // Default tag based on category if empty
     if (tagsArr.length === 0) {
         const catText = document.getElementById('category-select-text');
-        if (catText) tagsArr.push({ name: catText.innerText.trim(), type: 'primary', color: categoryInput.getAttribute('data-color') || 'indigo' });
+        const catColor = categoryInput ? (categoryInput.getAttribute('data-color') || 'indigo') : 'indigo';
+        if (catText) tagsArr.push({ name: catText.innerText.trim(), type: 'primary', color: catColor });
     }
 
     const payload = {
@@ -365,7 +367,7 @@ window.submitForm = function (event) {
         url,
         title,
         tags: tagsArr,
-        theme: categoryId // Map category to theme color 
+        theme: categoryId
     };
 
     fetch('api/links.php', {
