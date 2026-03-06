@@ -337,7 +337,8 @@ window.submitForm = function (event) {
 
     // Default tag based on category if empty
     if (tagsArr.length === 0) {
-        tagsArr.push({ name: document.getElementById('link-category').options[document.getElementById('link-category').selectedIndex].text, type: 'primary', color: category });
+        const catText = document.getElementById('category-select-text');
+        if (catText) tagsArr.push({ name: catText.innerText.trim(), type: 'primary', color: category });
     }
 
     const payload = {
@@ -460,8 +461,8 @@ window.updatePreview = function () {
     if (pTagsContainer) {
         let tagsArr = tagsInput.split(',').map(t => t.trim()).filter(Boolean);
         if (tagsArr.length === 0) {
-            const catSelect = document.getElementById('link-category');
-            if (catSelect) tagsArr.push(catSelect.options[catSelect.selectedIndex].text.split(' ')[0]);
+            const catText = document.getElementById('category-select-text');
+            if (catText) tagsArr.push(catText.innerText.trim().split(' ')[0]);
         }
 
         const tagClasses = {
