@@ -1,0 +1,24 @@
+# Cấu hình bảo mật và tối ưu hóa cho Link Manager Dashboard
+
+# 1. Ngăn chặn truy cập vào các file nhạy cảm
+<FilesMatch "^\.|\.(sql|json|ini|log|sh|bak|php|yml|yaml)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# 2. Ngoại trừ các file cần thiết cho web chạy
+<FilesMatch "^(index|links)\.php$">
+    Order deny,allow
+    Allow from all
+</FilesMatch>
+
+# 3. Tắt danh sách thư mục
+Options -Indexes
+
+# 4. Cấu hình lỗi trang (Tùy chọn)
+# ErrorDocument 404 /index.php
+
+# 5. Bật Gzip nén trang (Nếu server hỗ trợ)
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript
+</IfModule>
