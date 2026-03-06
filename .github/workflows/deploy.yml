@@ -28,4 +28,5 @@ jobs:
             .github/**
           dangerous-clean-slate: false
           port: 21
-          security: strict
+          protocol: ftp
+          security: loose
