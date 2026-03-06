@@ -35,10 +35,12 @@ document.addEventListener('DOMContentLoaded', () => {
             htmlElement.classList.remove('dark');
             localStorage.setItem('theme', 'light');
             updateThemeIcon('dark_mode');
+            if (window.showToast) window.showToast('Switched to Light Mode', 'success');
         } else {
             htmlElement.classList.add('dark');
             localStorage.setItem('theme', 'dark');
             updateThemeIcon('light_mode');
+            if (window.showToast) window.showToast('Switched to Dark Mode', 'success');
         }
     });
 
@@ -152,6 +154,7 @@ document.addEventListener('DOMContentLoaded', () => {
             btn.classList.add('active', 'bg-surface-light-highlight', 'dark:bg-surface-dark-highlight');
 
             const filterValue = btn.getAttribute('data-filter');
+            const filterName = btn.innerText.replace(/[0-9]+$/, '').trim(); // Lấy tên text và loại bỏ số count
 
             linkCards.forEach(card => {
                 if (filterValue === 'all' || card.getAttribute('data-category') === filterValue) {
@@ -162,6 +165,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     setTimeout(() => card.style.display = 'none', 300);
                 }
             });
+
+            if (window.showToast) window.showToast(`Filtered by ${filterName}`, 'success');
         });
     });
 
@@ -177,6 +182,14 @@ window.toggleMenu = function (menuId, event) {
     });
     // Toggle current
     if (menu) menu.classList.toggle('active');
+};
+
+window.copyUrl = function (url) {
+    navigator.clipboard.writeText(url).then(() => {
+        if (window.showToast) window.showToast('Link copied to clipboard!');
+    }).catch(err => {
+        if (window.showToast) window.showToast('Failed to copy', 'error');
+    });
 };
 
 window.showToast = function (message, type = 'success') {

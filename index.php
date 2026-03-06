@@ -260,7 +260,12 @@ else: ?>
                                                     <button class="rounded-lg p-1.5 text-text-secondary-light dark:text-text-secondary-dark hover:bg-surface-light-highlight dark:hover:bg-surface-dark-highlight transition-all" onclick="window.toggleMenu('menu-<?php echo $link['id']; ?>', event)">
                                                         <span class="material-symbols-outlined text-[20px]">more_vert</span>
                                                     </button>
-                                                    <div id="menu-<?php echo $link['id']; ?>" class="action-menu hidden absolute right-0 mt-1 w-32 origin-top-right rounded-lg bg-white dark:bg-surface-dark shadow-xl ring-1 ring-black/5 dark:ring-white/10 overflow-hidden z-30 border border-border-light dark:border-border-dark">
+                                                    <div id="menu-<?php echo $link['id']; ?>" class="action-menu hidden absolute right-0 mt-1 w-36 origin-top-right rounded-lg bg-white dark:bg-surface-dark shadow-xl ring-1 ring-black/5 dark:ring-white/10 overflow-hidden z-30 border border-border-light dark:border-border-dark">
+                                                        <button class="flex w-full items-center gap-2 px-3 py-2 text-sm text-text-primary-light dark:text-text-primary-dark hover:bg-surface-light-highlight dark:hover:bg-surface-dark-highlight transition-colors" onclick="window.copyUrl('<?php echo htmlspecialchars($link['url'], ENT_QUOTES); ?>'); window.toggleMenu('menu-<?php echo $link['id']; ?>', event)">
+                                                            <span class="material-symbols-outlined text-[18px]">content_copy</span>
+                                                            Copy Link
+                                                        </button>
+                                                        <div class="h-px w-full bg-border-light dark:bg-border-dark border-0"></div>
                                                         <button class="flex w-full items-center gap-2 px-3 py-2 text-sm text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors" onclick="window.deleteLink('<?php echo $link['id']; ?>')">
                                                             <span class="material-symbols-outlined text-[18px]">delete</span>
                                                             Delete
