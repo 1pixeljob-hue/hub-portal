@@ -468,8 +468,8 @@ endforeach; ?>
 
     <script src="js/script.js"></script>
     <style>
-        #add-modal.active { opacity: 1; pointer-events: auto; }
-        #add-modal.active .modal-content { transform: scale(1); }
+        #add-modal.active, #add-category-modal.active { opacity: 1; pointer-events: auto; }
+        #add-modal.active .modal-content, #add-category-modal.active .modal-content { transform: scale(1); }
         .action-menu.active { display: block; }
         .toast { display: flex; align-items: center; gap: 12px; padding: 12px 20px; border-radius: 12px; background: white; border: 1px solid #e2e8f0; shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1); animation: slideIn 0.3s ease-out; }
         .dark .toast { background: #1e293b; border-color: #334155; }
