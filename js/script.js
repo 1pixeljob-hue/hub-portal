@@ -183,7 +183,12 @@ window.deleteLink = function (id) {
 window.submitForm = function (event) {
     event.preventDefault();
 
-    const url = document.getElementById('link-url').value;
+    let url = document.getElementById('link-url').value.trim();
+    if (url && !/^https?:\/\//i.test(url)) {
+        url = 'https://' + url;
+        document.getElementById('link-url').value = url;
+    }
+
     const title = document.getElementById('link-title').value;
     const category = document.getElementById('link-category').value;
     const tagsInput = document.getElementById('link-tags').value;

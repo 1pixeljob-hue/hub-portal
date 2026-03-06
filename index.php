@@ -361,13 +361,18 @@ endif; ?>
                                 <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                                     <span class="material-symbols-outlined text-[18px] text-text-secondary-light">link</span>
                                 </div>
-                                <input id="link-url" class="w-full bg-surface-light-highlight dark:bg-surface-dark-highlight border-2 border-transparent focus:border-indigo-500 rounded-xl pl-11 pr-4 py-3.5 text-sm outline-none transition-all shadow-inner text-text-primary-light dark:text-white font-medium placeholder-text-secondary-light/60" required placeholder="https://..." type="url"/>
+                                <input id="link-url" class="w-full bg-surface-light-highlight dark:bg-surface-dark-highlight border-2 border-transparent focus:border-indigo-500 rounded-xl pl-11 pr-4 py-3.5 text-sm outline-none transition-all shadow-inner text-text-primary-light dark:text-white font-medium placeholder-text-secondary-light/60" required placeholder="e.g. google.com" type="text"/>
                             </div>
                         </div>
                         
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                             <div class="group">
-                                <label class="block text-sm font-bold text-text-primary-light dark:text-text-primary-dark mb-2 group-focus-within:text-indigo-500 transition-colors">Category Theme</label>
+                                <div class="flex justify-between items-center mb-2">
+                                    <label class="block text-sm font-bold text-text-primary-light dark:text-text-primary-dark group-focus-within:text-indigo-500 transition-colors">Category Theme</label>
+                                    <button type="button" onclick="document.getElementById('add-category-modal').classList.add('active')" class="text-[11px] uppercase tracking-wider font-bold text-indigo-500 hover:text-indigo-600 dark:text-indigo-400 dark:hover:text-indigo-300 transition-colors flex items-center gap-1">
+                                        <span class="material-symbols-outlined text-[14px]">add_circle</span> New
+                                    </button>
+                                </div>
                                 <div class="relative">
                                     <select id="link-category" class="w-full appearance-none bg-surface-light-highlight dark:bg-surface-dark-highlight border-2 border-transparent focus:border-indigo-500 rounded-xl pl-4 pr-10 py-3.5 text-sm outline-none transition-all shadow-inner text-text-primary-light dark:text-white font-medium cursor-pointer">
                                         <?php foreach ($categories as $key => $cat): ?>
