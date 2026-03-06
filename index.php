@@ -144,7 +144,7 @@ foreach ($links as $link) {
                     </div>
                     <nav class="space-y-1" id="category-nav">
                         <?php foreach ($categories as $key => $cat): ?>
-                        <div class="category-filter relative group flex w-full items-center justify-between rounded-xl px-3 py-2.5 text-sm font-medium transition-all hover:bg-surface-light-highlight dark:hover:bg-surface-dark-highlight" data-filter="<?php echo htmlspecialchars($key); ?>" onclick="document.querySelector('[data-filter=\'<?php echo htmlspecialchars($key); ?>\']').click()">
+                        <div class="category-filter relative group flex w-full items-center justify-between rounded-xl px-3 py-2.5 text-sm font-medium transition-all hover:bg-surface-light-highlight dark:hover:bg-surface-dark-highlight cursor-pointer" data-filter="<?php echo htmlspecialchars($key); ?>">
                             <div class="flex items-center gap-3 text-text-secondary-light dark:text-text-secondary-dark group-hover:text-text-primary-light dark:group-hover:text-text-primary-dark transition-colors">
                                 <div class="flex h-7 w-7 items-center justify-center rounded-lg <?php echo htmlspecialchars($cat['color']); ?> shadow-sm">
                                     <span class="material-symbols-outlined text-[16px]"><?php echo htmlspecialchars($cat['icon']); ?></span>
@@ -396,7 +396,7 @@ endif; ?>
                                     <div id="category-select-menu" class="absolute z-[100] bottom-full left-0 w-full mb-1.5 bg-white dark:bg-surface-dark border border-indigo-500/30 rounded-xl shadow-2xl opacity-0 invisible transform translate-y-2 transition-all duration-200 overflow-hidden origin-bottom">
                                         <ul class="max-h-60 overflow-y-auto custom-scrollbar p-1.5 space-y-0.5 bg-surface-light-highlight/20 dark:bg-surface-dark-highlight/20 backdrop-blur-md">
                                             <?php foreach ($categories as $key => $cat): ?>
-                                            <li class="custom-select-option px-3 py-2 rounded-lg text-sm font-medium text-text-primary-light dark:text-text-primary-dark hover:bg-indigo-500 hover:text-white dark:hover:bg-indigo-600 dark:hover:text-white cursor-pointer flex items-center gap-2 transition-all" data-value="<?php echo htmlspecialchars($key); ?>">
+                                            <li class="custom-select-option px-3 py-2 rounded-lg text-sm font-medium text-text-primary-light dark:text-text-primary-dark hover:bg-indigo-500 hover:text-white dark:hover:bg-indigo-600 dark:hover:text-white cursor-pointer flex items-center gap-2 transition-all" data-value="<?php echo htmlspecialchars($key); ?>" data-color="<?php echo htmlspecialchars($cat['baseColor']); ?>">
                                                 <span class="material-symbols-outlined text-[18px] opacity-70"><?php echo htmlspecialchars($cat['icon']); ?></span> 
                                                 <?php echo htmlspecialchars($cat['name']); ?>
                                             </li>
@@ -404,7 +404,7 @@ endif; ?>
 endforeach; ?>
                                         </ul>
                                     </div>
-                                    <input type="hidden" id="link-category" name="theme" value="<?php echo htmlspecialchars(array_key_first($categories) ?? 'indigo'); ?>">
+                                    <input type="hidden" id="link-category" name="theme" value="<?php echo htmlspecialchars(array_key_first($categories) ?? 'indigo'); ?>" data-color="indigo">
                                 </div>
                             </div>
                             <div class="group">

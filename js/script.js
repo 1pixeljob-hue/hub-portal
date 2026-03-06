@@ -129,9 +129,11 @@ document.addEventListener('DOMContentLoaded', () => {
             option.addEventListener('click', () => {
                 const value = option.getAttribute('data-value');
                 const label = option.innerText.trim();
+                const color = option.getAttribute('data-color') || 'indigo';
 
                 // Update value
                 catHiddenInput.value = value;
+                catHiddenInput.setAttribute('data-color', color);
                 catSelectText.textContent = label;
                 prevCategoryValue = value;
                 updatePreview();
@@ -254,6 +256,7 @@ window.editLink = function (link, event) {
     const activeOption = document.querySelector(`.custom-select-option[data-value="${link.theme}"]`);
     if (activeOption) {
         catText.textContent = activeOption.innerText.trim();
+        catInput.setAttribute('data-color', activeOption.getAttribute('data-color') || 'indigo');
     }
 
     // Cập nhật tags (join lại thành string)
@@ -305,11 +308,27 @@ window.openAddLinkModal = function () {
     document.getElementById('modal-title').textContent = 'Thêm Liên Kết Mới';
     document.getElementById('submit-btn-text').textContent = 'Lưu Liên Kết';
 
-    // Reset category to default (first option)
-    const firstOption = document.querySelector('.custom-select-option');
-    if (firstOption) {
-        document.getElementById('link-category').value = firstOption.getAttribute('data-value');
-        document.getElementById('category-select-text').textContent = firstOption.innerText.trim();
+    // Check active category filter in sidebar
+    const activeFilter = document.querySelector('.category-filter.active');
+    let targetCategoryValue = null;
+
+    if (activeFilter && activeFilter.getAttribute('data-filter') !== 'all') {
+        targetCategoryValue = activeFilter.getAttribute('data-filter');
+    }
+
+    // Set category based on active filter or default to first option
+    let targetOption = null;
+    if (targetCategoryValue) {
+        targetOption = document.querySelector(`.custom-select-option[data-value="${targetCategoryValue}"]`);
+    }
+    if (!targetOption) {
+        targetOption = document.querySelector('.custom-select-option');
+    }
+
+    if (targetOption) {
+        document.getElementById('link-category').value = targetOption.getAttribute('data-value');
+        document.getElementById('link-category').setAttribute('data-color', targetOption.getAttribute('data-color') || 'indigo');
+        document.getElementById('category-select-text').textContent = targetOption.innerText.trim();
     }
 
     window.updatePreview();
@@ -338,7 +357,7 @@ window.submitForm = function (event) {
     // Default tag based on category if empty
     if (tagsArr.length === 0) {
         const catText = document.getElementById('category-select-text');
-        if (catText) tagsArr.push({ name: catText.innerText.trim(), type: 'primary', color: category });
+        if (catText) tagsArr.push({ name: catText.innerText.trim(), type: 'primary', color: categoryInput.getAttribute('data-color') || 'indigo' });
     }
 
     const payload = {
@@ -346,7 +365,7 @@ window.submitForm = function (event) {
         url,
         title,
         tags: tagsArr,
-        theme: category // Map category to theme color 
+        theme: categoryId // Map category to theme color 
     };
 
     fetch('api/links.php', {
@@ -424,7 +443,9 @@ window.submitCategoryForm = function (event) {
 window.updatePreview = function () {
     const titleInput = document.getElementById('link-title')?.value || '';
     const urlInput = document.getElementById('link-url')?.value || '';
-    const category = document.getElementById('link-category')?.value || 'indigo';
+    const categoryInput = document.getElementById('link-category');
+    const categoryId = categoryInput?.value || 'indigo';
+    const categoryColor = categoryInput?.getAttribute('data-color') || 'indigo';
     const tagsInput = document.getElementById('link-tags')?.value || '';
 
     // Elements
@@ -453,7 +474,7 @@ window.updatePreview = function () {
             'pink': 'from-pink-500 to-pink-600',
             'emerald': 'from-emerald-500 to-emerald-600'
         };
-        const gradClass = gradiens[category] || gradiens['indigo'];
+        const gradClass = gradiens[categoryColor] || gradiens['indigo'];
         pInitial.className = `text-2xl font-black bg-gradient-to-br ${gradClass} bg-clip-text text-transparent`;
         if (pGradient) pGradient.className = `absolute top-0 left-0 h-1.5 w-full bg-gradient-to-r ${gradClass} rounded-t-xl z-20`;
     }
@@ -473,7 +494,7 @@ window.updatePreview = function () {
         };
 
         pTagsContainer.innerHTML = tagsArr.slice(0, 3).map(tag => `
-            <span class="rounded-full ${tagClasses[category]} px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wide border">
+            <span class="rounded-full ${tagClasses[categoryColor] || tagClasses['indigo']} px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wide border">
                 ${tag}
             </span>
         `).join('');
