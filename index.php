@@ -376,6 +376,9 @@ endif; ?>
                                             </option>
                                         <?php
 endforeach; ?>
+                                        <option value="__custom__" class="font-bold text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30">
+                                            + Tạo danh mục mới...
+                                        </option>
                                     </select>
                                     <div class="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none text-text-secondary-light">
                                         <span class="material-symbols-outlined text-[20px]">expand_more</span>

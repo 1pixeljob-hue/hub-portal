@@ -58,15 +58,41 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // 4. Live Preview Logic
+    // 4. Live Preview & Smart Input Logic
     const titleInput = document.getElementById('link-title');
     const urlInput = document.getElementById('link-url');
     const categoryInput = document.getElementById('link-category');
     const tagsInput = document.getElementById('link-tags');
 
     if (titleInput) titleInput.addEventListener('input', updatePreview);
-    if (urlInput) urlInput.addEventListener('input', updatePreview);
-    if (categoryInput) categoryInput.addEventListener('change', updatePreview);
+
+    if (urlInput) {
+        urlInput.addEventListener('input', updatePreview);
+        // Auto add https:// on blur
+        urlInput.addEventListener('blur', function (e) {
+            let val = e.target.value.trim();
+            if (val && !/^https?:\/\//i.test(val)) {
+                e.target.value = 'https://' + val;
+                updatePreview();
+            }
+        });
+    }
+
+    if (categoryInput) {
+        let prevCategoryValue = categoryInput.value !== '__custom__' ? categoryInput.value : '';
+        categoryInput.addEventListener('change', (e) => {
+            if (e.target.value === '__custom__') {
+                // Open Category Modal
+                document.getElementById('add-category-modal').classList.add('active');
+                // Revert select back to previous safe state
+                e.target.value = prevCategoryValue || (e.target.options[0] ? e.target.options[0].value : '');
+            } else {
+                prevCategoryValue = e.target.value;
+                updatePreview();
+            }
+        });
+    }
+
     if (tagsInput) tagsInput.addEventListener('input', updatePreview);
 
     // 5. Category Filtering
