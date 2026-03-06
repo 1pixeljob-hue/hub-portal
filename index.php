@@ -17,22 +17,32 @@ function getTags($tagStr)
     return json_decode($tagStr, true) ?? [];
 }
 
-// Calculate Categories Count
-$categories = [
-    'indigo' => ['name' => 'Work', 'icon' => 'work', 'count' => 0, 'color' => 'text-indigo-500 bg-indigo-50 dark:bg-indigo-500/10', 'activeBg' => 'bg-indigo-500', 'activeText' => 'text-white'],
-    'purple' => ['name' => 'Personal', 'icon' => 'person', 'count' => 0, 'color' => 'text-purple-500 bg-purple-50 dark:bg-purple-500/10', 'activeBg' => 'bg-purple-500', 'activeText' => 'text-white'],
-    'pink' => ['name' => 'Social', 'icon' => 'forum', 'count' => 0, 'color' => 'text-pink-500 bg-pink-50 dark:bg-pink-500/10', 'activeBg' => 'bg-pink-500', 'activeText' => 'text-white'],
-    'emerald' => ['name' => 'Research', 'icon' => 'science', 'count' => 0, 'color' => 'text-emerald-500 bg-emerald-50 dark:bg-emerald-500/10', 'activeBg' => 'bg-emerald-500', 'activeText' => 'text-white']
-];
+// Fetch categories from database
+try {
+    $stmt = $pdo->query("SELECT * FROM categories ORDER BY created_at ASC");
+    $dbCategories = $stmt->fetchAll();
+
+    $categories = [];
+    foreach ($dbCategories as $cat) {
+        $categories[$cat['id']] = [
+            'name' => $cat['name'],
+            'icon' => $cat['icon'],
+            'color' => 'text-' . $cat['color'] . '-500 bg-' . $cat['color'] . '-50 dark:bg-' . $cat['color'] . '-500/10',
+            'baseColor' => $cat['color'],
+            'count' => 0
+        ];
+    }
+}
+catch (\PDOException $e) {
+    $categories = [];
+}
 
 $totalLinks = 0;
 foreach ($links as $link) {
-    // We roughly use theme as the category indicator for simplicity
     $theme = $link['theme'] ?? 'indigo';
-    if (!isset($categories[$theme])) {
-        $theme = 'indigo'; // default fallback
+    if (isset($categories[$theme])) {
+        $categories[$theme]['count']++;
     }
-    $categories[$theme]['count']++;
     $totalLinks++;
 }
 ?>
@@ -126,13 +136,18 @@ foreach ($links as $link) {
                 </div>
                 
                 <div>
-                    <p class="px-3 mb-2 text-xs font-bold uppercase tracking-wider text-text-secondary-light dark:text-text-secondary-dark/70">Categories</p>
+                    <div class="flex items-center justify-between px-3 mb-2">
+                        <p class="text-xs font-bold uppercase tracking-wider text-text-secondary-light dark:text-text-secondary-dark/70">Categories</p>
+                        <button onclick="document.getElementById('add-category-modal').classList.add('active')" class="text-text-secondary-light hover:text-indigo-500 dark:hover:text-indigo-400 transition-colors" title="Add new category">
+                            <span class="material-symbols-outlined text-[16px]">add_circle</span>
+                        </button>
+                    </div>
                     <nav class="space-y-1" id="category-nav">
                         <?php foreach ($categories as $key => $cat): ?>
-                        <button class="category-filter group flex w-full items-center justify-between rounded-xl px-3 py-2.5 text-sm font-medium transition-all hover:bg-surface-light-highlight dark:hover:bg-surface-dark-highlight" data-filter="<?php echo $key; ?>">
+                        <button class="category-filter group flex w-full items-center justify-between rounded-xl px-3 py-2.5 text-sm font-medium transition-all hover:bg-surface-light-highlight dark:hover:bg-surface-dark-highlight" data-filter="<?php echo htmlspecialchars($key); ?>">
                             <div class="flex items-center gap-3 text-text-secondary-light dark:text-text-secondary-dark group-hover:text-text-primary-light dark:group-hover:text-text-primary-dark transition-colors">
-                                <div class="flex h-7 w-7 items-center justify-center rounded-lg <?php echo $cat['color']; ?> shadow-sm">
-                                    <span class="material-symbols-outlined text-[16px]"><?php echo $cat['icon']; ?></span>
+                                <div class="flex h-7 w-7 items-center justify-center rounded-lg <?php echo htmlspecialchars($cat['color']); ?> shadow-sm">
+                                    <span class="material-symbols-outlined text-[16px]"><?php echo htmlspecialchars($cat['icon']); ?></span>
                                 </div>
                                 <?php echo htmlspecialchars($cat['name']); ?>
                             </div>
@@ -355,10 +370,12 @@ endif; ?>
                                 <label class="block text-sm font-bold text-text-primary-light dark:text-text-primary-dark mb-2 group-focus-within:text-indigo-500 transition-colors">Category Theme</label>
                                 <div class="relative">
                                     <select id="link-category" class="w-full appearance-none bg-surface-light-highlight dark:bg-surface-dark-highlight border-2 border-transparent focus:border-indigo-500 rounded-xl pl-4 pr-10 py-3.5 text-sm outline-none transition-all shadow-inner text-text-primary-light dark:text-white font-medium cursor-pointer">
-                                        <option value="indigo">Work (Indigo)</option>
-                                        <option value="purple">Personal (Purple)</option>
-                                        <option value="pink">Social (Pink)</option>
-                                        <option value="emerald">Research (Emerald)</option>
+                                        <?php foreach ($categories as $key => $cat): ?>
+                                            <option value="<?php echo htmlspecialchars($key); ?>" data-color="<?php echo htmlspecialchars($cat['baseColor']); ?>">
+                                                <?php echo htmlspecialchars($cat['name']); ?>
+                                            </option>
+                                        <?php
+endforeach; ?>
                                     </select>
                                     <div class="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none text-text-secondary-light">
                                         <span class="material-symbols-outlined text-[20px]">expand_more</span>
@@ -378,6 +395,49 @@ endif; ?>
                     </div>
                 </form>
             </div>
+        </div>
+    </div>
+
+    <!-- Add Category Modal -->
+    <div class="fixed inset-0 z-[110] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 opacity-0 pointer-events-none transition-all duration-300" id="add-category-modal">
+        <div class="bg-surface-light dark:bg-surface-dark w-full max-w-md rounded-2xl shadow-2xl border border-border-light/50 dark:border-border-dark/50 overflow-hidden transform scale-95 transition-all duration-300 modal-content">
+            <form id="add-category-form" onsubmit="window.submitCategoryForm(event)">
+                <div class="px-6 py-5 border-b border-border-light/50 dark:border-border-dark/50 flex justify-between items-center">
+                    <h3 class="text-xl font-bold text-text-primary-light dark:text-white">New Category</h3>
+                    <button type="button" class="rounded-full p-2 text-text-secondary-light hover:bg-surface-light-highlight dark:hover:bg-surface-dark-highlight transition-colors" onclick="document.getElementById('add-category-modal').classList.remove('active')">
+                        <span class="material-symbols-outlined text-[20px]">close</span>
+                    </button>
+                </div>
+                <div class="p-6 space-y-4">
+                    <div>
+                        <label class="block text-sm font-semibold mb-2">Category Name</label>
+                        <input id="cat-title" class="w-full bg-surface-light-highlight dark:bg-surface-dark-highlight border border-border-light dark:border-border-dark rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary outline-none" required placeholder="e.g. Design, API..." type="text"/>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-semibold mb-2">Icon (Material)</label>
+                            <input id="cat-icon" class="w-full bg-surface-light-highlight dark:bg-surface-dark-highlight border border-border-light dark:border-border-dark rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary outline-none" placeholder="e.g. code, star" value="folder" type="text"/>
+                            <p class="text-[10px] text-text-secondary-light mt-1"><a href="https://fonts.google.com/icons" target="_blank" class="hover:underline">Google Fonts Icons</a></p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold mb-2">Color Theme</label>
+                            <select id="cat-color" class="w-full bg-surface-light-highlight dark:bg-surface-dark-highlight border border-border-light dark:border-border-dark rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary outline-none">
+                                <option value="indigo">Indigo</option>
+                                <option value="purple">Purple</option>
+                                <option value="pink">Pink</option>
+                                <option value="emerald">Emerald</option>
+                                <option value="rose">Rose</option>
+                                <option value="amber">Amber</option>
+                                <option value="cyan">Cyan</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-surface-light-highlight/30 dark:bg-black/20 px-6 py-4 flex items-center justify-end gap-3">
+                    <button class="px-5 py-2.5 text-sm font-semibold text-text-secondary-light" onclick="document.getElementById('add-category-modal').classList.remove('active')" type="button">Cancel</button>
+                    <button class="bg-gradient-to-r from-indigo-500 to-purple-600 px-6 py-2.5 rounded-xl text-sm font-bold text-white shadow-lg shadow-indigo-500/25 hover:scale-[1.02] transition-all" type="submit">Create Category</button>
+                </div>
+            </form>
         </div>
     </div>
 

@@ -206,6 +206,44 @@ window.submitForm = function (event) {
         });
 };
 
+window.submitCategoryForm = function (event) {
+    event.preventDefault();
+
+    const name = document.getElementById('cat-title').value;
+    const icon = document.getElementById('cat-icon').value;
+    const color = document.getElementById('cat-color').value;
+
+    const payload = {
+        name,
+        icon,
+        color
+    };
+
+    fetch('api/categories.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+    })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                showToast('Category created successfully!');
+                document.getElementById('add-category-modal').classList.remove('active');
+                document.getElementById('add-category-form').reset();
+                setTimeout(() => {
+                    window.location.reload();
+                }, 800);
+            } else {
+                showToast(data.error || 'Failed to create category', 'error');
+            }
+        })
+        .catch(err => {
+            showToast('Network error occurred', 'error');
+        });
+};
+
 window.updatePreview = function () {
     const titleInput = document.getElementById('link-title')?.value || '';
     const urlInput = document.getElementById('link-url')?.value || '';
