@@ -2,9 +2,9 @@
 // File cấu hình kết nối MySQL (PDO)
 
 $host = 'localhost'; // Thường là localhost trên cPanel
-$db = 'YOUR_DATABASE_NAME'; // Tên database bạn tạo trên cPanel
-$user = 'YOUR_DATABASE_USER'; // Tên user database bạn tạo
-$pass = 'YOUR_DATABASE_PASSWORD'; // Mật khẩu user database
+$db = 'gtxjozdehosting_hubportal'; // Tên database bạn tạo trên cPanel
+$user = 'gtxjozdehosting_hubportal'; // Tên user database bạn tạo
+$pass = 'Spencil@123'; // Mật khẩu user database
 $charset = 'utf8mb4';
 
 $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
