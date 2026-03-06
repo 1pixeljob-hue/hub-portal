@@ -1,3 +1,12 @@
+// Helper: Chỉ lấy text thuần của một element, bỏ qua text bên trong thẻ con (icon)
+window.getOptionLabel = function (el) {
+    let text = '';
+    el.childNodes.forEach(node => {
+        if (node.nodeType === Node.TEXT_NODE) text += node.textContent;
+    });
+    return text.trim();
+};
+
 document.addEventListener('DOMContentLoaded', () => {
     // 1. Clock and Greeting Logic
     const clockDisplay = document.getElementById('clock-display');
@@ -87,15 +96,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const catSelectIcon = document.getElementById('category-select-icon');
     const catHiddenInput = document.getElementById('link-category');
     const catOptions = document.querySelectorAll('.custom-select-option');
-
-    // Chỉ lấy text thuần, bỏ qua chữ từ icon span (Material Symbols)
-    function getOptionLabel(el) {
-        let text = '';
-        el.childNodes.forEach(node => {
-            if (node.nodeType === Node.TEXT_NODE) text += node.textContent;
-        });
-        return text.trim();
-    }
 
     if (catSelectBtn && catSelectMenu && catHiddenInput) {
         let prevCategoryValue = catHiddenInput.value;
