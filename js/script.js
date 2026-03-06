@@ -239,9 +239,87 @@ window.deleteLink = function (id) {
         });
 };
 
+window.editLink = function (link, event) {
+    if (event) event.stopPropagation();
+
+    // Đổ dữ liệu vào form
+    document.getElementById('link-id').value = link.id;
+    document.getElementById('link-title').value = link.title;
+    document.getElementById('link-url').value = link.url;
+
+    // Cập nhật category
+    const catInput = document.getElementById('link-category');
+    const catText = document.getElementById('category-select-text');
+    catInput.value = link.theme;
+    const activeOption = document.querySelector(`.custom-select-option[data-value="${link.theme}"]`);
+    if (activeOption) {
+        catText.textContent = activeOption.innerText.trim();
+    }
+
+    // Cập nhật tags (join lại thành string)
+    let tagsStr = '';
+    if (Array.isArray(link.tags)) {
+        tagsStr = link.tags.map(t => typeof t === 'object' ? t.name : t).join(', ');
+    }
+    document.getElementById('link-tags').value = tagsStr;
+
+    // Đổi tiêu đề Form
+    document.getElementById('modal-title').textContent = 'Chỉnh Sửa Liên Kết';
+    document.getElementById('submit-btn-text').textContent = 'Cập Nhật';
+
+    // Update live preview
+    window.updatePreview();
+
+    // Ẩn dropdown menu hiện hành
+    document.querySelectorAll('.action-menu').forEach(m => m.classList.remove('active'));
+
+    // Hiển thị modal
+    document.getElementById('add-modal').classList.add('active');
+};
+
+window.deleteCategory = function (id, name, event) {
+    if (event) event.stopPropagation();
+
+    if (!confirm(`Bạn có chắc chắn muốn xóa danh mục: "${name}" không?`)) return;
+
+    fetch(`api/categories.php?id=${id}`, {
+        method: 'DELETE'
+    })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                showToast('Xóa danh mục thành công');
+                setTimeout(() => window.location.reload(), 500);
+            } else {
+                showToast(data.error || 'Xóa danh mục thất bại', 'error');
+            }
+        })
+        .catch(err => {
+            showToast('Lỗi kết nối mạng', 'error');
+        });
+};
+
+window.openAddLinkModal = function () {
+    document.getElementById('link-id').value = '';
+    document.getElementById('add-link-form').reset();
+    document.getElementById('modal-title').textContent = 'Thêm Liên Kết Mới';
+    document.getElementById('submit-btn-text').textContent = 'Lưu Liên Kết';
+
+    // Reset category to default (first option)
+    const firstOption = document.querySelector('.custom-select-option');
+    if (firstOption) {
+        document.getElementById('link-category').value = firstOption.getAttribute('data-value');
+        document.getElementById('category-select-text').textContent = firstOption.innerText.trim();
+    }
+
+    window.updatePreview();
+    document.getElementById('add-modal').classList.add('active');
+};
+
 window.submitForm = function (event) {
     event.preventDefault();
 
+    let id = document.getElementById('link-id').value.trim();
     let url = document.getElementById('link-url').value.trim();
     if (url && !/^https?:\/\//i.test(url)) {
         url = 'https://' + url;
@@ -263,6 +341,7 @@ window.submitForm = function (event) {
     }
 
     const payload = {
+        id: id || undefined,
         url,
         title,
         tags: tagsArr,
@@ -279,7 +358,7 @@ window.submitForm = function (event) {
         .then(res => res.json())
         .then(data => {
             if (data.success) {
-                showToast('Thêm liên kết mới thành công!');
+                showToast(id ? 'Cập nhật liên kết thành công!' : 'Thêm liên kết mới thành công!');
                 document.getElementById('add-modal').classList.remove('active');
                 document.getElementById('add-link-form').reset();
                 // In a real SPA, we'd inject the new card HTML here.
@@ -288,7 +367,7 @@ window.submitForm = function (event) {
                     window.location.reload();
                 }, 800);
             } else {
-                showToast(data.error || 'Thêm liên kết thất bại', 'error');
+                showToast(data.error || (id ? 'Cập nhật thất bại' : 'Thêm liên kết thất bại'), 'error');
             }
         })
         .catch(err => {

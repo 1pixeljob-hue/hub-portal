@@ -25,7 +25,7 @@ switch ($method) {
         break;
 
     case 'POST':
-        // Thêm liên kết mới
+        // Thêm hoặc Cập nhật liên kết
         $input = json_decode(file_get_contents('php://input'), true);
         if (!$input || !isset($input['url'])) {
             http_response_code(400);
@@ -33,24 +33,52 @@ switch ($method) {
             exit;
         }
 
-        $newLink = [
-            "id" => uniqid(),
-            "title" => $input['title'] ?? 'New Link',
-            "url" => $input['url'],
-            "theme" => $input['theme'] ?? "blue",
-            "logoUrl" => $input['logoUrl'] ?? null,
-            "initial" => $input['initial'] ?? strtoupper(substr($input['title'] ?? 'L', 0, 1)),
-            "tags" => json_encode($input['tags'] ?? []) // Encode mảng tags sang JSON string
-        ];
+        $id = $input['id'] ?? null;
+        $title = $input['title'] ?? 'New Link';
+        $url = $input['url'];
+        $theme = $input['theme'] ?? "indigo";
+        $logoUrl = $input['logoUrl'] ?? null;
+        $initial = $input['initial'] ?? strtoupper(substr($title, 0, 1));
+        $tags = json_encode($input['tags'] ?? []);
 
         try {
-            $sql = "INSERT INTO links (id, title, url, theme, logoUrl, initial, tags) VALUES (:id, :title, :url, :theme, :logoUrl, :initial, :tags)";
-            $stmt = $pdo->prepare($sql);
-            $stmt->execute($newLink);
+            if ($id) {
+                // Update
+                $sql = "UPDATE links SET title = :title, url = :url, theme = :theme, logoUrl = :logoUrl, initial = :initial, tags = :tags WHERE id = :id";
+                $stmt = $pdo->prepare($sql);
+                $stmt->execute([
+                    "id" => $id,
+                    "title" => $title,
+                    "url" => $url,
+                    "theme" => $theme,
+                    "logoUrl" => $logoUrl,
+                    "initial" => $initial,
+                    "tags" => $tags
+                ]);
 
-            // Trả về dữ liệu đã decode để frontend sử dụng ngay
-            $newLink['tags'] = json_decode($newLink['tags'], true);
-            echo json_encode(["success" => true, "link" => $newLink]);
+                $linkData = [
+                    "id" => $id, "title" => $title, "url" => $url, "theme" => $theme,
+                    "logoUrl" => $logoUrl, "initial" => $initial, "tags" => json_decode($tags, true)
+                ];
+
+                echo json_encode(["success" => true, "link" => $linkData]);
+            }
+            else {
+                // Insert
+                $newId = uniqid();
+                $sql = "INSERT INTO links (id, title, url, theme, logoUrl, initial, tags) VALUES (:id, :title, :url, :theme, :logoUrl, :initial, :tags)";
+                $stmt = $pdo->prepare($sql);
+
+                $newLink = [
+                    "id" => $newId, "title" => $title, "url" => $url, "theme" => $theme,
+                    "logoUrl" => $logoUrl, "initial" => $initial, "tags" => $tags
+                ];
+
+                $stmt->execute($newLink);
+
+                $newLink['tags'] = json_decode($newLink['tags'], true);
+                echo json_encode(["success" => true, "link" => $newLink]);
+            }
         }
         catch (\PDOException $e) {
             http_response_code(500);

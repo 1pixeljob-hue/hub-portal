@@ -144,20 +144,25 @@ foreach ($links as $link) {
                     </div>
                     <nav class="space-y-1" id="category-nav">
                         <?php foreach ($categories as $key => $cat): ?>
-                        <button class="category-filter group flex w-full items-center justify-between rounded-xl px-3 py-2.5 text-sm font-medium transition-all hover:bg-surface-light-highlight dark:hover:bg-surface-dark-highlight" data-filter="<?php echo htmlspecialchars($key); ?>">
+                        <div class="category-filter relative group flex w-full items-center justify-between rounded-xl px-3 py-2.5 text-sm font-medium transition-all hover:bg-surface-light-highlight dark:hover:bg-surface-dark-highlight" data-filter="<?php echo htmlspecialchars($key); ?>" onclick="document.querySelector('[data-filter=\'<?php echo htmlspecialchars($key); ?>\']').click()">
                             <div class="flex items-center gap-3 text-text-secondary-light dark:text-text-secondary-dark group-hover:text-text-primary-light dark:group-hover:text-text-primary-dark transition-colors">
                                 <div class="flex h-7 w-7 items-center justify-center rounded-lg <?php echo htmlspecialchars($cat['color']); ?> shadow-sm">
                                     <span class="material-symbols-outlined text-[16px]"><?php echo htmlspecialchars($cat['icon']); ?></span>
                                 </div>
                                 <?php echo htmlspecialchars($cat['name']); ?>
                             </div>
-                            <?php if ($cat['count'] > 0): ?>
-                            <span class="flex h-5 min-w-[20px] items-center justify-center rounded-full bg-border-light dark:bg-border-dark px-1.5 text-[10px] font-bold text-text-secondary-light dark:text-text-secondary-dark group-hover:bg-indigo-100 group-hover:text-indigo-700 dark:group-hover:bg-indigo-500/20 dark:group-hover:text-indigo-300 transition-colors">
-                                <?php echo $cat['count']; ?>
-                            </span>
-                            <?php
+                            <div class="flex items-center gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                                <?php if ($cat['count'] > 0): ?>
+                                <span class="flex h-5 min-w-[20px] items-center justify-center rounded-full bg-border-light dark:bg-border-dark px-1.5 text-[10px] font-bold text-text-secondary-light dark:text-text-secondary-dark group-hover:bg-indigo-100 group-hover:text-indigo-700 dark:group-hover:bg-indigo-500/20 dark:group-hover:text-indigo-300 transition-colors">
+                                    <?php echo $cat['count']; ?>
+                                </span>
+                                <?php
     endif; ?>
-                        </button>
+                                <button type="button" class="flex h-5 w-5 items-center justify-center rounded text-red-500 hover:bg-red-500/10 hover:text-red-600 transition-colors pointer-events-auto" onclick="window.deleteCategory('<?php echo htmlspecialchars($key); ?>', '<?php echo htmlspecialchars($cat['name']); ?>', event)" title="Xoá Danh Mục">
+                                    <span class="material-symbols-outlined text-[14px]">delete</span>
+                                </button>
+                            </div>
+                        </div>
                         <?php
 endforeach; ?>
                     </nav>
@@ -194,7 +199,7 @@ endforeach; ?>
                         <span class="material-symbols-outlined text-[18px]">create_new_folder</span>
                         Danh Mục
                     </button>
-                    <button class="flex items-center gap-2 rounded-lg bg-gradient-to-r from-indigo-500 to-purple-600 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40 hover:scale-[1.02] transition-all" onclick="document.getElementById('add-modal').classList.add('active')">
+                    <button class="flex items-center gap-2 rounded-lg bg-gradient-to-r from-indigo-500 to-purple-600 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40 hover:scale-[1.02] transition-all" onclick="window.openAddLinkModal()">
                         <span class="material-symbols-outlined text-[20px]">add</span>
                         Thêm Liên Kết
                     </button>
@@ -261,6 +266,10 @@ else: ?>
                                                         <span class="material-symbols-outlined text-[20px]">more_vert</span>
                                                     </button>
                                                     <div id="menu-<?php echo $link['id']; ?>" class="action-menu hidden absolute right-0 mt-1 w-36 origin-top-right rounded-lg bg-white dark:bg-surface-dark shadow-xl ring-1 ring-black/5 dark:ring-white/10 overflow-hidden z-30 border border-border-light dark:border-border-dark">
+                                                        <button class="flex w-full items-center gap-2 px-3 py-2 text-sm text-text-primary-light dark:text-text-primary-dark hover:bg-surface-light-highlight dark:hover:bg-surface-dark-highlight transition-colors" onclick='window.editLink(<?php echo json_encode($link, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP); ?>, event)'>
+                                                            <span class="material-symbols-outlined text-[18px]">edit</span>
+                                                            Sửa Link
+                                                        </button>
                                                         <button class="flex w-full items-center gap-2 px-3 py-2 text-sm text-text-primary-light dark:text-text-primary-dark hover:bg-surface-light-highlight dark:hover:bg-surface-dark-highlight transition-colors" onclick="window.copyUrl('<?php echo htmlspecialchars($link['url'], ENT_QUOTES); ?>'); window.toggleMenu('menu-<?php echo $link['id']; ?>', event)">
                                                             <span class="material-symbols-outlined text-[18px]">content_copy</span>
                                                             Sao chép
@@ -350,7 +359,7 @@ endif; ?>
                 <form id="add-link-form" onsubmit="window.submitForm(event)" class="h-full flex flex-col">
                     <div class="px-8 py-6 border-b border-border-light/50 dark:border-border-dark/50 flex justify-between items-center">
                         <div>
-                            <h3 class="text-2xl font-bold text-text-primary-light dark:text-white">Thêm Liên Kết Mới</h3>
+                            <h3 class="text-2xl font-bold text-text-primary-light dark:text-white" id="modal-title">Thêm Liên Kết Mới</h3>
                             <p class="text-sm text-text-secondary-light tracking-wide mt-1">Tạo một thẻ tùy chỉnh mới cho bảng điều khiển.</p>
                         </div>
                         <button type="button" class="rounded-full p-2 text-text-secondary-light hover:bg-surface-light-highlight dark:hover:bg-surface-dark-highlight transition-colors" onclick="document.getElementById('add-modal').classList.remove('active')">
@@ -359,6 +368,7 @@ endif; ?>
                     </div>
                     
                     <div class="p-8 space-y-6 flex-1 overflow-y-visible">
+                        <input type="hidden" id="link-id" name="id" value="">
                         <div class="group">
                             <label class="block text-sm font-bold text-text-primary-light dark:text-text-primary-dark mb-2 group-focus-within:text-indigo-500 transition-colors">Tiêu Đề (Title) <span class="text-red-500">*</span></label>
                             <input id="link-title" class="w-full bg-surface-light-highlight dark:bg-surface-dark-highlight border-2 border-transparent focus:border-indigo-500 rounded-xl px-4 py-3.5 text-sm outline-none transition-all shadow-inner text-text-primary-light dark:text-white font-medium placeholder-text-secondary-light/60" required placeholder="vd: Không gian làm việc..." type="text"/>
@@ -406,7 +416,7 @@ endforeach; ?>
                     
                     <div class="bg-surface-light-highlight/50 dark:bg-surface-dark-highlight/20 px-8 py-5 flex items-center justify-end gap-3 mt-auto border-t border-border-light/50 dark:border-border-dark/50">
                         <button class="px-6 py-2.5 text-sm font-bold text-text-secondary-light dark:text-text-secondary-dark hover:text-text-primary-light dark:hover:text-white transition-colors" onclick="document.getElementById('add-modal').classList.remove('active')" type="button">Trở Về</button>
-                        <button class="bg-gradient-to-r from-indigo-500 to-purple-600 px-8 py-2.5 rounded-xl text-sm font-bold text-white shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40 hover:-translate-y-0.5 transition-all" type="submit">Lưu Liên Kết</button>
+                        <button class="bg-gradient-to-r from-indigo-500 to-purple-600 px-8 py-2.5 rounded-xl text-sm font-bold text-white shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40 hover:-translate-y-0.5 transition-all" type="submit" id="submit-btn-text">Lưu Liên Kết</button>
                     </div>
                 </form>
             </div>
