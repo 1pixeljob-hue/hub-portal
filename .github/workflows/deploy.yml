@@ -1,28 +1,18 @@
-name: Deploy to cPanel FTP
+name: Deploy PHP App to cPanel FTP
 
 on:
   push:
     branches:
       - main
+      - master # Hỗ trợ cả branch master nếu có
 
 jobs:
-  build-and-deploy:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '20'
-
-      - name: Install Dependencies
-        run: npm install
-
-      - name: Build Project
-        run: npm run build
 
       - name: Deploy via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
@@ -30,9 +20,12 @@ jobs:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          server-dir: /
-          local-dir: ./dist/ 
+          server-dir: / # Thay đổi đường dẫn này nếu thư mục public_html ở vị trí khác (VD: /public_html/link-manager/)
+          local-dir: ./ 
+          exclude: |
+            **/.git*
+            **/.git*/**
+            .github/**
           dangerous-clean-slate: false
           port: 21
-          protocol: ftps
           security: strict
