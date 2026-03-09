@@ -48,6 +48,28 @@ switch ($method) {
         $tags = json_encode($input['tags'] ?? []);
 
         try {
+            // Kiểm tra link trùng lặp (xét cả trường hợp có hoặc không có dấu / ở cuối)
+            $checkSql = "SELECT id FROM links WHERE (url = :url OR url = :url_no_slash OR url = :url_with_slash)";
+            $checkParams = [
+                'url' => $url,
+                'url_no_slash' => rtrim($url, '/'),
+                'url_with_slash' => rtrim($url, '/') . '/'
+            ];
+
+            if ($id) {
+                $checkSql .= " AND id != :id";
+                $checkParams['id'] = $id;
+            }
+
+            $checkStmt = $pdo->prepare($checkSql);
+            $checkStmt->execute($checkParams);
+
+            if ($checkStmt->fetch()) {
+                http_response_code(409); // Trạng thái HTTP 409: Xảy ra xung đột (Conflict)
+                echo json_encode(["error" => "Liên kết này đã tồn tại trong hệ thống!"]);
+                exit;
+            }
+
             if ($id) {
                 // Update
                 $sql = "UPDATE links SET title = :title, url = :url, theme = :theme, logoUrl = :logoUrl, initial = :initial, tags = :tags WHERE id = :id";
