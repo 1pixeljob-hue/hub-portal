@@ -562,10 +562,13 @@ window.updatePreview = function () {
 
     if (pInitial) {
         const gradiens = {
-            'indigo': 'from-indigo-500 to-indigo-600',
-            'purple': 'from-purple-500 to-purple-600',
-            'pink': 'from-pink-500 to-pink-600',
-            'emerald': 'from-emerald-500 to-emerald-600'
+            'indigo': 'from-[#00DDB3] to-[#0066FF]',
+            'purple': 'from-[#0066FF] to-[#00b4d8]',
+            'pink': 'from-[#00DDB3] to-[#00b4d8]',
+            'emerald': 'from-[#00DDB3] to-[#00b4d8]',
+            'rose': 'from-[#00DDB3] to-[#0066FF]',
+            'amber': 'from-[#00DDB3] to-[#00b4d8]',
+            'cyan': 'from-[#00DDB3] to-[#00b4d8]'
         };
         const gradClass = gradiens[categoryColor] || gradiens['indigo'];
 
@@ -610,10 +613,13 @@ window.updatePreview = function () {
         }
 
         const tagClasses = {
-            'indigo': 'bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600 dark:text-indigo-400 border-indigo-200/50 dark:border-indigo-800/30',
-            'purple': 'bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400 border-purple-200/50 dark:border-purple-800/30',
-            'pink': 'bg-pink-50 dark:bg-pink-900/20 text-pink-600 dark:text-pink-400 border-pink-200/50 dark:border-pink-800/30',
-            'emerald': 'bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 border-emerald-200/50 dark:border-emerald-800/30'
+            'indigo': 'bg-primary/10 dark:bg-primary/20 text-primary dark:text-primary border-primary/30 dark:border-primary/30',
+            'purple': 'bg-secondary/10 dark:bg-secondary/20 text-secondary dark:text-secondary border-secondary/30 dark:border-secondary/30',
+            'pink': 'bg-accent/10 dark:bg-accent/20 text-accent dark:text-accent border-accent/30 dark:border-accent/30',
+            'emerald': 'bg-primary/10 dark:bg-primary/20 text-primary dark:text-primary border-primary/30 dark:border-primary/30',
+            'rose': 'bg-secondary/10 dark:bg-secondary/20 text-secondary dark:text-secondary border-secondary/30 dark:border-secondary/30',
+            'amber': 'bg-primary/10 dark:bg-primary/20 text-primary dark:text-primary border-primary/30 dark:border-primary/30',
+            'cyan': 'bg-accent/10 dark:bg-accent/20 text-accent dark:text-accent border-accent/30 dark:border-accent/30'
         };
 
         pTagsContainer.innerHTML = tagsArr.slice(0, 3).map(tag => {

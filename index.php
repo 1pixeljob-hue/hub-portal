@@ -68,30 +68,74 @@ foreach ($links as $link) {
             theme: {
                 extend: {
                     colors: {
-                        "primary": "#6366f1",
-                        "secondary": "#ec4899",
-                        "accent": "#8b5cf6",
+                        "primary": "#00DDB3",
+                        "secondary": "#0066FF",
+                        "accent": "#00b4d8",
                         "background-light": "#f8fafc",
-                        "background-dark": "#0f172a",
+                        "background-dark": "#0b1120",
                         "surface-light": "#ffffff",
-                        "surface-dark": "#1e293b",
+                        "surface-dark": "#111827",
                         "surface-light-highlight": "#f1f5f9",
-                        "surface-dark-highlight": "#334155",
+                        "surface-dark-highlight": "#1f2937",
                         "border-light": "#e2e8f0",
-                        "border-dark": "#334155",
+                        "border-dark": "#1f2937",
                         "text-primary-light": "#0f172a",
                         "text-primary-dark": "#f8fafc",
                         "text-secondary-light": "#64748b",
-                        "text-secondary-dark": "#94a3b8"
+                        "text-secondary-dark": "#94a3b8",
+                        // Redefine standard colors to match logo theme
+                        "indigo": {
+                            50: "#eafefb",
+                            100: "#cafdf4",
+                            200: "#96fbed",
+                            300: "#5df6e3",
+                            400: "#2eead3",
+                            500: "#00DDB3",
+                            600: "#00bfa3",
+                            700: "#009d89",
+                            800: "#007c6f",
+                            900: "#00665b"
+                        },
+                        "purple": {
+                            50: "#e6f0ff",
+                            100: "#ccdeff",
+                            200: "#99beff",
+                            300: "#669eff",
+                            400: "#337eff",
+                            500: "#0066FF",
+                            600: "#0052cc",
+                            700: "#003e99",
+                            800: "#002a66",
+                            900: "#001633"
+                        },
+                        "pink": {
+                            50: "#eafefb", 100: "#cafdf4", 200: "#96fbed", 300: "#5df6e3", 400: "#2eead3", 500: "#00DDB3", 600: "#00bfa3", 700: "#009d89", 800: "#007c6f", 900: "#00665b"
+                        },
+                        "emerald": {
+                            50: "#eafefb", 100: "#cafdf4", 200: "#96fbed", 300: "#5df6e3", 400: "#2eead3", 500: "#00DDB3", 600: "#00bfa3", 700: "#009d89", 800: "#007c6f", 900: "#00665b"
+                        },
+                        "rose": {
+                            50: "#e6f0ff", 100: "#ccdeff", 200: "#99beff", 300: "#669eff", 400: "#337eff", 500: "#0066FF", 600: "#0052cc", 700: "#003e99", 800: "#002a66", 900: "#001633"
+                        },
+                        "amber": {
+                            50: "#eafefb", 100: "#cafdf4", 200: "#96fbed", 300: "#5df6e3", 400: "#2eead3", 500: "#00DDB3", 600: "#00bfa3", 700: "#009d89", 800: "#007c6f", 900: "#00665b"
+                        },
+                        "cyan": {
+                            50: "#e6f8fc", 100: "#cdedf9", 200: "#9cdaf3", 300: "#6bc7ed", 400: "#3ab4e7", 500: "#00b4d8", 600: "#0090ad", 700: "#006c82", 800: "#004856", 900: "#00242b"
+                        },
+                        "teal": {
+                            50: "#eafefb", 100: "#cafdf4", 200: "#96fbed", 300: "#5df6e3", 400: "#2eead3", 500: "#00DDB3", 600: "#00bfa3", 700: "#009d89", 800: "#007c6f", 900: "#00665b"
+                        }
                     },
                     fontFamily: {
                         "display": ["Inter", "sans-serif"]
                     },
                     backgroundImage: {
-                        'mesh-light': 'radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%)',
-                        'mesh-dark': 'radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), radial-gradient(at 50% 0%, hsla(225,39%,25%,1) 0, transparent 50%), radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%)',
-                        'mesh-vibrant': 'radial-gradient(at 40% 20%, hsla(266,100%,70%,0.15) 0px, transparent 50%), radial-gradient(at 80% 0%, hsla(189,100%,56%,0.15) 0px, transparent 50%), radial-gradient(at 0% 50%, hsla(340,100%,76%,0.15) 0px, transparent 50%)',
-                        'gradient-border': 'linear-gradient(to right, #6366f1, #a855f7, #ec4899)',
+                        'mesh-light': 'radial-gradient(at 0% 0%, hsla(168,100%,70%,0.1) 0, transparent 50%), radial-gradient(at 50% 0%, hsla(217,100%,50%,0.1) 0, transparent 50%), radial-gradient(at 100% 0%, hsla(180,100%,50%,0.1) 0, transparent 50%)',
+                        'mesh-dark': 'radial-gradient(at 0% 0%, hsla(168,100%,10%,0.4) 0, transparent 50%), radial-gradient(at 50% 0%, hsla(217,100%,10%,0.4) 0, transparent 50%), radial-gradient(at 100% 0%, hsla(180,100%,10%,0.4) 0, transparent 50%)',
+                        'mesh-vibrant': 'radial-gradient(at 40% 20%, hsla(168,100%,70%,0.1) 0px, transparent 50%), radial-gradient(at 80% 0%, hsla(217,100%,56%,0.1) 0px, transparent 50%), radial-gradient(at 0% 50%, hsla(189,100%,76%,0.1) 0px, transparent 50%)',
+                        'gradient-border': 'linear-gradient(to right, #00DDB3, #0066FF)',
+                        'logo-gradient': 'linear-gradient(135deg, #00DDB3 0%, #0066FF 100%)',
                         'card-gradient': 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%)'
                     },
                 },
@@ -100,19 +144,19 @@ foreach ($links as $link) {
     </script>
     <style>
         .glass-panel { backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
-        .gradient-text { background-clip: text; -webkit-background-clip: text; color: transparent; background-image: linear-gradient(to right, #6366f1, #ec4899); }
+        .gradient-text { background-clip: text; -webkit-background-clip: text; color: transparent; background-image: linear-gradient(to right, #00DDB3, #0066FF); }
         .interactive-card { position: relative; z-index: 1; border-radius: 1rem; padding: 1px; background: transparent; transition: transform 0.3s ease, box-shadow 0.3s ease; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1); }
         .interactive-card::before { content: ""; position: absolute; inset: 0; border-radius: 1rem; padding: 1px; background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05)); -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); -webkit-mask-composite: xor; mask-composite: exclude; pointer-events: none; transition: background 0.3s ease; }
         .interactive-card:hover { transform: scale(1.02); box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1); }
-        .interactive-card:hover::before { background: linear-gradient(45deg, #6366f1, #ec4899, #8b5cf6, #3b82f6); opacity: 1; }
+        .interactive-card:hover::before { background: linear-gradient(45deg, #00DDB3, #0066FF, #00b4d8, #3b82f6); opacity: 1; }
         .interactive-card-inner { height: 100%; border-radius: calc(1rem - 1px); background-color: rgb(255 255 255 / 0.8); backdrop-filter: blur(12px); transition: all 0.3s ease; border: 1px solid rgba(255, 255, 255, 0.5); }
         .dark .interactive-card-inner { background-color: rgb(30 41 59 / 0.6); border: 1px solid rgba(255, 255, 255, 0.05); }
-        .interactive-card:hover .interactive-card-inner { background-color: rgb(255 255 255 / 0.95); box-shadow: inset 0 0 20px rgba(99, 102, 241, 0.15); border-color: transparent; }
-        .dark .interactive-card:hover .interactive-card-inner { background-color: rgb(15 23 42 / 0.9); box-shadow: inset 0 0 20px rgba(99, 102, 241, 0.15); border-color: transparent; }
+        .interactive-card:hover .interactive-card-inner { background-color: rgb(255 255 255 / 0.95); box-shadow: inset 0 0 20px rgba(0, 221, 179, 0.15); border-color: transparent; }
+        .dark .interactive-card:hover .interactive-card-inner { background-color: rgb(15 23 42 / 0.9); box-shadow: inset 0 0 20px rgba(0, 221, 179, 0.15); border-color: transparent; }
         .refined-btn { position: relative; overflow: hidden; z-index: 10; }
-        .refined-btn::after { content: ''; position: absolute; inset: 0; background: linear-gradient(45deg, #6366f1, #ec4899); opacity: 0; transition: opacity 0.3s ease; z-index: -1; border-radius: inherit; }
+        .refined-btn::after { content: ''; position: absolute; inset: 0; background: linear-gradient(45deg, #00DDB3, #0066FF); opacity: 0; transition: opacity 0.3s ease; z-index: -1; border-radius: inherit; }
         .refined-btn:hover::after { opacity: 1; }
-        .refined-btn:hover { color: white !important; box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3); }
+        .refined-btn:hover { color: white !important; box-shadow: 0 4px 12px rgba(0, 221, 179, 0.3); }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         
         /* Tùy chỉnh thanh cuộn nhỏ gọn */
@@ -130,16 +174,17 @@ foreach ($links as $link) {
         }
     </style>
 </head>
-<body class="bg-background-light dark:bg-background-dark font-display text-text-primary-light dark:text-text-primary-dark antialiased overflow-hidden transition-colors duration-300 selection:bg-pink-500 selection:text-white">
+<body class="bg-background-light dark:bg-background-dark font-display text-text-primary-light dark:text-text-primary-dark antialiased overflow-hidden transition-colors duration-300 selection:bg-primary selection:text-white">
     <div class="fixed inset-0 pointer-events-none bg-mesh-vibrant z-0 opacity-100 dark:opacity-40"></div>
     <div class="flex h-screen w-full relative z-10">
         <!-- Sidebar -->
         <aside class="hidden md:flex w-72 flex-col border-r border-border-light/80 dark:border-border-dark/80 bg-surface-light/80 dark:bg-surface-dark/80 backdrop-blur-xl transition-colors duration-300 z-20">
-            <div class="flex h-20 items-center gap-4 px-6 border-b border-border-light/50 dark:border-border-dark/50">
-                <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 shadow-lg shadow-purple-500/20">
-                    <span class="material-symbols-outlined text-[24px] text-white">webhook</span>
+            <div class="flex h-20 items-center gap-3 px-6 border-b border-border-light/50 dark:border-border-dark/50">
+                <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-[#00DDB3] to-[#0066FF] shadow-lg shadow-[#00DDB3]/20 overflow-hidden">
+                    <img src="assets/logo.png" id="main-logo" class="h-10 w-10 object-contain p-1" alt="1Pixel Logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <span class="material-symbols-outlined text-[24px] text-white hidden">webhook</span>
                 </div>
-                <h1 class="text-xl font-bold tracking-tight bg-gradient-to-r from-indigo-600 to-pink-500 bg-clip-text text-transparent dark:from-indigo-400 dark:to-pink-400">Hub Portal</h1>
+                <h1 class="text-xl font-bold tracking-tight bg-gradient-to-r from-[#00DDB3] to-[#0066FF] bg-clip-text text-transparent">1Pixel</h1>
             </div>
             
             <div class="flex flex-1 flex-col overflow-y-auto py-6 px-4 custom-scrollbar">
@@ -148,10 +193,10 @@ foreach ($links as $link) {
                     <nav class="space-y-1">
                         <button class="category-filter active group flex w-full items-center justify-between rounded-xl px-3 py-2.5 text-sm font-medium transition-all hover:bg-surface-light-highlight dark:hover:bg-surface-dark-highlight" data-filter="all">
                             <div class="flex items-center gap-3 text-text-primary-light dark:text-text-primary-dark">
-                                <span class="material-symbols-outlined text-[20px] text-indigo-500 dark:text-indigo-400">dashboard</span>
+                                <span class="material-symbols-outlined text-[20px] text-primary">dashboard</span>
                                 Tất cả liên kết
                             </div>
-                            <span class="flex h-6 min-w-[24px] items-center justify-center rounded-full bg-indigo-100 px-2 text-xs font-bold text-indigo-700 dark:bg-indigo-500/20 dark:text-indigo-300"><?php echo $totalLinks; ?></span>
+                            <span class="flex h-6 min-w-[24px] items-center justify-center rounded-full bg-primary/10 px-2 text-xs font-bold text-primary dark:bg-primary/20 dark:text-primary"><?php echo $totalLinks; ?></span>
                         </button>
                     </nav>
                 </div>
@@ -159,7 +204,7 @@ foreach ($links as $link) {
                 <div>
                     <div class="flex items-center justify-between px-3 mb-2">
                         <p class="text-xs font-bold uppercase tracking-wider text-text-secondary-light dark:text-text-secondary-dark/70">Danh Mục</p>
-                        <button onclick="document.getElementById('add-category-modal').classList.add('active')" class="text-text-secondary-light hover:text-indigo-500 dark:hover:text-indigo-400 transition-colors" title="Thêm danh mục mới">
+                        <button onclick="document.getElementById('add-category-modal').classList.add('active')" class="text-text-secondary-light hover:text-primary transition-colors" title="Thêm danh mục mới">
                             <span class="material-symbols-outlined text-[16px]">add_circle</span>
                         </button>
                     </div>
@@ -174,7 +219,7 @@ foreach ($links as $link) {
                             </div>
                             <div class="flex items-center gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
                                 <?php if ($cat['count'] > 0): ?>
-                                <span class="flex h-5 min-w-[20px] items-center justify-center rounded-full bg-border-light dark:bg-border-dark px-1.5 text-[10px] font-bold text-text-secondary-light dark:text-text-secondary-dark group-hover:bg-indigo-100 group-hover:text-indigo-700 dark:group-hover:bg-indigo-500/20 dark:group-hover:text-indigo-300 transition-colors">
+                                <span class="flex h-5 min-w-[20px] items-center justify-center rounded-full bg-border-light dark:bg-border-dark px-1.5 text-[10px] font-bold text-text-secondary-light dark:text-text-secondary-dark group-hover:bg-primary/10 group-hover:text-primary dark:group-hover:bg-primary/20 dark:group-hover:text-primary transition-colors">
                                     <?php echo $cat['count']; ?>
                                 </span>
                                 <?php
@@ -191,8 +236,8 @@ endforeach; ?>
             </div>
             
             <div class="mt-auto border-t border-border-light/50 dark:border-border-dark/50 p-4">
-                <div class="rounded-2xl border border-indigo-100 dark:border-indigo-500/20 bg-gradient-to-b from-indigo-50/50 to-white dark:from-indigo-500/5 dark:to-surface-dark p-4 shadow-sm">
-                    <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-indigo-100 text-indigo-600 dark:bg-indigo-500/20 dark:text-indigo-400">
+                <div class="rounded-2xl border border-primary/20 dark:border-primary/20 bg-gradient-to-b from-primary/5 to-white dark:from-primary/5 dark:to-surface-dark p-4 shadow-sm">
+                    <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary">
                         <span class="material-symbols-outlined text-[20px]">bolt</span>
                     </div>
                     <h4 class="mb-1 text-sm font-bold text-text-primary-light dark:text-text-primary-dark">Pro Workspace</h4>
@@ -206,21 +251,21 @@ endforeach; ?>
             <header class="flex h-16 shrink-0 items-center justify-between border-b border-border-light/50 dark:border-border-dark/50 bg-surface-light/80 dark:bg-surface-dark/80 backdrop-blur-md px-6 transition-colors duration-300">
                 <div class="flex flex-1 items-center max-w-md">
                     <div class="relative w-full group">
-                        <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-text-secondary-light dark:text-text-secondary-dark group-focus-within:text-indigo-500 transition-colors">
+                        <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-text-secondary-light dark:text-text-secondary-dark group-focus-within:text-primary transition-colors">
                             <span class="material-symbols-outlined text-[20px]">search</span>
                         </div>
-                        <input id="link-search" class="block w-full rounded-full border-2 border-transparent bg-surface-light-highlight dark:bg-surface-dark-highlight py-2 pl-10 pr-3 text-sm text-text-primary-light dark:text-white placeholder-text-secondary-light dark:placeholder-text-secondary-dark focus:border-indigo-500 focus:bg-white dark:focus:bg-surface-dark focus:outline-none focus:ring-0 transition-all shadow-inner" placeholder="Tìm liên kết, thẻ..." type="text"/>
+                        <input id="link-search" class="block w-full rounded-full border-2 border-transparent bg-surface-light-highlight dark:bg-surface-dark-highlight py-2 pl-10 pr-3 text-sm text-text-primary-light dark:text-white placeholder-text-secondary-light dark:placeholder-text-secondary-dark focus:border-primary focus:bg-white dark:focus:bg-surface-dark focus:outline-none focus:ring-0 transition-all shadow-inner" placeholder="Tìm liên kết, thẻ..." type="text"/>
                     </div>
                 </div>
                 <div class="flex items-center gap-3">
-                    <button class="relative rounded-lg p-2 text-text-secondary-light dark:text-text-secondary-dark hover:bg-surface-light-highlight dark:hover:bg-surface-dark-highlight hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors" id="theme-toggle" title="Toggle Theme">
+                    <button class="relative rounded-lg p-2 text-text-secondary-light dark:text-text-secondary-dark hover:bg-surface-light-highlight dark:hover:bg-surface-dark-highlight hover:text-primary transition-colors" id="theme-toggle" title="Toggle Theme">
                         <span class="material-symbols-outlined text-[24px]">light_mode</span>
                     </button>
-                    <button class="flex items-center gap-2 rounded-lg bg-surface-light-highlight dark:bg-surface-dark-highlight border border-border-light/50 dark:border-border-dark/50 px-3.5 py-2 text-sm font-semibold text-text-primary-light dark:text-white hover:border-indigo-500/50 dark:hover:border-indigo-500/50 hover:text-indigo-600 dark:hover:text-indigo-400 hover:shadow-sm transition-all" onclick="document.getElementById('add-category-modal').classList.add('active')">
+                    <button class="flex items-center gap-2 rounded-lg bg-surface-light-highlight dark:bg-surface-dark-highlight border border-border-light/50 dark:border-border-dark/50 px-3.5 py-2 text-sm font-semibold text-text-primary-light dark:text-white hover:border-primary/50 hover:text-primary transition-all" onclick="document.getElementById('add-category-modal').classList.add('active')">
                         <span class="material-symbols-outlined text-[18px]">create_new_folder</span>
                         Danh Mục
                     </button>
-                    <button class="flex items-center gap-2 rounded-lg bg-gradient-to-r from-indigo-500 to-purple-600 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40 hover:scale-[1.02] transition-all" onclick="window.openAddLinkModal()">
+                    <button class="flex items-center gap-2 rounded-lg bg-gradient-to-r from-primary to-secondary px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-primary/25 hover:shadow-primary/40 hover:scale-[1.02] transition-all" onclick="window.openAddLinkModal()">
                         <span class="material-symbols-outlined text-[20px]">add</span>
                         Thêm Liên Kết
                     </button>
@@ -230,10 +275,10 @@ endforeach; ?>
             <div class="flex-1 overflow-y-auto p-4 md:p-8">
                 <div class="mx-auto max-w-7xl">
                     <!-- Greeting Section -->
-                    <div class="relative mb-8 overflow-hidden rounded-2xl p-[2px] bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 shadow-xl shadow-purple-500/10">
+                    <div class="relative mb-8 overflow-hidden rounded-2xl p-[2px] bg-gradient-to-r from-[#00DDB3] via-[#0066FF] to-[#00b4d8] shadow-xl shadow-[#00DDB3]/10">
                         <div class="relative flex flex-col md:flex-row md:items-end justify-between gap-4 rounded-2xl bg-white/90 dark:bg-surface-dark/90 backdrop-blur-xl p-6 md:p-8">
                             <div class="z-10">
-                                <h2 id="greeting-text" class="text-3xl md:text-4xl font-extrabold tracking-tight bg-gradient-to-r from-indigo-600 to-pink-500 bg-clip-text text-transparent dark:from-indigo-400 dark:to-pink-400 drop-shadow-sm">Chào buổi sáng, Sếp</h2>
+                                <h2 id="greeting-text" class="text-3xl md:text-4xl font-extrabold tracking-tight bg-gradient-to-r from-[#00DDB3] to-[#0066FF] bg-clip-text text-transparent drop-shadow-sm">Chào buổi sáng, Sếp</h2>
                                 <p class="text-text-secondary-light dark:text-text-secondary-dark mt-2 font-medium">Quản lý các liên kết của bạn hiệu quả.</p>
                             </div>
                             <div class="z-10 flex items-center gap-3 rounded-xl bg-surface-light-highlight/50 dark:bg-surface-dark-highlight/50 p-3 backdrop-blur-md border border-white/20 dark:border-white/5">
@@ -263,9 +308,9 @@ else: ?>
         }
         else {
             $gradients = [
-                'indigo' => 'from-indigo-500 to-indigo-600 hover:shadow-indigo-500/20 text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/20 border-indigo-100 dark:border-indigo-800/30',
-                'purple' => 'from-purple-500 to-purple-600 hover:shadow-purple-500/20 text-purple-600 dark:text-purple-400 bg-purple-50 dark:bg-purple-900/20 border-purple-100 dark:border-purple-800/30',
-                'pink' => 'from-pink-500 to-pink-600 hover:shadow-pink-500/20 text-pink-600 dark:text-pink-400 bg-pink-50 dark:bg-pink-900/20 border-pink-100 dark:border-pink-800/30',
+                'indigo' => 'from-[#00DDB3] to-[#0066FF] hover:shadow-[#00DDB3]/20 text-[#0066FF] dark:text-[#00DDB3] bg-[#00DDB3]/5 dark:bg-[#00DDB3]/10 border-[#00DDB3]/20 dark:border-[#00DDB3]/30',
+                'purple' => 'from-[#0066FF] to-[#00b4d8] hover:shadow-[#0066FF]/20 text-[#0066FF] dark:text-[#00b4d8] bg-[#0066FF]/5 dark:bg-[#0066FF]/10 border-[#0066FF]/20 dark:border-[#0066FF]/30',
+                'pink' => 'from-[#00DDB3] to-[#00b4d8] hover:shadow-[#00DDB3]/20 text-[#00DDB3] dark:text-[#00b4d8] bg-[#00b4d8]/5 dark:bg-[#00b4d8]/10 border-[#00b4d8]/20 dark:border-[#00b4d8]/30',
                 'emerald' => 'from-emerald-500 to-emerald-600 hover:shadow-emerald-500/20 text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 border-emerald-100 dark:border-emerald-800/30'
             ];
             $gClass = $gradients[$cardTheme] ?? $gradients['indigo'];
@@ -410,26 +455,26 @@ endif; ?>
                     
                     <div class="p-8 space-y-6 flex-1 overflow-y-visible">
                         <input type="hidden" id="link-id" name="id" value="">
-                        <div class="group">
-                            <label class="block text-sm font-bold text-text-primary-light dark:text-text-primary-dark mb-2 group-focus-within:text-indigo-500 transition-colors">Tiêu Đề (Title) <span class="text-red-500">*</span></label>
-                            <input id="link-title" class="w-full bg-surface-light-highlight dark:bg-surface-dark-highlight border-2 border-transparent focus:border-indigo-500 rounded-xl px-4 py-3.5 text-sm outline-none transition-all shadow-inner text-text-primary-light dark:text-white font-medium placeholder-text-secondary-light/60" required placeholder="vd: Không gian làm việc..." type="text"/>
+                         <div class="group">
+                            <label class="block text-sm font-bold text-text-primary-light dark:text-text-primary-dark mb-2 group-focus-within:text-primary transition-colors">Tiêu Đề (Title) <span class="text-red-500">*</span></label>
+                            <input id="link-title" class="w-full bg-surface-light-highlight dark:bg-surface-dark-highlight border-2 border-transparent focus:border-primary rounded-xl px-4 py-3.5 text-sm outline-none transition-all shadow-inner text-text-primary-light dark:text-white font-medium placeholder-text-secondary-light/60" required placeholder="vd: Không gian làm việc..." type="text"/>
                         </div>
                         
                         <div class="group">
-                            <label class="block text-sm font-bold text-text-primary-light dark:text-text-primary-dark mb-2 group-focus-within:text-indigo-500 transition-colors">Đường Dẫn URL <span class="text-red-500">*</span></label>
+                            <label class="block text-sm font-bold text-text-primary-light dark:text-text-primary-dark mb-2 group-focus-within:text-primary transition-colors">Đường Dẫn URL <span class="text-red-500">*</span></label>
                             <div class="relative">
                                 <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                                     <span class="material-symbols-outlined text-[18px] text-text-secondary-light">link</span>
                                 </div>
-                                <input id="link-url" class="w-full bg-surface-light-highlight dark:bg-surface-dark-highlight border-2 border-transparent focus:border-indigo-500 rounded-xl pl-11 pr-4 py-3.5 text-sm outline-none transition-all shadow-inner text-text-primary-light dark:text-white font-medium placeholder-text-secondary-light/60" required placeholder="e.g. google.com" type="text"/>
+                                <input id="link-url" class="w-full bg-surface-light-highlight dark:bg-surface-dark-highlight border-2 border-transparent focus:border-primary rounded-xl pl-11 pr-4 py-3.5 text-sm outline-none transition-all shadow-inner text-text-primary-light dark:text-white font-medium placeholder-text-secondary-light/60" required placeholder="e.g. google.com" type="text"/>
                             </div>
                         </div>
                         
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                             <div class="group">
-                                <label class="block text-sm font-bold text-text-primary-light dark:text-text-primary-dark mb-2 group-focus-within:text-indigo-500 transition-colors">Danh Mục</label>
+                                <label class="block text-sm font-bold text-text-primary-light dark:text-text-primary-dark mb-2 group-focus-within:text-primary transition-colors">Danh Mục</label>
                                 <div class="relative custom-select-container">
-                                    <button type="button" id="category-select-btn" class="w-full flex items-center justify-between text-left appearance-none bg-surface-light-highlight dark:bg-surface-dark-highlight border-2 border-transparent focus:border-indigo-500 focus:ring-[3px] focus:ring-indigo-500/20 rounded-xl pl-4 pr-3 py-3 text-sm outline-none transition-all shadow-inner text-text-primary-light dark:text-white font-medium cursor-pointer relative z-10">
+                                    <button type="button" id="category-select-btn" class="w-full flex items-center justify-between text-left appearance-none bg-surface-light-highlight dark:bg-surface-dark-highlight border-2 border-transparent focus:border-primary focus:ring-[3px] focus:ring-primary/20 rounded-xl pl-4 pr-3 py-3 text-sm outline-none transition-all shadow-inner text-text-primary-light dark:text-white font-medium cursor-pointer relative z-10">
                                         <span id="category-select-text">Chọn Danh Mục...</span>
                                         <span class="material-symbols-outlined text-[20px] text-text-secondary-light transition-transform duration-200" id="category-select-icon">expand_more</span>
                                     </button>
@@ -449,15 +494,15 @@ endforeach; ?>
                                 </div>
                             </div>
                             <div class="group">
-                                <label class="block text-sm font-bold text-text-primary-light dark:text-text-primary-dark mb-2 group-focus-within:text-indigo-500 transition-colors">Thẻ Phân Loại (Tags)</label>
-                                <input id="link-tags" class="w-full bg-surface-light-highlight dark:bg-surface-dark-highlight border-2 border-transparent focus:border-indigo-500 rounded-xl px-4 py-3.5 text-sm outline-none transition-all shadow-inner text-text-primary-light dark:text-white font-medium placeholder-text-secondary-light/60" placeholder="vd: dev, design, tool..."/>
+                                <label class="block text-sm font-bold text-text-primary-light dark:text-text-primary-dark mb-2 group-focus-within:text-primary transition-colors">Thẻ Phân Loại (Tags)</label>
+                                <input id="link-tags" class="w-full bg-surface-light-highlight dark:bg-surface-dark-highlight border-2 border-transparent focus:border-primary rounded-xl px-4 py-3.5 text-sm outline-none transition-all shadow-inner text-text-primary-light dark:text-white font-medium placeholder-text-secondary-light/60" placeholder="vd: dev, design, tool..."/>
                             </div>
                         </div>
                     </div>
                     
                     <div class="bg-surface-light-highlight/50 dark:bg-surface-dark-highlight/20 px-8 py-5 flex items-center justify-end gap-3 mt-auto border-t border-border-light/50 dark:border-border-dark/50">
                         <button class="px-6 py-2.5 text-sm font-bold text-text-secondary-light dark:text-text-secondary-dark hover:text-text-primary-light dark:hover:text-white transition-colors" onclick="document.getElementById('add-modal').classList.remove('active')" type="button">Trở Về</button>
-                        <button class="bg-gradient-to-r from-indigo-500 to-purple-600 px-8 py-2.5 rounded-xl text-sm font-bold text-white shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40 hover:-translate-y-0.5 transition-all" type="submit" id="submit-btn-text">Lưu Liên Kết</button>
+                        <button class="bg-gradient-to-r from-primary to-secondary px-8 py-2.5 rounded-xl text-sm font-bold text-white shadow-lg shadow-primary/25 hover:shadow-primary/40 hover:-translate-y-0.5 transition-all" type="submit" id="submit-btn-text">Lưu Liên Kết</button>
                     </div>
                 </form>
             </div>
@@ -472,9 +517,9 @@ endforeach; ?>
 
             <form id="add-category-form" onsubmit="window.submitCategoryForm(event)" class="relative z-10 flex flex-col h-full">
                 <div class="px-8 py-6 border-b border-border-light/50 dark:border-border-dark/50 flex justify-between items-center relative">
-                    <div class="absolute top-0 left-0 h-1 w-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500"></div>
+                    <div class="absolute top-0 left-0 h-1 w-full bg-gradient-to-r from-[#00DDB3] via-[#0066FF] to-[#00b4d8]"></div>
                     <div>
-                        <h3 class="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-pink-500 bg-clip-text text-transparent dark:from-indigo-400 dark:to-pink-400 drop-shadow-sm">Danh Mục Mới</h3>
+                        <h3 class="text-2xl font-bold bg-gradient-to-r from-[#00DDB3] to-[#0066FF] bg-clip-text text-transparent drop-shadow-sm">Danh Mục Mới</h3>
                         <p class="text-sm text-text-secondary-light tracking-wide mt-1">Phân loại hiển thị cho giao diện trực quan.</p>
                     </div>
                     <button type="button" class="rounded-full p-2 text-text-secondary-light hover:bg-surface-light-highlight dark:hover:bg-surface-dark-highlight transition-colors" onclick="document.getElementById('add-category-modal').classList.remove('active')">
@@ -483,48 +528,48 @@ endforeach; ?>
                 </div>
                 <div class="p-8 space-y-6 flex-1">
                     <div class="group">
-                        <label class="block text-sm font-bold text-text-primary-light dark:text-text-primary-dark mb-2 group-focus-within:text-indigo-500 transition-colors">Tên Danh Mục <span class="text-red-500">*</span></label>
-                        <input id="cat-title" class="w-full bg-surface-light-highlight dark:bg-surface-dark-highlight border-2 border-transparent focus:border-indigo-500 rounded-xl px-4 py-3.5 text-sm outline-none transition-all shadow-inner text-text-primary-light dark:text-white font-medium placeholder-text-secondary-light/60" required placeholder="vd: Thiết Kế, Phần Mềm..." type="text"/>
+                        <label class="block text-sm font-bold text-text-primary-light dark:text-text-primary-dark mb-2 group-focus-within:text-primary transition-colors">Tên Danh Mục <span class="text-red-500">*</span></label>
+                        <input id="cat-title" class="w-full bg-surface-light-highlight dark:bg-surface-dark-highlight border-2 border-transparent focus:border-primary rounded-xl px-4 py-3.5 text-sm outline-none transition-all shadow-inner text-text-primary-light dark:text-white font-medium placeholder-text-secondary-light/60" required placeholder="vd: Thiết Kế, Phần Mềm..." type="text"/>
                     </div>
                     <div class="grid grid-cols-2 gap-6">
                         <div class="group">
-                            <label class="block text-sm font-bold text-text-primary-light dark:text-text-primary-dark mb-2 group-focus-within:text-indigo-500 transition-colors">Mã Biểu Tượng</label>
-                            <input id="cat-icon" class="w-full bg-surface-light-highlight dark:bg-surface-dark-highlight border-2 border-transparent focus:border-indigo-500 rounded-xl px-4 py-3.5 text-sm outline-none transition-all shadow-inner text-text-primary-light dark:text-white font-medium placeholder-text-secondary-light/60" placeholder="vd: code, star..." value="folder" type="text"/>
-                            <p class="text-[11px] font-bold text-indigo-500 hover:text-indigo-600 transition-colors mt-2"><a href="https://fonts.google.com/icons" target="_blank" class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">open_in_new</span> Thư Viện Biểu Tượng</a></p>
+                            <label class="block text-sm font-bold text-text-primary-light dark:text-text-primary-dark mb-2 group-focus-within:text-primary transition-colors">Mã Biểu Tượng</label>
+                            <input id="cat-icon" class="w-full bg-surface-light-highlight dark:bg-surface-dark-highlight border-2 border-transparent focus:border-primary rounded-xl px-4 py-3.5 text-sm outline-none transition-all shadow-inner text-text-primary-light dark:text-white font-medium placeholder-text-secondary-light/60" placeholder="vd: code, star..." value="folder" type="text"/>
+                            <p class="text-[11px] font-bold text-primary hover:text-secondary transition-colors mt-2"><a href="https://fonts.google.com/icons" target="_blank" class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">open_in_new</span> Thư Viện Biểu Tượng</a></p>
                         </div>
                         <div class="group">
-                            <label class="block text-sm font-bold text-text-primary-light dark:text-text-primary-dark mb-2 group-focus-within:text-indigo-500 transition-colors">Màu Sắc</label>
+                            <label class="block text-sm font-bold text-text-primary-light dark:text-text-primary-dark mb-2 group-focus-within:text-primary transition-colors">Màu Sắc</label>
                             <div class="relative custom-select-container">
-                                <button type="button" id="color-select-btn" class="w-full flex items-center justify-between text-left appearance-none bg-surface-light-highlight dark:bg-surface-dark-highlight border-2 border-transparent focus:border-indigo-500 focus:ring-[3px] focus:ring-indigo-500/20 rounded-xl pl-4 pr-3 py-3.5 text-sm outline-none transition-all shadow-inner text-text-primary-light dark:text-white font-medium cursor-pointer relative z-10">
+                                <button type="button" id="color-select-btn" class="w-full flex items-center justify-between text-left appearance-none bg-surface-light-highlight dark:bg-surface-dark-highlight border-2 border-transparent focus:border-primary focus:ring-[3px] focus:ring-primary/20 rounded-xl pl-4 pr-3 py-3.5 text-sm outline-none transition-all shadow-inner text-text-primary-light dark:text-white font-medium cursor-pointer relative z-10">
                                     <div class="flex items-center gap-2" id="color-select-display">
-                                        <div class="w-4 h-4 rounded-full bg-indigo-500"></div>
-                                        <span id="color-select-text">Chàm (Indigo)</span>
+                                        <div class="w-4 h-4 rounded-full bg-primary"></div>
+                                        <span id="color-select-text">Màu 1Pixel (Default)</span>
                                     </div>
                                     <span class="material-symbols-outlined text-[20px] text-text-secondary-light transition-transform duration-200" id="color-select-icon">expand_more</span>
                                 </button>
                                 
-                                <div id="color-select-menu" class="absolute z-[100] bottom-full left-0 w-full mb-1.5 bg-white dark:bg-surface-dark border border-indigo-500/30 rounded-xl shadow-2xl opacity-0 invisible transform translate-y-2 transition-all duration-200 overflow-hidden origin-bottom">
+                                <div id="color-select-menu" class="absolute z-[100] bottom-full left-0 w-full mb-1.5 bg-white dark:bg-surface-dark border border-primary/30 rounded-xl shadow-2xl opacity-0 invisible transform translate-y-2 transition-all duration-200 overflow-hidden origin-bottom">
                                     <ul class="max-h-60 overflow-y-auto custom-scrollbar p-1.5 space-y-0.5 bg-surface-light-highlight/20 dark:bg-surface-dark-highlight/20 backdrop-blur-md">
-                                        <li class="custom-color-option px-3 py-2 rounded-lg text-sm font-medium text-text-primary-light dark:text-text-primary-dark hover:bg-indigo-50 dark:hover:bg-indigo-900/40 cursor-pointer flex items-center gap-2 transition-all" data-value="indigo">
-                                            <div class="w-4 h-4 rounded-full bg-indigo-500"></div> Chàm (Indigo)
+                                        <li class="custom-color-option px-3 py-2 rounded-lg text-sm font-medium text-text-primary-light dark:text-text-primary-dark hover:bg-primary/5 dark:hover:bg-primary/10 cursor-pointer flex items-center gap-2 transition-all" data-value="indigo">
+                                            <div class="w-4 h-4 rounded-full bg-primary"></div> Teal Primary (Brand)
                                         </li>
-                                        <li class="custom-color-option px-3 py-2 rounded-lg text-sm font-medium text-text-primary-light dark:text-text-primary-dark hover:bg-purple-50 dark:hover:bg-purple-900/40 cursor-pointer flex items-center gap-2 transition-all" data-value="purple">
-                                            <div class="w-4 h-4 rounded-full bg-purple-500"></div> Tím Đậm (Purple)
+                                        <li class="custom-color-option px-3 py-2 rounded-lg text-sm font-medium text-text-primary-light dark:text-text-primary-dark hover:bg-secondary/5 dark:hover:bg-secondary/10 cursor-pointer flex items-center gap-2 transition-all" data-value="purple">
+                                            <div class="w-4 h-4 rounded-full bg-secondary"></div> Blue Secondary (Brand)
                                         </li>
-                                        <li class="custom-color-option px-3 py-2 rounded-lg text-sm font-medium text-text-primary-light dark:text-text-primary-dark hover:bg-pink-50 dark:hover:bg-pink-900/40 cursor-pointer flex items-center gap-2 transition-all" data-value="pink">
-                                            <div class="w-4 h-4 rounded-full bg-pink-500"></div> Hồng Đậm (Pink)
+                                        <li class="custom-color-option px-3 py-2 rounded-lg text-sm font-medium text-text-primary-light dark:text-text-primary-dark hover:bg-accent/5 dark:hover:bg-accent/10 cursor-pointer flex items-center gap-2 transition-all" data-value="pink">
+                                            <div class="w-4 h-4 rounded-full bg-accent"></div> Cyan Accent (Brand)
                                         </li>
-                                        <li class="custom-color-option px-3 py-2 rounded-lg text-sm font-medium text-text-primary-light dark:text-text-primary-dark hover:bg-emerald-50 dark:hover:bg-emerald-900/40 cursor-pointer flex items-center gap-2 transition-all" data-value="emerald">
-                                            <div class="w-4 h-4 rounded-full bg-emerald-500"></div> Ngọc Bích (Emerald)
+                                        <li class="custom-color-option px-3 py-2 rounded-lg text-sm font-medium text-text-primary-light dark:text-text-primary-dark hover:bg-primary/5 dark:hover:bg-primary/10 cursor-pointer flex items-center gap-2 transition-all" data-value="emerald">
+                                            <div class="w-4 h-4 rounded-full bg-emerald-500"></div> Emerald Brand
                                         </li>
-                                        <li class="custom-color-option px-3 py-2 rounded-lg text-sm font-medium text-text-primary-light dark:text-text-primary-dark hover:bg-rose-50 dark:hover:bg-rose-900/40 cursor-pointer flex items-center gap-2 transition-all" data-value="rose">
-                                            <div class="w-4 h-4 rounded-full bg-rose-500"></div> Đỏ Hồng (Rose)
+                                        <li class="custom-color-option px-3 py-2 rounded-lg text-sm font-medium text-text-primary-light dark:text-text-primary-dark hover:bg-secondary/5 dark:hover:bg-secondary/10 cursor-pointer flex items-center gap-2 transition-all" data-value="rose">
+                                            <div class="w-4 h-4 rounded-full bg-rose-500"></div> Rose Brand
                                         </li>
-                                        <li class="custom-color-option px-3 py-2 rounded-lg text-sm font-medium text-text-primary-light dark:text-text-primary-dark hover:bg-amber-50 dark:hover:bg-amber-900/40 cursor-pointer flex items-center gap-2 transition-all" data-value="amber">
-                                            <div class="w-4 h-4 rounded-full bg-amber-500"></div> Hổ Phách (Amber)
+                                        <li class="custom-color-option px-3 py-2 rounded-lg text-sm font-medium text-text-primary-light dark:text-text-primary-dark hover:bg-primary/5 dark:hover:bg-primary/10 cursor-pointer flex items-center gap-2 transition-all" data-value="amber">
+                                            <div class="w-4 h-4 rounded-full bg-amber-500"></div> Amber Brand
                                         </li>
-                                        <li class="custom-color-option px-3 py-2 rounded-lg text-sm font-medium text-text-primary-light dark:text-text-primary-dark hover:bg-cyan-50 dark:hover:bg-cyan-900/40 cursor-pointer flex items-center gap-2 transition-all" data-value="cyan">
-                                            <div class="w-4 h-4 rounded-full bg-cyan-500"></div> Xanh Lơ (Cyan)
+                                        <li class="custom-color-option px-3 py-2 rounded-lg text-sm font-medium text-text-primary-light dark:text-text-primary-dark hover:bg-accent/5 dark:hover:bg-accent/10 cursor-pointer flex items-center gap-2 transition-all" data-value="cyan">
+                                            <div class="w-4 h-4 rounded-full bg-cyan-500"></div> Cyan Brand
                                         </li>
                                         <li class="mt-1 pt-1 border-t border-indigo-500/10"></li>
                                         <li class="custom-color-option px-3 py-2 rounded-lg text-sm font-medium text-text-primary-light dark:text-text-primary-dark hover:bg-gray-50 dark:hover:bg-gray-900/40 cursor-pointer flex items-center gap-2 transition-all relative overflow-hidden" data-value="#ec4899" id="custom-color-li">
@@ -543,7 +588,7 @@ endforeach; ?>
                 </div>
                 <div class="bg-surface-light-highlight/30 dark:bg-surface-dark-highlight/20 border-t border-border-light/50 dark:border-border-dark/50 px-8 py-5 flex items-center justify-end gap-3 mt-auto">
                     <button class="px-6 py-2.5 text-sm font-bold text-text-secondary-light dark:text-text-secondary-dark hover:text-text-primary-light dark:hover:text-white transition-colors" onclick="document.getElementById('add-category-modal').classList.remove('active')" type="button">Hủy</button>
-                    <button class="bg-gradient-to-r from-indigo-500 to-purple-600 px-8 py-2.5 rounded-xl text-sm font-bold text-white shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40 hover:-translate-y-0.5 transition-all" type="submit">Lưu Danh Mục</button>
+                    <button class="bg-gradient-to-r from-primary to-secondary px-8 py-2.5 rounded-xl text-sm font-bold text-white shadow-lg shadow-primary/25 hover:shadow-primary/40 hover:-translate-y-0.5 transition-all" type="submit">Lưu Danh Mục</button>
                 </div>
             </form>
         </div>

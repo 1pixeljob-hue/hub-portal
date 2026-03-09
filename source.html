@@ -18,30 +18,74 @@
             theme: {
                 extend: {
                     colors: {
-                        "primary": "#6366f1",
-                        "secondary": "#ec4899",
-                        "accent": "#8b5cf6",
+                        "primary": "#00DDB3",
+                        "secondary": "#0066FF",
+                        "accent": "#00b4d8",
                         "background-light": "#f8fafc",
-                        "background-dark": "#0f172a",
+                        "background-dark": "#0b1120",
                         "surface-light": "#ffffff",
-                        "surface-dark": "#1e293b",
+                        "surface-dark": "#111827",
                         "surface-light-highlight": "#f1f5f9",
-                        "surface-dark-highlight": "#334155",
+                        "surface-dark-highlight": "#1f2937",
                         "border-light": "#e2e8f0",
-                        "border-dark": "#334155",
+                        "border-dark": "#1f2937",
                         "text-primary-light": "#0f172a",
                         "text-primary-dark": "#f8fafc",
                         "text-secondary-light": "#64748b",
-                        "text-secondary-dark": "#94a3b8"
+                        "text-secondary-dark": "#94a3b8",
+                        // Redefine standard colors to match logo theme
+                        "indigo": {
+                            50: "#eafefb",
+                            100: "#cafdf4",
+                            200: "#96fbed",
+                            300: "#5df6e3",
+                            400: "#2eead3",
+                            500: "#00DDB3",
+                            600: "#00bfa3",
+                            700: "#009d89",
+                            800: "#007c6f",
+                            900: "#00665b"
+                        },
+                        "purple": {
+                            50: "#e6f0ff",
+                            100: "#ccdeff",
+                            200: "#99beff",
+                            300: "#669eff",
+                            400: "#337eff",
+                            500: "#0066FF",
+                            600: "#0052cc",
+                            700: "#003e99",
+                            800: "#002a66",
+                            900: "#001633"
+                        },
+                        "pink": {
+                            50: "#eafefb", 100: "#cafdf4", 200: "#96fbed", 300: "#5df6e3", 400: "#2eead3", 500: "#00DDB3", 600: "#00bfa3", 700: "#009d89", 800: "#007c6f", 900: "#00665b"
+                        },
+                        "emerald": {
+                            50: "#eafefb", 100: "#cafdf4", 200: "#96fbed", 300: "#5df6e3", 400: "#2eead3", 500: "#00DDB3", 600: "#00bfa3", 700: "#009d89", 800: "#007c6f", 900: "#00665b"
+                        },
+                        "rose": {
+                            50: "#e6f0ff", 100: "#ccdeff", 200: "#99beff", 300: "#669eff", 400: "#337eff", 500: "#0066FF", 600: "#0052cc", 700: "#003e99", 800: "#002a66", 900: "#001633"
+                        },
+                        "amber": {
+                            50: "#eafefb", 100: "#cafdf4", 200: "#96fbed", 300: "#5df6e3", 400: "#2eead3", 500: "#00DDB3", 600: "#00bfa3", 700: "#009d89", 800: "#007c6f", 900: "#00665b"
+                        },
+                        "cyan": {
+                            50: "#e6f8fc", 100: "#cdedf9", 200: "#9cdaf3", 300: "#6bc7ed", 400: "#3ab4e7", 500: "#00b4d8", 600: "#0090ad", 700: "#006c82", 800: "#004856", 900: "#00242b"
+                        },
+                        "teal": {
+                            50: "#eafefb", 100: "#cafdf4", 200: "#96fbed", 300: "#5df6e3", 400: "#2eead3", 500: "#00DDB3", 600: "#00bfa3", 700: "#009d89", 800: "#007c6f", 900: "#00665b"
+                        }
                     },
                     fontFamily: {
                         "display": ["Inter", "sans-serif"]
                     },
                     backgroundImage: {
-                        'mesh-light': 'radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%)',
-                        'mesh-dark': 'radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), radial-gradient(at 50% 0%, hsla(225,39%,25%,1) 0, transparent 50%), radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%)',
-                        'mesh-vibrant': 'radial-gradient(at 40% 20%, hsla(266,100%,70%,0.15) 0px, transparent 50%), radial-gradient(at 80% 0%, hsla(189,100%,56%,0.15) 0px, transparent 50%), radial-gradient(at 0% 50%, hsla(340,100%,76%,0.15) 0px, transparent 50%)',
-                        'gradient-border': 'linear-gradient(to right, #6366f1, #a855f7, #ec4899)',
+                        'mesh-light': 'radial-gradient(at 0% 0%, hsla(168,100%,70%,0.1) 0, transparent 50%), radial-gradient(at 50% 0%, hsla(217,100%,50%,0.1) 0, transparent 50%), radial-gradient(at 100% 0%, hsla(180,100%,50%,0.1) 0, transparent 50%)',
+                        'mesh-dark': 'radial-gradient(at 0% 0%, hsla(168,100%,10%,0.4) 0, transparent 50%), radial-gradient(at 50% 0%, hsla(217,100%,10%,0.4) 0, transparent 50%), radial-gradient(at 100% 0%, hsla(180,100%,10%,0.4) 0, transparent 50%)',
+                        'mesh-vibrant': 'radial-gradient(at 40% 20%, hsla(168,100%,70%,0.1) 0px, transparent 50%), radial-gradient(at 80% 0%, hsla(217,100%,56%,0.1) 0px, transparent 50%), radial-gradient(at 0% 50%, hsla(189,100%,76%,0.1) 0px, transparent 50%)',
+                        'gradient-border': 'linear-gradient(to right, #00DDB3, #0066FF)',
+                        'logo-gradient': 'linear-gradient(135deg, #00DDB3 0%, #0066FF 100%)',
                         'card-gradient': 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%)'
                     },
                 },
@@ -90,7 +134,7 @@
             background-clip: text;
             -webkit-background-clip: text;
             color: transparent;
-            background-image: linear-gradient(to right, #6366f1, #ec4899);
+            background-image: linear-gradient(to right, #00DDB3, #0066FF);
         }
 
         .interactive-card {
@@ -125,7 +169,7 @@
         }
 
         .interactive-card:hover::before {
-            background: linear-gradient(45deg, #6366f1, #ec4899, #8b5cf6, #3b82f6);
+            background: linear-gradient(45deg, #00DDB3, #0066FF, #00b4d8, #3b82f6);
             opacity: 1;
         }
 
@@ -225,19 +269,21 @@
 </head>
 
 <body
-    class="bg-background-light dark:bg-background-dark font-display text-text-primary-light dark:text-text-primary-dark antialiased overflow-hidden transition-colors duration-300 selection:bg-pink-500 selection:text-white">
+    class="bg-background-light dark:bg-background-dark font-display text-text-primary-light dark:text-text-primary-dark antialiased overflow-hidden transition-colors duration-300 selection:bg-primary selection:text-white">
     <div class="fixed inset-0 pointer-events-none bg-mesh-vibrant z-0 opacity-100 dark:opacity-40"></div>
     <div class="flex h-screen w-full relative z-10">
         <aside
             class="hidden md:flex w-64 flex-col border-r border-border-light/50 dark:border-border-dark/50 bg-surface-light/80 dark:bg-surface-dark/80 backdrop-blur-md transition-colors duration-300">
             <div class="flex h-16 items-center gap-3 px-6 border-b border-border-light/50 dark:border-border-dark/50">
                 <div
-                    class="flex items-center justify-center rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 p-1.5 shadow-lg shadow-indigo-500/20">
-                    <span class="material-symbols-outlined text-[24px] text-white">link</span>
+                    class="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-[#00DDB3] to-[#0066FF] shadow-lg shadow-[#00DDB3]/20 overflow-hidden">
+                    <img src="assets/logo.png" class="h-10 w-10 object-contain p-1" alt="1Pixel Logo"
+                        onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <span class="material-symbols-outlined text-[24px] text-white hidden">webhook</span>
                 </div>
                 <h1
-                    class="text-lg font-bold tracking-tight bg-gradient-to-r from-indigo-600 to-pink-500 bg-clip-text text-transparent dark:from-indigo-400 dark:to-pink-400">
-                    Link Manager</h1>
+                    class="text-xl font-bold tracking-tight bg-gradient-to-r from-[#00DDB3] to-[#0066FF] bg-clip-text text-transparent">
+                    1Pixel</h1>
             </div>
             <div class="flex flex-1 flex-col justify-between overflow-y-auto p-4">
                 <nav class="flex flex-col gap-1">
