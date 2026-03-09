@@ -24,11 +24,18 @@ try {
 
     $categories = [];
     foreach ($dbCategories as $cat) {
+        $color = $cat['color'];
+        if (strpos($color, '#') === 0) {
+            $catColorClass = "text-[{$color}] bg-[{$color}]/10 dark:bg-[{$color}]/20";
+        }
+        else {
+            $catColorClass = 'text-' . $color . '-500 bg-' . $color . '-50 dark:bg-' . $color . '-500/10';
+        }
         $categories[$cat['id']] = [
             'name' => $cat['name'],
             'icon' => $cat['icon'],
-            'color' => 'text-' . $cat['color'] . '-500 bg-' . $cat['color'] . '-50 dark:bg-' . $cat['color'] . '-500/10',
-            'baseColor' => $cat['color'],
+            'color' => $catColorClass,
+            'baseColor' => $color,
             'count' => 0
         ];
     }
@@ -107,6 +114,20 @@ foreach ($links as $link) {
         .refined-btn:hover::after { opacity: 1; }
         .refined-btn:hover { color: white !important; box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3); }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        /* Tùy chỉnh thanh cuộn nhỏ gọn */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 2px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            margin-top: 10px;
+            margin-bottom: 10px;
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(156, 163, 175, 0.5); 
+            border-radius: 9999px;
+        }
     </style>
 </head>
 <body class="bg-background-light dark:bg-background-dark font-display text-text-primary-light dark:text-text-primary-dark antialiased overflow-hidden transition-colors duration-300 selection:bg-pink-500 selection:text-white">
@@ -235,17 +256,22 @@ endforeach; ?>
 else: ?>
                             <?php foreach ($links as $link):
         $cardTheme = $link['theme'] ?? 'indigo';
-        // Determine gradient colors based on theme
-        $gradients = [
-            'indigo' => 'from-indigo-500 to-indigo-600 hover:shadow-indigo-500/20 text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/20 border-indigo-100 dark:border-indigo-800/30',
-            'purple' => 'from-purple-500 to-purple-600 hover:shadow-purple-500/20 text-purple-600 dark:text-purple-400 bg-purple-50 dark:bg-purple-900/20 border-purple-100 dark:border-purple-800/30',
-            'pink' => 'from-pink-500 to-pink-600 hover:shadow-pink-500/20 text-pink-600 dark:text-pink-400 bg-pink-50 dark:bg-pink-900/20 border-pink-100 dark:border-pink-800/30',
-            'emerald' => 'from-emerald-500 to-emerald-600 hover:shadow-emerald-500/20 text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 border-emerald-100 dark:border-emerald-800/30'
-        ];
-        $gClass = $gradients[$cardTheme] ?? $gradients['indigo'];
-        // Splitting into color specific parts for tags
-        preg_match('/text-([a-z]+)-600/', $gClass, $matches);
-        $colorName = $matches[1] ?? 'indigo';
+        $catColor = $categories[$cardTheme]['baseColor'] ?? 'indigo';
+        if (strpos($catColor, '#') === 0) {
+            $gClass = "from-[{$catColor}] to-[{$catColor}] hover:shadow-[{$catColor}]/20 text-[{$catColor}] dark:text-[{$catColor}] bg-[{$catColor}]/10 dark:bg-[{$catColor}]/20 border-[{$catColor}]/30 dark:border-[{$catColor}]/30";
+            $colorName = $catColor;
+        }
+        else {
+            $gradients = [
+                'indigo' => 'from-indigo-500 to-indigo-600 hover:shadow-indigo-500/20 text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/20 border-indigo-100 dark:border-indigo-800/30',
+                'purple' => 'from-purple-500 to-purple-600 hover:shadow-purple-500/20 text-purple-600 dark:text-purple-400 bg-purple-50 dark:bg-purple-900/20 border-purple-100 dark:border-purple-800/30',
+                'pink' => 'from-pink-500 to-pink-600 hover:shadow-pink-500/20 text-pink-600 dark:text-pink-400 bg-pink-50 dark:bg-pink-900/20 border-pink-100 dark:border-pink-800/30',
+                'emerald' => 'from-emerald-500 to-emerald-600 hover:shadow-emerald-500/20 text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 border-emerald-100 dark:border-emerald-800/30'
+            ];
+            $gClass = $gradients[$cardTheme] ?? $gradients['indigo'];
+            preg_match('/text-([a-z]+)-600/', $gClass, $matches);
+            $colorName = $matches[1] ?? 'indigo';
+        }
 ?>
                                 <div class="group interactive-card link-card filter-item transition-all duration-300 transform" data-id="<?php echo $link['id']; ?>" data-category="<?php echo $cardTheme; ?>">
                                     <div class="interactive-card-inner flex flex-col justify-between p-5">
@@ -295,9 +321,14 @@ else: ?>
                                             <p class="mb-4 truncate text-sm text-text-secondary-light dark:text-text-secondary-dark"><?php echo htmlspecialchars(parse_url($link['url'], PHP_URL_HOST)); ?></p>
                                             <div class="flex flex-wrap gap-2 mt-auto">
                                                 <?php foreach (getTags($link['tags']) as $tag):
-            // use tag color style matching card theme
+            if (strpos($colorName, '#') === 0) {
+                $tagClass = "bg-[{$colorName}]/10 dark:bg-[{$colorName}]/20 text-[{$colorName}] dark:text-[{$colorName}] border-[{$colorName}]/30 dark:border-[{$colorName}]/30";
+            }
+            else {
+                $tagClass = "bg-{$colorName}-50 dark:bg-{$colorName}-900/20 text-{$colorName}-600 dark:text-{$colorName}-400 border-{$colorName}-200/50 dark:border-{$colorName}-800/30";
+            }
 ?>
-                                                    <span class="rounded-full <?php echo "bg-{$colorName}-50 dark:bg-{$colorName}-900/20 text-{$colorName}-600 dark:text-{$colorName}-400 border-{$colorName}-200/50 dark:border-{$colorName}-800/30"; ?> px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wide border">
+                                                    <span class="rounded-full <?php echo $tagClass; ?> px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wide border">
                                                         <?php echo htmlspecialchars($tag['name'] ?? $tag); ?>
                                                     </span>
                                                 <?php
@@ -494,6 +525,14 @@ endforeach; ?>
                                         </li>
                                         <li class="custom-color-option px-3 py-2 rounded-lg text-sm font-medium text-text-primary-light dark:text-text-primary-dark hover:bg-cyan-50 dark:hover:bg-cyan-900/40 cursor-pointer flex items-center gap-2 transition-all" data-value="cyan">
                                             <div class="w-4 h-4 rounded-full bg-cyan-500"></div> Xanh Lơ (Cyan)
+                                        </li>
+                                        <li class="mt-1 pt-1 border-t border-indigo-500/10"></li>
+                                        <li class="custom-color-option px-3 py-2 rounded-lg text-sm font-medium text-text-primary-light dark:text-text-primary-dark hover:bg-gray-50 dark:hover:bg-gray-900/40 cursor-pointer flex items-center gap-2 transition-all relative overflow-hidden" data-value="#ec4899" id="custom-color-li">
+                                            <div class="relative flex items-center gap-2 w-full">
+                                                <input type="color" id="custom-color-picker" class="absolute opacity-0 w-full h-full cursor-pointer" style="left:0; top:0; z-index:10;" value="#ec4899" title="Chọn màu tùy chỉnh">
+                                                <div id="custom-color-preview" class="w-4 h-4 rounded-full border border-gray-300 pointer-events-none transition-colors" style="background-color: #ec4899;"></div>
+                                                <span class="pointer-events-none w-full flex-1">Tùy Chỉnh Màu</span>
+                                            </div>
                                         </li>
                                     </ul>
                                 </div>

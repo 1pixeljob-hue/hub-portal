@@ -191,14 +191,41 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Option click
         colorOptions.forEach(option => {
-            option.addEventListener('click', () => {
+            option.addEventListener('click', (e) => {
+                // Ignore clicks originating from input[type="color"] to avoid double triggers
+                if (e.target.tagName.toLowerCase() === 'input') return;
+
                 const value = option.getAttribute('data-value');
-                // Copy innerHTML to display (so it copies the color dot and text perfectly)
-                colorSelectDisplay.innerHTML = option.innerHTML;
+                // Use a clean display content depending on whether it's custom or predefined
+                if (value.startsWith('#')) {
+                    colorSelectDisplay.innerHTML = `<div class="w-4 h-4 rounded-full border border-gray-300 pointer-events-none transition-colors" style="background-color: ${value};"></div><span class="pointer-events-none flex-1">Tùy Chỉnh Màu</span>`;
+                } else {
+                    colorSelectDisplay.innerHTML = option.innerHTML;
+                }
                 colorHiddenInput.value = value;
                 closeColorMenu();
             });
         });
+
+        const customColorPicker = document.getElementById('custom-color-picker');
+        const customColorPreview = document.getElementById('custom-color-preview');
+        const customColorLi = document.getElementById('custom-color-li');
+
+        if (customColorPicker) {
+            customColorPicker.addEventListener('input', (e) => {
+                const hexColor = e.target.value;
+                if (customColorPreview) customColorPreview.style.backgroundColor = hexColor;
+                if (customColorLi) customColorLi.setAttribute('data-value', hexColor);
+
+                // Update display immediately while user chooses
+                colorSelectDisplay.innerHTML = `<div class="w-4 h-4 rounded-full border border-gray-300 pointer-events-none transition-colors" style="background-color: ${hexColor};"></div><span class="pointer-events-none flex-1">Tùy Chỉnh Màu</span>`;
+                colorHiddenInput.value = hexColor;
+            });
+            // Auto close menu when user clicks outside picker
+            customColorPicker.addEventListener('change', () => {
+                closeColorMenu();
+            });
+        }
     }
 
     if (tagsInput) tagsInput.addEventListener('input', updatePreview);
@@ -545,14 +572,34 @@ window.updatePreview = function () {
         if (hostname && pLogo) {
             pLogo.src = `https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://${hostname}&size=128`;
             pLogo.classList.remove('hidden');
-            pInitial.className = `text-2xl font-black bg-gradient-to-br ${gradClass} bg-clip-text text-transparent hidden`;
+            if (categoryColor.startsWith('#')) {
+                pInitial.className = `text-2xl font-black bg-clip-text text-transparent hidden`;
+                pInitial.style.backgroundImage = `linear-gradient(to bottom right, ${categoryColor}, ${categoryColor})`;
+            } else {
+                pInitial.className = `text-2xl font-black bg-gradient-to-br ${gradClass} bg-clip-text text-transparent hidden`;
+                pInitial.style.backgroundImage = '';
+            }
         } else {
             if (pLogo) pLogo.classList.add('hidden');
             pInitial.textContent = titleInput ? titleInput.charAt(0).toUpperCase() : 'N';
-            pInitial.className = `text-2xl font-black bg-gradient-to-br ${gradClass} bg-clip-text text-transparent`;
+            if (categoryColor.startsWith('#')) {
+                pInitial.className = `text-2xl font-black bg-clip-text text-transparent`;
+                pInitial.style.backgroundImage = `linear-gradient(to bottom right, ${categoryColor}, ${categoryColor})`;
+            } else {
+                pInitial.className = `text-2xl font-black bg-gradient-to-br ${gradClass} bg-clip-text text-transparent`;
+                pInitial.style.backgroundImage = '';
+            }
         }
 
-        if (pGradient) pGradient.className = `absolute top-0 left-0 h-1.5 w-full bg-gradient-to-r ${gradClass} rounded-t-xl z-20`;
+        if (pGradient) {
+            if (categoryColor.startsWith('#')) {
+                pGradient.className = `absolute top-0 left-0 h-1.5 w-full rounded-t-xl z-20`;
+                pGradient.style.background = categoryColor;
+            } else {
+                pGradient.className = `absolute top-0 left-0 h-1.5 w-full bg-gradient-to-r ${gradClass} rounded-t-xl z-20`;
+                pGradient.style.background = '';
+            }
+        }
     }
 
     if (pTagsContainer) {
@@ -569,10 +616,13 @@ window.updatePreview = function () {
             'emerald': 'bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 border-emerald-200/50 dark:border-emerald-800/30'
         };
 
-        pTagsContainer.innerHTML = tagsArr.slice(0, 3).map(tag => `
-            <span class="rounded-full ${tagClasses[categoryColor] || tagClasses['indigo']} px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wide border">
-                ${tag}
-            </span>
-        `).join('');
+        pTagsContainer.innerHTML = tagsArr.slice(0, 3).map(tag => {
+            if (categoryColor.startsWith('#')) {
+                // Fallback style inside loop using inline CSS for custom HEX
+                return `<span class="rounded-full px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wide border" style="color: ${categoryColor}; border-color: ${categoryColor}40; background-color: ${categoryColor}10;">${tag}</span>`;
+            } else {
+                return `<span class="rounded-full ${tagClasses[categoryColor] || tagClasses['indigo']} px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wide border">${tag}</span>`;
+            }
+        }).join('');
     }
 };
