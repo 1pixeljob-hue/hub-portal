@@ -48,6 +48,15 @@ switch ($method) {
         }
 
         try {
+            // Kiểm tra danh mục trùng lặp theo tên (không phân biệt chữ hoa, chữ thường)
+            $checkNameStmt = $pdo->prepare("SELECT id FROM categories WHERE LOWER(name) = LOWER(?)");
+            $checkNameStmt->execute([$name]);
+            if ($checkNameStmt->fetch()) {
+                http_response_code(409); // Xung đột dữ liệu
+                echo json_encode(['error' => 'Tên danh mục này đã tồn tại trong hệ thống!']);
+                exit;
+            }
+
             // Check if ID exists, append random string if it does
             $checkStmt = $pdo->prepare("SELECT id FROM categories WHERE id = ?");
             $checkStmt->execute([$id]);
