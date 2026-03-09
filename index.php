@@ -180,9 +180,8 @@ foreach ($links as $link) {
         <!-- Sidebar -->
         <aside class="hidden md:flex w-72 flex-col border-r border-border-light/80 dark:border-border-dark/80 bg-surface-light/80 dark:bg-surface-dark/80 backdrop-blur-xl transition-colors duration-300 z-20">
             <div class="flex h-20 items-center gap-3 px-6 border-b border-border-light/50 dark:border-border-dark/50">
-                <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-[#00DDB3] to-[#0066FF] shadow-lg shadow-[#00DDB3]/20 overflow-hidden">
-                    <img src="assets/logo.png" id="main-logo" class="h-10 w-10 object-contain p-1" alt="1Pixel Logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                    <span class="material-symbols-outlined text-[24px] text-white hidden">webhook</span>
+                <div class="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-[#00DDB3] to-[#0066FF] shadow-lg shadow-[#00DDB3]/20 transition-transform hover:scale-105">
+                    <span class="material-symbols-outlined text-[28px] text-white">hub</span>
                 </div>
                 <h1 class="text-xl font-bold tracking-tight bg-gradient-to-r from-[#00DDB3] to-[#0066FF] bg-clip-text text-transparent">1Pixel</h1>
             </div>
