@@ -152,6 +152,55 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Custom Color Select Logic (Add Category Modal)
+    const colorSelectBtn = document.getElementById('color-select-btn');
+    const colorSelectMenu = document.getElementById('color-select-menu');
+    const colorSelectDisplay = document.getElementById('color-select-display');
+    const colorSelectIcon = document.getElementById('color-select-icon');
+    const colorHiddenInput = document.getElementById('cat-color');
+    const colorOptions = document.querySelectorAll('.custom-color-option');
+
+    if (colorSelectBtn && colorSelectMenu && colorHiddenInput) {
+
+        function openColorMenu() {
+            colorSelectMenu.classList.remove('opacity-0', 'invisible', '-translate-y-2');
+            colorSelectMenu.classList.add('opacity-100', 'visible', 'translate-y-0');
+            if (colorSelectIcon) colorSelectIcon.style.transform = 'rotate(180deg)';
+        }
+
+        function closeColorMenu() {
+            colorSelectMenu.classList.add('opacity-0', 'invisible', '-translate-y-2');
+            colorSelectMenu.classList.remove('opacity-100', 'visible', 'translate-y-0');
+            if (colorSelectIcon) colorSelectIcon.style.transform = 'rotate(0deg)';
+        }
+
+        // Toggle menu
+        colorSelectBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const isOpen = colorSelectMenu.classList.contains('opacity-100');
+            if (isOpen) closeColorMenu();
+            else openColorMenu();
+        });
+
+        // Close when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!colorSelectBtn.contains(e.target) && !colorSelectMenu.contains(e.target)) {
+                closeColorMenu();
+            }
+        });
+
+        // Option click
+        colorOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                const value = option.getAttribute('data-value');
+                // Copy innerHTML to display (so it copies the color dot and text perfectly)
+                colorSelectDisplay.innerHTML = option.innerHTML;
+                colorHiddenInput.value = value;
+                closeColorMenu();
+            });
+        });
+    }
+
     if (tagsInput) tagsInput.addEventListener('input', updatePreview);
 
     // 5. Category Filtering

@@ -463,19 +463,41 @@ endforeach; ?>
                         </div>
                         <div class="group">
                             <label class="block text-sm font-bold text-text-primary-light dark:text-text-primary-dark mb-2 group-focus-within:text-indigo-500 transition-colors">Màu Sắc</label>
-                            <div class="relative">
-                                <select id="cat-color" class="w-full appearance-none bg-surface-light-highlight dark:bg-surface-dark-highlight border-2 border-transparent focus:border-indigo-500 rounded-xl pl-4 pr-10 py-3.5 text-sm outline-none transition-all shadow-inner text-text-primary-light dark:text-white font-medium cursor-pointer">
-                                    <option value="indigo">Chàm (Indigo)</option>
-                                    <option value="purple">Tím Đậm (Purple)</option>
-                                    <option value="pink">Hồng Đậm (Pink)</option>
-                                    <option value="emerald">Ngọc Bích (Emerald)</option>
-                                    <option value="rose">Đỏ Hồng (Rose)</option>
-                                    <option value="amber">Hổ Phách (Amber)</option>
-                                    <option value="cyan">Xanh Lơ (Cyan)</option>
-                                </select>
-                                <div class="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none text-text-secondary-light">
-                                    <span class="material-symbols-outlined text-[20px]">expand_more</span>
+                            <div class="relative custom-select-container">
+                                <button type="button" id="color-select-btn" class="w-full flex items-center justify-between text-left appearance-none bg-surface-light-highlight dark:bg-surface-dark-highlight border-2 border-transparent focus:border-indigo-500 focus:ring-[3px] focus:ring-indigo-500/20 rounded-xl pl-4 pr-3 py-3.5 text-sm outline-none transition-all shadow-inner text-text-primary-light dark:text-white font-medium cursor-pointer relative z-10">
+                                    <div class="flex items-center gap-2" id="color-select-display">
+                                        <div class="w-4 h-4 rounded-full bg-indigo-500"></div>
+                                        <span id="color-select-text">Chàm (Indigo)</span>
+                                    </div>
+                                    <span class="material-symbols-outlined text-[20px] text-text-secondary-light transition-transform duration-200" id="color-select-icon">expand_more</span>
+                                </button>
+                                
+                                <div id="color-select-menu" class="absolute z-[100] bottom-full left-0 w-full mb-1.5 bg-white dark:bg-surface-dark border border-indigo-500/30 rounded-xl shadow-2xl opacity-0 invisible transform translate-y-2 transition-all duration-200 overflow-hidden origin-bottom">
+                                    <ul class="max-h-60 overflow-y-auto custom-scrollbar p-1.5 space-y-0.5 bg-surface-light-highlight/20 dark:bg-surface-dark-highlight/20 backdrop-blur-md">
+                                        <li class="custom-color-option px-3 py-2 rounded-lg text-sm font-medium text-text-primary-light dark:text-text-primary-dark hover:bg-indigo-50 dark:hover:bg-indigo-900/40 cursor-pointer flex items-center gap-2 transition-all" data-value="indigo">
+                                            <div class="w-4 h-4 rounded-full bg-indigo-500"></div> Chàm (Indigo)
+                                        </li>
+                                        <li class="custom-color-option px-3 py-2 rounded-lg text-sm font-medium text-text-primary-light dark:text-text-primary-dark hover:bg-purple-50 dark:hover:bg-purple-900/40 cursor-pointer flex items-center gap-2 transition-all" data-value="purple">
+                                            <div class="w-4 h-4 rounded-full bg-purple-500"></div> Tím Đậm (Purple)
+                                        </li>
+                                        <li class="custom-color-option px-3 py-2 rounded-lg text-sm font-medium text-text-primary-light dark:text-text-primary-dark hover:bg-pink-50 dark:hover:bg-pink-900/40 cursor-pointer flex items-center gap-2 transition-all" data-value="pink">
+                                            <div class="w-4 h-4 rounded-full bg-pink-500"></div> Hồng Đậm (Pink)
+                                        </li>
+                                        <li class="custom-color-option px-3 py-2 rounded-lg text-sm font-medium text-text-primary-light dark:text-text-primary-dark hover:bg-emerald-50 dark:hover:bg-emerald-900/40 cursor-pointer flex items-center gap-2 transition-all" data-value="emerald">
+                                            <div class="w-4 h-4 rounded-full bg-emerald-500"></div> Ngọc Bích (Emerald)
+                                        </li>
+                                        <li class="custom-color-option px-3 py-2 rounded-lg text-sm font-medium text-text-primary-light dark:text-text-primary-dark hover:bg-rose-50 dark:hover:bg-rose-900/40 cursor-pointer flex items-center gap-2 transition-all" data-value="rose">
+                                            <div class="w-4 h-4 rounded-full bg-rose-500"></div> Đỏ Hồng (Rose)
+                                        </li>
+                                        <li class="custom-color-option px-3 py-2 rounded-lg text-sm font-medium text-text-primary-light dark:text-text-primary-dark hover:bg-amber-50 dark:hover:bg-amber-900/40 cursor-pointer flex items-center gap-2 transition-all" data-value="amber">
+                                            <div class="w-4 h-4 rounded-full bg-amber-500"></div> Hổ Phách (Amber)
+                                        </li>
+                                        <li class="custom-color-option px-3 py-2 rounded-lg text-sm font-medium text-text-primary-light dark:text-text-primary-dark hover:bg-cyan-50 dark:hover:bg-cyan-900/40 cursor-pointer flex items-center gap-2 transition-all" data-value="cyan">
+                                            <div class="w-4 h-4 rounded-full bg-cyan-500"></div> Xanh Lơ (Cyan)
+                                        </li>
+                                    </ul>
                                 </div>
+                                <input type="hidden" id="cat-color" name="cat-color" value="indigo">
                             </div>
                         </div>
                     </div>
