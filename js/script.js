@@ -464,22 +464,27 @@ window.updatePreview = function () {
     const pTitle = document.getElementById('preview-title');
     const pUrl = document.getElementById('preview-url');
     const pInitial = document.getElementById('preview-initial');
+    const pLogo = document.getElementById('preview-logo');
     const pTagsContainer = document.getElementById('preview-tags-container');
     const pGradient = document.getElementById('preview-gradient');
 
     if (pTitle) pTitle.textContent = titleInput || 'Liên Kết Mới';
 
+    let hostname = '';
     if (pUrl) {
+        let tempUrl = urlInput;
+        if (tempUrl && !/^https?:\/\//i.test(tempUrl)) {
+            tempUrl = 'https://' + tempUrl;
+        }
         try {
-            pUrl.textContent = urlInput ? new URL(urlInput).hostname : 'example.com';
+            hostname = tempUrl ? new URL(tempUrl).hostname : '';
+            pUrl.textContent = hostname || 'example.com';
         } catch (e) {
             pUrl.textContent = urlInput || 'example.com';
         }
     }
 
     if (pInitial) {
-        pInitial.textContent = titleInput ? titleInput.charAt(0).toUpperCase() : 'N';
-        // Update gradient color based on category
         const gradiens = {
             'indigo': 'from-indigo-500 to-indigo-600',
             'purple': 'from-purple-500 to-purple-600',
@@ -487,7 +492,17 @@ window.updatePreview = function () {
             'emerald': 'from-emerald-500 to-emerald-600'
         };
         const gradClass = gradiens[categoryColor] || gradiens['indigo'];
-        pInitial.className = `text-2xl font-black bg-gradient-to-br ${gradClass} bg-clip-text text-transparent`;
+
+        if (hostname && pLogo) {
+            pLogo.src = `https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://${hostname}&size=128`;
+            pLogo.classList.remove('hidden');
+            pInitial.className = `text-2xl font-black bg-gradient-to-br ${gradClass} bg-clip-text text-transparent hidden`;
+        } else {
+            if (pLogo) pLogo.classList.add('hidden');
+            pInitial.textContent = titleInput ? titleInput.charAt(0).toUpperCase() : 'N';
+            pInitial.className = `text-2xl font-black bg-gradient-to-br ${gradClass} bg-clip-text text-transparent`;
+        }
+
         if (pGradient) pGradient.className = `absolute top-0 left-0 h-1.5 w-full bg-gradient-to-r ${gradClass} rounded-t-xl z-20`;
     }
 

@@ -253,8 +253,17 @@ else: ?>
                                         <div>
                                             <div class="mb-5 flex items-start justify-between">
                                                 <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-white dark:bg-surface-dark-highlight p-2 border border-border-light/80 dark:border-white/10 shadow-sm relative z-10 overflow-hidden shrink-0 group-hover:scale-105 transition-transform">
-                                                    <?php if ($link['logoUrl']): ?>
-                                                        <img src="<?php echo htmlspecialchars($link['logoUrl']); ?>" class="h-10 w-10 object-contain" alt="Logo">
+                                                    <?php
+        $computedLogoUrl = $link['logoUrl'];
+        if ((empty($computedLogoUrl) || strpos($computedLogoUrl, 's2/favicons') !== false) && !empty($link['url'])) {
+            $host = parse_url($link['url'], PHP_URL_HOST);
+            if (!empty($host)) {
+                $computedLogoUrl = "https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://" . $host . "&size=128";
+            }
+        }
+        if ($computedLogoUrl):
+?>
+                                                        <img src="<?php echo htmlspecialchars($computedLogoUrl); ?>" class="h-10 w-10 object-contain" alt="Logo">
                                                     <?php
         else: ?>
                                                         <span class="text-2xl font-black bg-gradient-to-br <?php echo preg_replace('/hover:shadow-.*?\s.*/', '', $gClass); ?> bg-clip-text text-transparent"><?php echo htmlspecialchars($link['initial']); ?></span>
@@ -336,6 +345,7 @@ endif; ?>
                                 <div class="mb-5 flex items-start justify-between">
                                     <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-white dark:bg-surface-dark-highlight p-2 border border-border-light/80 dark:border-white/10 shadow-sm relative z-10 overflow-hidden shrink-0">
                                         <span class="text-2xl font-black bg-gradient-to-br from-indigo-500 to-indigo-600 bg-clip-text text-transparent" id="preview-initial">N</span>
+                                        <img src="" class="h-10 w-10 object-contain hidden" id="preview-logo" alt="Logo">
                                     </div>
                                     <div class="relative z-20">
                                         <button type="button" class="rounded-lg p-1.5 text-text-secondary-light dark:text-text-secondary-dark opacity-50 cursor-not-allowed">

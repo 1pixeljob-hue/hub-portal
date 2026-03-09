@@ -38,6 +38,12 @@ switch ($method) {
         $url = $input['url'];
         $theme = $input['theme'] ?? "indigo";
         $logoUrl = $input['logoUrl'] ?? null;
+        if ((empty($logoUrl) || strpos($logoUrl, 's2/favicons') !== false) && !empty($url)) {
+            $parsedHost = parse_url($url, PHP_URL_HOST);
+            if (!empty($parsedHost)) {
+                $logoUrl = "https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://" . $parsedHost . "&size=128";
+            }
+        }
         $initial = $input['initial'] ?? strtoupper(substr($title, 0, 1));
         $tags = json_encode($input['tags'] ?? []);
 
