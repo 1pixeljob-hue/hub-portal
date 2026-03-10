@@ -328,7 +328,7 @@ endforeach; ?>
                         </button>
                     </div>
                     
-                    <div class="flex-1 overflow-visible p-8 space-y-6">
+                    <div class="flex-1 p-8 space-y-6" style="overflow: visible;">
 
                             <input type="hidden" id="link-id" name="id" value="">
                             <div class="group">
@@ -342,16 +342,41 @@ endforeach; ?>
                             </div>
                             
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                                <div class="group">
+                                <!-- Premium Custom Dropdown -->
+                                <div class="group" id="cat-dropdown-wrapper">
                                     <label class="block text-sm font-bold text-slate-900 mb-2">Danh Mục</label>
-                                    <div class="relative">
-                                        <select id="link-category" name="theme" class="w-full appearance-none bg-slate-50 border-2 border-transparent focus:border-primary rounded-xl px-4 py-3.5 text-sm outline-none transition-all text-slate-900 font-medium cursor-pointer pr-10">
+                                    <!-- Hidden real input for form submit -->
+                                    <input type="hidden" id="link-category" name="theme" value="<?php echo htmlspecialchars(array_key_first($categories) ?? ''); ?>">
+                                    <!-- Trigger button -->
+                                    <button type="button" id="cat-dd-btn"
+                                        class="w-full flex items-center justify-between gap-3 bg-slate-50 border-2 border-transparent hover:border-primary/30 focus:border-primary rounded-xl px-4 py-3.5 text-sm text-slate-900 font-medium transition-all outline-none cursor-pointer">
+                                        <span class="flex items-center gap-2" id="cat-dd-display">
+                                            <?php $firstCat = reset($categories); ?>
+                                            <span class="material-symbols-outlined text-[18px] text-primary" id="cat-dd-icon"><?php echo htmlspecialchars($firstCat['icon'] ?? 'folder'); ?></span>
+                                            <span id="cat-dd-label"><?php echo htmlspecialchars($firstCat['name'] ?? 'Chọn danh mục'); ?></span>
+                                        </span>
+                                        <span class="material-symbols-outlined text-[20px] text-slate-400 transition-transform duration-200" id="cat-dd-chevron">expand_more</span>
+                                    </button>
+                                    <!-- Dropdown list -->
+                                    <div id="cat-dd-menu"
+                                        class="cat-dropdown-menu absolute left-0 w-full mt-2 bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden hidden"
+                                        style="z-index: 9999;">
+                                        <div class="p-1.5 space-y-0.5">
                                             <?php foreach ($categories as $key => $cat): ?>
-                                            <option value="<?php echo htmlspecialchars($key); ?>" data-color="<?php echo htmlspecialchars($cat['baseColor']); ?>"><?php echo htmlspecialchars($cat['name']); ?></option>
+                                            <div class="cat-dd-option flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer transition-all hover:bg-primary/8 group/opt"
+                                                data-value="<?php echo htmlspecialchars($key); ?>"
+                                                data-icon="<?php echo htmlspecialchars($cat['icon']); ?>"
+                                                data-label="<?php echo htmlspecialchars($cat['name']); ?>"
+                                                data-color="<?php echo htmlspecialchars($cat['baseColor']); ?>">
+                                                <span class="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0" style="background: <?php echo htmlspecialchars($cat['baseColor']); ?>20;">
+                                                    <span class="material-symbols-outlined text-[16px]" style="color: <?php echo htmlspecialchars($cat['baseColor']); ?>"><?php echo htmlspecialchars($cat['icon']); ?></span>
+                                                </span>
+                                                <span class="flex-1 text-sm font-medium text-slate-800"><?php echo htmlspecialchars($cat['name']); ?></span>
+                                                <span class="material-symbols-outlined text-[16px] text-primary opacity-0 group/opt-[.selected]:opacity-100 check-icon">check</span>
+                                            </div>
                                             <?php
 endforeach; ?>
-                                        </select>
-                                        <span class="material-symbols-outlined text-[20px] absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400">expand_more</span>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="group">
@@ -416,10 +441,112 @@ endforeach; ?>
         #add-modal.active, #add-category-modal.active { opacity: 1; pointer-events: auto; }
         #add-modal.active .modal-content, #add-category-modal.active .modal-content { transform: scale(1); }
         .action-menu.active { display: block; }
-        #category-select-menu.active { display: block !important; }
         .toast { pointer-events: auto; display: flex; align-items: center; gap: 12px; padding: 12px 20px; border-radius: 12px; background: white; border: 1px solid #e2e8f0; box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1); animation: slideIn 0.3s ease-out; }
         @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
         @keyframes fadeOut { to { opacity: 0; transform: scale(0.95); } }
+
+        /* Premium Custom Category Dropdown */
+        #cat-dropdown-wrapper { position: relative; }
+        #cat-dd-btn { background: #f8fafc; }
+        #cat-dd-btn:hover, #cat-dd-btn.open { border-color: var(--color-primary, #ec5b13); background: white; }
+        #cat-dd-btn.open { box-shadow: 0 0 0 3px rgba(236,91,19,.12); }
+        .cat-dropdown-menu {
+            position: absolute;
+            left: 0; top: calc(100% + 6px);
+            width: 100%;
+            background: white;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 16px;
+            box-shadow: 0 20px 40px rgba(0,0,0,.15), 0 4px 12px rgba(0,0,0,.08);
+            z-index: 9999;
+            overflow: hidden;
+            transform-origin: top center;
+            animation: ddSlideIn .18s ease-out;
+        }
+        @keyframes ddSlideIn {
+            from { opacity: 0; transform: scaleY(.95) translateY(-6px); }
+            to   { opacity: 1; transform: scaleY(1)  translateY(0); }
+        }
+        .cat-dropdown-menu.hidden { display: none; }
+        .cat-dd-option {
+            border-radius: 10px;
+            transition: background .15s;
+        }
+        .cat-dd-option:hover { background: rgba(236,91,19,.08); }
+        .cat-dd-option.selected { background: rgba(236,91,19,.1); }
+        .cat-dd-option.selected .check-icon { opacity: 1 !important; }
+        #cat-dd-chevron.rotated { transform: rotate(180deg); }
     </style>
+    <script>
+    (function() {
+        function initCatDropdown() {
+            const btn = document.getElementById('cat-dd-btn');
+            const menu = document.getElementById('cat-dd-menu');
+            const label = document.getElementById('cat-dd-label');
+            const icon = document.getElementById('cat-dd-icon');
+            const chevron = document.getElementById('cat-dd-chevron');
+            const hiddenInput = document.getElementById('link-category');
+            const options = document.querySelectorAll('.cat-dd-option');
+            if (!btn || !menu) return;
+
+            // Mark first option as selected by default
+            if (options.length > 0) options[0].classList.add('selected');
+
+            function openMenu() {
+                menu.classList.remove('hidden');
+                btn.classList.add('open');
+                chevron.classList.add('rotated');
+            }
+            function closeMenu() {
+                menu.classList.add('hidden');
+                btn.classList.remove('open');
+                chevron.classList.remove('rotated');
+            }
+
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                menu.classList.contains('hidden') ? openMenu() : closeMenu();
+            });
+
+            options.forEach(function(opt) {
+                opt.addEventListener('click', function() {
+                    const value = opt.dataset.value;
+                    const lbl   = opt.dataset.label;
+                    const ico   = opt.dataset.icon;
+                    const color = opt.dataset.color;
+
+                    // Update hidden input
+                    hiddenInput.value = value;
+                    hiddenInput.setAttribute('data-color', color);
+
+                    // Update button display
+                    label.textContent = lbl;
+                    icon.textContent  = ico;
+                    icon.style.color  = color;
+
+                    // Mark selected
+                    options.forEach(o => o.classList.remove('selected'));
+                    opt.classList.add('selected');
+
+                    closeMenu();
+                    if (typeof window.updatePreview === 'function') window.updatePreview();
+                });
+            });
+
+            // Close on outside click
+            document.addEventListener('click', function(e) {
+                if (!btn.contains(e.target) && !menu.contains(e.target)) closeMenu();
+            });
+        }
+
+        // Run after DOM ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initCatDropdown);
+        } else {
+            initCatDropdown();
+        }
+    })();
+    </script>
 </body>
 </html>
