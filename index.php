@@ -342,42 +342,27 @@ endforeach; ?>
                             </div>
                             
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                                <!-- Premium Custom Dropdown -->
+                                <!-- Premium Custom Dropdown - menu rendered at body level via JS -->
                                 <div class="group" id="cat-dropdown-wrapper">
                                     <label class="block text-sm font-bold text-slate-900 mb-2">Danh Mục</label>
-                                    <!-- Hidden real input for form submit -->
                                     <input type="hidden" id="link-category" name="theme" value="<?php echo htmlspecialchars(array_key_first($categories) ?? ''); ?>">
-                                    <!-- Trigger button -->
                                     <button type="button" id="cat-dd-btn"
-                                        class="w-full flex items-center justify-between gap-3 bg-slate-50 border-2 border-transparent hover:border-primary/30 focus:border-primary rounded-xl px-4 py-3.5 text-sm text-slate-900 font-medium transition-all outline-none cursor-pointer">
+                                        class="w-full flex items-center justify-between gap-3 bg-slate-50 border-2 border-transparent hover:border-primary/30 rounded-xl px-4 py-3.5 text-sm text-slate-900 font-medium transition-all outline-none cursor-pointer">
                                         <span class="flex items-center gap-2" id="cat-dd-display">
                                             <?php $firstCat = reset($categories); ?>
-                                            <span class="material-symbols-outlined text-[18px] text-primary" id="cat-dd-icon"><?php echo htmlspecialchars($firstCat['icon'] ?? 'folder'); ?></span>
+                                            <span class="material-symbols-outlined text-[18px]" id="cat-dd-icon" style="color:<?php echo htmlspecialchars($firstCat['baseColor'] ?? '#ec5b13'); ?>"><?php echo htmlspecialchars($firstCat['icon'] ?? 'folder'); ?></span>
                                             <span id="cat-dd-label"><?php echo htmlspecialchars($firstCat['name'] ?? 'Chọn danh mục'); ?></span>
                                         </span>
                                         <span class="material-symbols-outlined text-[20px] text-slate-400 transition-transform duration-200" id="cat-dd-chevron">expand_more</span>
                                     </button>
-                                    <!-- Dropdown list -->
-                                    <div id="cat-dd-menu"
-                                        class="cat-dropdown-menu absolute left-0 w-full mt-2 bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden hidden"
-                                        style="z-index: 9999;">
-                                        <div class="p-1.5 space-y-0.5">
-                                            <?php foreach ($categories as $key => $cat): ?>
-                                            <div class="cat-dd-option flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer transition-all hover:bg-primary/8 group/opt"
-                                                data-value="<?php echo htmlspecialchars($key); ?>"
-                                                data-icon="<?php echo htmlspecialchars($cat['icon']); ?>"
-                                                data-label="<?php echo htmlspecialchars($cat['name']); ?>"
-                                                data-color="<?php echo htmlspecialchars($cat['baseColor']); ?>">
-                                                <span class="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0" style="background: <?php echo htmlspecialchars($cat['baseColor']); ?>20;">
-                                                    <span class="material-symbols-outlined text-[16px]" style="color: <?php echo htmlspecialchars($cat['baseColor']); ?>"><?php echo htmlspecialchars($cat['icon']); ?></span>
-                                                </span>
-                                                <span class="flex-1 text-sm font-medium text-slate-800"><?php echo htmlspecialchars($cat['name']); ?></span>
-                                                <span class="material-symbols-outlined text-[16px] text-primary opacity-0 group/opt-[.selected]:opacity-100 check-icon">check</span>
-                                            </div>
-                                            <?php
-endforeach; ?>
-                                        </div>
-                                    </div>
+                                    <!-- Options data stored inline, menu rendered to body by JS -->
+                                    <script id="cat-options-data" type="application/json"><?php
+$optArr = [];
+foreach ($categories as $k => $c) {
+    $optArr[] = ['value' => $k, 'icon' => $c['icon'], 'label' => $c['name'], 'color' => $c['baseColor']];
+}
+echo json_encode($optArr);
+?></script>
                                 </div>
                                 <div class="group">
                                     <label class="block text-sm font-bold text-slate-900 mb-2">Thẻ Phân Loại</label>
@@ -481,66 +466,142 @@ endforeach; ?>
     (function() {
         function initCatDropdown() {
             const btn = document.getElementById('cat-dd-btn');
-            const menu = document.getElementById('cat-dd-menu');
             const label = document.getElementById('cat-dd-label');
             const icon = document.getElementById('cat-dd-icon');
             const chevron = document.getElementById('cat-dd-chevron');
             const hiddenInput = document.getElementById('link-category');
-            const options = document.querySelectorAll('.cat-dd-option');
-            if (!btn || !menu) return;
+            const dataEl = document.getElementById('cat-options-data');
+            if (!btn || !dataEl) return;
 
-            // Mark first option as selected by default
-            if (options.length > 0) options[0].classList.add('selected');
+            const options = JSON.parse(dataEl.textContent);
+            let selectedIdx = 0;
+
+            // Build the floating menu DOM
+            const menu = document.createElement('div');
+            menu.id = 'cat-dd-menu';
+            menu.style.cssText = [
+                'position:fixed',
+                'z-index:99999',
+                'background:white',
+                'border:1.5px solid #e2e8f0',
+                'border-radius:16px',
+                'box-shadow:0 20px 40px rgba(0,0,0,.18),0 4px 12px rgba(0,0,0,.1)',
+                'overflow:hidden',
+                'display:none',
+                'min-width:200px',
+                'animation:ddSlideIn .18s ease-out'
+            ].join(';');
+
+            const inner = document.createElement('div');
+            inner.style.cssText = 'padding:6px;';
+
+            options.forEach(function(opt, idx) {
+                const row = document.createElement('div');
+                row.className = 'cat-dd-option';
+                row.style.cssText = [
+                    'display:flex', 'align-items:center', 'gap:10px',
+                    'padding:9px 10px', 'border-radius:10px',
+                    'cursor:pointer', 'transition:background .15s'
+                ].join(';');
+
+                // Icon bubble
+                const bubble = document.createElement('span');
+                bubble.style.cssText = [
+                    'width:28px', 'height:28px', 'border-radius:8px',
+                    'display:flex', 'align-items:center', 'justify-content:center',
+                    'flex-shrink:0',
+                    'background:' + opt.color + '22'
+                ].join(';');
+                const ico = document.createElement('span');
+                ico.className = 'material-symbols-outlined';
+                ico.style.cssText = 'font-size:16px;color:' + opt.color;
+                ico.textContent = opt.icon;
+                bubble.appendChild(ico);
+
+                // Label
+                const lbl = document.createElement('span');
+                lbl.style.cssText = 'flex:1;font-size:14px;font-weight:500;color:#1e293b';
+                lbl.textContent = opt.label;
+
+                // Check mark
+                const check = document.createElement('span');
+                check.className = 'material-symbols-outlined check-icon';
+                check.style.cssText = 'font-size:16px;color:#ec5b13;opacity:0;transition:opacity .15s';
+                check.textContent = 'check';
+
+                row.appendChild(bubble);
+                row.appendChild(lbl);
+                row.appendChild(check);
+
+                row.addEventListener('mouseenter', () => row.style.background = 'rgba(236,91,19,.08)');
+                row.addEventListener('mouseleave', () => row.style.background = idx === selectedIdx ? 'rgba(236,91,19,.1)' : '');
+
+                row.addEventListener('click', function() {
+                    selectedIdx = idx;
+                    // Update hidden input
+                    hiddenInput.value = opt.value;
+                    hiddenInput.setAttribute('data-color', opt.color);
+                    // Update button display
+                    label.textContent = opt.label;
+                    icon.textContent  = opt.icon;
+                    icon.style.color  = opt.color;
+                    // Mark selected rows
+                    inner.querySelectorAll('.cat-dd-option').forEach((r, i) => {
+                        r.style.background = i === idx ? 'rgba(236,91,19,.1)' : '';
+                        r.querySelector('.check-icon').style.opacity = i === idx ? '1' : '0';
+                    });
+                    closeMenu();
+                    if (typeof window.updatePreview === 'function') window.updatePreview();
+                });
+
+                inner.appendChild(row);
+            });
+
+            // Mark first as selected
+            if (inner.children.length > 0) {
+                inner.children[0].style.background = 'rgba(236,91,19,.1)';
+                inner.children[0].querySelector('.check-icon').style.opacity = '1';
+            }
+
+            menu.appendChild(inner);
+            document.body.appendChild(menu);
+
+            function positionMenu() {
+                const r = btn.getBoundingClientRect();
+                menu.style.top   = (r.bottom + 6) + 'px';
+                menu.style.left  = r.left + 'px';
+                menu.style.width = r.width + 'px';
+            }
 
             function openMenu() {
-                menu.classList.remove('hidden');
-                btn.classList.add('open');
-                chevron.classList.add('rotated');
+                positionMenu();
+                menu.style.display = 'block';
+                btn.style.borderColor = '#ec5b13';
+                btn.style.boxShadow   = '0 0 0 3px rgba(236,91,19,.15)';
+                chevron.style.transform = 'rotate(180deg)';
             }
             function closeMenu() {
-                menu.classList.add('hidden');
-                btn.classList.remove('open');
-                chevron.classList.remove('rotated');
+                menu.style.display = 'none';
+                btn.style.borderColor = '';
+                btn.style.boxShadow   = '';
+                chevron.style.transform = '';
             }
 
             btn.addEventListener('click', function(e) {
                 e.preventDefault();
                 e.stopPropagation();
-                menu.classList.contains('hidden') ? openMenu() : closeMenu();
+                menu.style.display === 'none' ? openMenu() : closeMenu();
             });
 
-            options.forEach(function(opt) {
-                opt.addEventListener('click', function() {
-                    const value = opt.dataset.value;
-                    const lbl   = opt.dataset.label;
-                    const ico   = opt.dataset.icon;
-                    const color = opt.dataset.color;
-
-                    // Update hidden input
-                    hiddenInput.value = value;
-                    hiddenInput.setAttribute('data-color', color);
-
-                    // Update button display
-                    label.textContent = lbl;
-                    icon.textContent  = ico;
-                    icon.style.color  = color;
-
-                    // Mark selected
-                    options.forEach(o => o.classList.remove('selected'));
-                    opt.classList.add('selected');
-
-                    closeMenu();
-                    if (typeof window.updatePreview === 'function') window.updatePreview();
-                });
-            });
-
-            // Close on outside click
             document.addEventListener('click', function(e) {
                 if (!btn.contains(e.target) && !menu.contains(e.target)) closeMenu();
             });
+
+            // Reposition on scroll/resize
+            window.addEventListener('scroll', positionMenu, true);
+            window.addEventListener('resize', function() { if (menu.style.display !== 'none') positionMenu(); });
         }
 
-        // Run after DOM ready
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', initCatDropdown);
         } else {
