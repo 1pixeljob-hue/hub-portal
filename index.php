@@ -54,11 +54,11 @@ foreach ($links as $link) {
 }
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>Link Manager Dashboard</title>
+    <title>Bảng Điều Khiển Liên Kết</title>
     <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
@@ -107,13 +107,13 @@ foreach ($links as $link) {
 
             const greetingElement = document.getElementById('greeting-text');
             const h = now.getHours();
-            let greeting = 'Good morning';
+            let greeting = 'Chào buổi sáng';
             if (h >= 12 && h < 18) {
-                greeting = 'Good afternoon';
+                greeting = 'Chào buổi chiều';
             } else if (h >= 18) {
-                greeting = 'Good evening';
+                greeting = 'Chào buổi tối';
             }
-            if(greetingElement) greetingElement.textContent = `${greeting}, Alex`;
+            if(greetingElement) greetingElement.textContent = `${greeting}, Sếp`;
         }
         setInterval(updateTime, 1000);
         window.addEventListener('load', updateTime);
@@ -130,13 +130,13 @@ foreach ($links as $link) {
 <path clip-rule="evenodd" d="M24 4H6V17.3333V30.6667H24V44H42V30.6667V17.3333H24V4Z" fill-rule="evenodd"></path>
 </svg>
 </div>
-<h2 class="text-slate-900 dark:text-white text-lg font-bold leading-tight tracking-[-0.015em]">Link Manager</h2>
+<h2 class="text-slate-900 dark:text-white text-lg font-bold leading-tight tracking-[-0.015em]">Quản Lý Liên Kết</h2>
 </div>
 <div class="hidden md:flex items-center gap-9">
-<a class="text-primary text-sm font-medium leading-normal" href="#">Dashboard</a>
-<a class="text-slate-600 dark:text-slate-400 hover:text-primary transition-colors text-sm font-medium leading-normal" href="#">Links</a>
-<a class="text-slate-600 dark:text-slate-400 hover:text-primary transition-colors text-sm font-medium leading-normal" href="#">Tags</a>
-<a class="text-slate-600 dark:text-slate-400 hover:text-primary transition-colors text-sm font-medium leading-normal" href="#">Settings</a>
+<a class="text-primary text-sm font-medium leading-normal" href="#">Tổng quan</a>
+<a class="text-slate-600 dark:text-slate-400 hover:text-primary transition-colors text-sm font-medium leading-normal" href="#">Liên kết</a>
+<a class="text-slate-600 dark:text-slate-400 hover:text-primary transition-colors text-sm font-medium leading-normal" href="#">Danh mục</a>
+<a class="text-slate-600 dark:text-slate-400 hover:text-primary transition-colors text-sm font-medium leading-normal" href="#">Cài đặt</a>
 </div>
 </div>
 <div class="flex flex-1 justify-end gap-6 items-center">
@@ -145,11 +145,11 @@ foreach ($links as $link) {
 <div class="text-slate-400 flex items-center justify-center pl-4 pr-2">
 <span class="material-symbols-outlined text-[20px]">search</span>
 </div>
-<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-full rounded-l-none bg-transparent text-slate-900 dark:text-white focus:outline-0 focus:ring-0 border-none h-full placeholder:text-slate-400 px-2 text-sm font-normal leading-normal" placeholder="Search links..." value=""/>
+<input id="link-search" class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-full rounded-l-none bg-transparent text-slate-900 dark:text-white focus:outline-0 focus:ring-0 border-none h-full placeholder:text-slate-400 px-2 text-sm font-normal leading-normal" placeholder="Tìm kiếm liên kết..." value=""/>
 </div>
 </label>
 <button onclick="window.openAddLinkModal()" class="flex h-10 items-center justify-center gap-2 rounded-full bg-primary text-white hover:bg-orange-600 transition-colors px-4 text-sm font-medium">
-    <span class="material-symbols-outlined text-[20px]">add</span> Add Link
+    <span class="material-symbols-outlined text-[20px]">add</span> Thêm Liên Kết
 </button>
 </div>
 </header>
@@ -157,24 +157,24 @@ foreach ($links as $link) {
 <!-- Header Section -->
 <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
 <div>
-<h1 class="text-slate-900 dark:text-white text-3xl font-bold leading-tight tracking-[-0.015em]" id="greeting-text">Good morning, Alex</h1>
-<p class="text-slate-500 dark:text-slate-400 mt-1">Here's an overview of your links.</p>
+<h1 class="text-slate-900 dark:text-white text-3xl font-bold leading-tight tracking-[-0.015em]" id="greeting-text">Chào buổi sáng, Sếp</h1>
+<p class="text-slate-500 dark:text-slate-400 mt-1">Dưới đây là tổng quan về các liên kết của bạn.</p>
 </div>
 <!-- Digital Clock -->
 <div class="flex gap-3 glass-card rounded-xl p-3">
 <div class="flex flex-col items-center">
 <span class="text-slate-900 dark:text-white text-xl font-bold font-mono" id="clock-hours">10</span>
-<span class="text-slate-500 dark:text-slate-400 text-[10px] uppercase tracking-wider">Hours</span>
+<span class="text-slate-500 dark:text-slate-400 text-[10px] uppercase tracking-wider">Giờ</span>
 </div>
 <span class="text-slate-300 dark:text-slate-600 font-bold self-start mt-1">:</span>
 <div class="flex flex-col items-center">
 <span class="text-slate-900 dark:text-white text-xl font-bold font-mono" id="clock-minutes">30</span>
-<span class="text-slate-500 dark:text-slate-400 text-[10px] uppercase tracking-wider">Minutes</span>
+<span class="text-slate-500 dark:text-slate-400 text-[10px] uppercase tracking-wider">Phút</span>
 </div>
 <span class="text-slate-300 dark:text-slate-600 font-bold self-start mt-1">:</span>
 <div class="flex flex-col items-center">
 <span class="text-primary text-xl font-bold font-mono" id="clock-seconds">45</span>
-<span class="text-slate-500 dark:text-slate-400 text-[10px] uppercase tracking-wider">Seconds</span>
+<span class="text-slate-500 dark:text-slate-400 text-[10px] uppercase tracking-wider">Giây</span>
 </div>
 </div>
 </div>
@@ -184,7 +184,7 @@ foreach ($links as $link) {
 <div class="absolute top-0 right-0 w-24 h-24 bg-primary/10 rounded-full blur-2xl -mr-10 -mt-10 transition-transform group-hover:scale-150"></div>
 <div class="flex items-center gap-2 mb-1">
 <span class="material-symbols-outlined text-slate-400 text-[20px]">link</span>
-<p class="text-slate-500 dark:text-slate-400 text-sm font-medium">Total Links</p>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium">Tổng Số Liên Kết</p>
 </div>
 <p class="text-slate-900 dark:text-white text-3xl font-bold"><?php echo $totalLinks; ?></p>
 </div>
@@ -192,7 +192,7 @@ foreach ($links as $link) {
 <div class="absolute top-0 right-0 w-24 h-24 bg-primary/10 rounded-full blur-2xl -mr-10 -mt-10 transition-transform group-hover:scale-150"></div>
 <div class="flex items-center gap-2 mb-1">
 <span class="material-symbols-outlined text-slate-400 text-[20px]">sell</span>
-<p class="text-slate-500 dark:text-slate-400 text-sm font-medium">Active Tags</p>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium">Danh Mục (Thẻ)</p>
 </div>
 <p class="text-slate-900 dark:text-white text-3xl font-bold"><?php echo count($categories); ?></p>
 </div>
@@ -200,24 +200,24 @@ foreach ($links as $link) {
 <div class="absolute top-0 right-0 w-24 h-24 bg-primary/10 rounded-full blur-2xl -mr-10 -mt-10 transition-transform group-hover:scale-150"></div>
 <div class="flex items-center gap-2 mb-1">
 <span class="material-symbols-outlined text-slate-400 text-[20px]">touch_app</span>
-<p class="text-slate-500 dark:text-slate-400 text-sm font-medium">Clicks This Week</p>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium">Lượt click Tuần này</p>
 </div>
 <p class="text-slate-900 dark:text-white text-3xl font-bold">342</p>
 </div>
 </div>
 <!-- Filters -->
 <div class="flex gap-2 overflow-x-auto pb-4 mb-4 scrollbar-hide">
-<button class="flex h-9 shrink-0 items-center justify-center rounded-full bg-primary text-white px-5 text-sm font-medium transition-transform hover:scale-105">
-    All
+<button class="category-filter active flex h-9 shrink-0 items-center justify-center rounded-full bg-primary text-white px-5 text-sm font-medium transition-transform hover:scale-105" data-filter="all">
+    Tất cả
 </button>
-<?php foreach ($categories as $cat): ?>
-<button class="flex h-9 shrink-0 items-center justify-center rounded-full glass-card hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 px-5 text-sm font-medium transition-colors">
+<?php foreach ($categories as $key => $cat): ?>
+<button class="category-filter flex h-9 shrink-0 items-center justify-center rounded-full glass-card hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 px-5 text-sm font-medium transition-colors" data-filter="<?php echo htmlspecialchars($key); ?>">
     <?php echo htmlspecialchars($cat['name']); ?>
 </button>
 <?php
 endforeach; ?>
 <button onclick="document.getElementById('add-category-modal').classList.add('active')" class="flex h-9 shrink-0 items-center justify-center rounded-full glass-card hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 px-5 text-sm font-medium transition-colors border-dashed border-slate-300 dark:border-slate-700">
-<span class="material-symbols-outlined text-[18px] mr-1">add</span> New Filter
+<span class="material-symbols-outlined text-[18px] mr-1">add</span> Bộ Lọc Mới
 </button>
 </div>
 <!-- Link Cards Grid -->
@@ -252,14 +252,14 @@ endforeach; ?>
     </button>
     <div id="menu-<?php echo $link['id']; ?>" class="action-menu hidden absolute right-0 mt-1 w-36 origin-top-right rounded-lg bg-white shadow-xl ring-1 ring-black/5 overflow-hidden z-30 border border-slate-200">
         <button class="flex w-full items-center gap-2 px-3 py-2 text-sm text-slate-700 hover:bg-slate-50 transition-colors" onclick='window.editLink(<?php echo json_encode($link, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP); ?>, event)'>
-            <span class="material-symbols-outlined text-[18px]">edit</span> Edit
+            <span class="material-symbols-outlined text-[18px]">edit</span> Sửa
         </button>
         <button class="flex w-full items-center gap-2 px-3 py-2 text-sm text-slate-700 hover:bg-slate-50 transition-colors" onclick="window.copyUrl('<?php echo htmlspecialchars($link['url'], ENT_QUOTES); ?>'); window.toggleMenu('menu-<?php echo $link['id']; ?>', event)">
-            <span class="material-symbols-outlined text-[18px]">content_copy</span> Copy
+            <span class="material-symbols-outlined text-[18px]">content_copy</span> Sao chép
         </button>
         <div class="h-px w-full bg-slate-200 border-0"></div>
         <button class="flex w-full items-center gap-2 px-3 py-2 text-sm text-red-500 hover:bg-red-50 transition-colors" onclick="window.deleteLink('<?php echo $link['id']; ?>')">
-            <span class="material-symbols-outlined text-[18px]">delete</span> Delete
+            <span class="material-symbols-outlined text-[18px]">delete</span> Xóa
         </button>
     </div>
 </div>
@@ -271,7 +271,7 @@ endforeach; ?>
     endforeach; ?>
 </div>
 <a href="<?php echo htmlspecialchars($link['url']); ?>" target="_blank" class="w-full flex items-center justify-center gap-2 bg-transparent hover:bg-primary/5 text-primary border border-primary/20 hover:border-primary/50 py-2.5 rounded-xl text-sm font-semibold transition-all group-hover:bg-primary group-hover:text-white">
-    Open Link <span class="material-symbols-outlined text-[18px]">open_in_new</span>
+    Mở Liên Kết <span class="material-symbols-outlined text-[18px]">open_in_new</span>
 </a>
 </div>
 <?php
@@ -288,7 +288,7 @@ endforeach; ?>
             <!-- Left Side: Live Preview -->
             <div class="w-full md:w-5/12 bg-slate-50 p-8 flex flex-col border-b md:border-b-0 md:border-r border-slate-200 relative overflow-hidden">
                 <h3 class="text-sm font-bold uppercase tracking-wider text-slate-500 mb-6 relative z-10 flex items-center gap-2">
-                    <span class="material-symbols-outlined text-[18px]">visibility</span> Preview
+                    <span class="material-symbols-outlined text-[18px]">visibility</span> Xem Trước
                 </h3>
                 
                 <div class="flex-1 flex items-center justify-center relative z-10 w-full" id="preview-card-container">
@@ -300,7 +300,7 @@ endforeach; ?>
                                      <img src="" class="w-10 h-10 object-contain absolute z-10 hidden" id="preview-logo" alt="Logo">
                                 </div>
                                 <div>
-                                    <h3 class="text-slate-900 font-semibold line-clamp-1" id="preview-title">New Link</h3>
+                                    <h3 class="text-slate-900 font-semibold line-clamp-1" id="preview-title">Liên Kết Mới</h3>
                                     <p class="text-slate-500 text-xs mt-0.5" id="preview-url">example.com</p>
                                 </div>
                             </div>

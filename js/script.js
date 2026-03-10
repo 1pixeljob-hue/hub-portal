@@ -237,8 +237,12 @@ document.addEventListener('DOMContentLoaded', () => {
     filterBtns.forEach(btn => {
         btn.addEventListener('click', () => {
             // Update active state
-            filterBtns.forEach(b => b.classList.remove('active', 'bg-surface-light-highlight', 'dark:bg-surface-dark-highlight'));
-            btn.classList.add('active', 'bg-surface-light-highlight', 'dark:bg-surface-dark-highlight');
+            filterBtns.forEach(b => {
+                b.classList.remove('active', 'bg-primary', 'text-white');
+                b.classList.add('glass-card', 'hover:bg-slate-100', 'dark:hover:bg-slate-800', 'text-slate-700', 'dark:text-slate-300');
+            });
+            btn.classList.add('active', 'bg-primary', 'text-white');
+            btn.classList.remove('glass-card', 'hover:bg-slate-100', 'dark:hover:bg-slate-800', 'text-slate-700', 'dark:text-slate-300');
 
             const filterValue = btn.getAttribute('data-filter');
             const filterName = btn.innerText.replace(/[0-9]+$/, '').trim(); // Lấy tên text và loại bỏ số count
