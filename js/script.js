@@ -8,26 +8,7 @@ window.getOptionLabel = function (el) {
 };
 
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. Clock and Greeting Logic
-    const clockDisplay = document.getElementById('clock-display');
-    const greetingText = document.getElementById('greeting-text');
-
-    function updateTime() {
-        const now = new Date();
-        const hours = now.getHours();
-        const minutes = String(now.getMinutes()).padStart(2, '0');
-
-        if (clockDisplay) clockDisplay.textContent = `${hours}:${minutes}`;
-
-        let greeting = 'Chào buổi sáng';
-        if (hours >= 12 && hours < 18) greeting = 'Chào buổi chiều';
-        else if (hours >= 18) greeting = 'Chào buổi tối';
-
-        if (greetingText) greetingText.textContent = `${greeting}, Sếp`;
-    }
-
-    updateTime();
-    setInterval(updateTime, 1000);
+    // 1. Clock and Greeting is handled in index.php to avoid conflicts
 
     // 2. Theme Toggle Logic
     const themeToggleBtn = document.getElementById('theme-toggle');
@@ -107,23 +88,23 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         function openSelectMenu() {
-            catSelectMenu.classList.remove('opacity-0', 'invisible', '-translate-y-2');
-            catSelectMenu.classList.add('opacity-100', 'visible', 'translate-y-0');
+            catSelectMenu.classList.add('active');
             if (catSelectIcon) catSelectIcon.style.transform = 'rotate(180deg)';
         }
 
         function closeSelectMenu() {
-            catSelectMenu.classList.add('opacity-0', 'invisible', '-translate-y-2');
-            catSelectMenu.classList.remove('opacity-100', 'visible', 'translate-y-0');
+            catSelectMenu.classList.remove('active');
             if (catSelectIcon) catSelectIcon.style.transform = 'rotate(0deg)';
         }
 
         // Toggle menu
         catSelectBtn.addEventListener('click', (e) => {
             e.preventDefault();
-            const isOpen = catSelectMenu.classList.contains('opacity-100');
-            if (isOpen) closeSelectMenu();
-            else openSelectMenu();
+            e.stopPropagation();
+            catSelectMenu.classList.toggle('active');
+            if (catSelectIcon) {
+                catSelectIcon.style.transform = catSelectMenu.classList.contains('active') ? 'rotate(180deg)' : 'rotate(0deg)';
+            }
         });
 
         // Close when clicking outside

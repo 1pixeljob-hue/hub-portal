@@ -283,7 +283,7 @@ endforeach; ?>
 
     <!-- Add Link Modal -->
     <div class="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 opacity-0 pointer-events-none transition-all duration-300" id="add-modal">
-        <div class="bg-white w-full max-w-4xl rounded-3xl shadow-2xl border border-slate-200 overflow-hidden transform scale-95 transition-all duration-300 modal-content flex flex-col md:flex-row">
+        <div class="bg-white w-full max-w-4xl rounded-3xl shadow-2xl border border-slate-200 transform scale-95 transition-all duration-300 modal-content flex flex-col md:flex-row">
             
             <!-- Left Side: Live Preview -->
             <div class="w-full md:w-5/12 bg-slate-50 p-8 flex flex-col border-b md:border-b-0 md:border-r border-slate-200 relative overflow-hidden">
@@ -344,7 +344,7 @@ endforeach; ?>
                                     <span class="material-symbols-outlined text-[20px]" id="category-select-icon">expand_more</span>
                                 </button>
                                 
-                                <div id="category-select-menu" class="absolute z-[100] top-full left-0 w-full mt-1.5 bg-white border border-slate-200 rounded-xl shadow-2xl opacity-0 invisible transition-all duration-200 overflow-hidden">
+                                <div id="category-select-menu" class="absolute z-[100] top-full left-0 w-full mt-1.5 bg-white border border-slate-200 rounded-xl shadow-2xl opacity-0 invisible transition-all duration-200 overflow-hidden -translate-y-2">
                                     <ul class="max-h-60 overflow-y-auto p-1.5 space-y-0.5">
                                         <?php foreach ($categories as $key => $cat): ?>
                                         <li class="custom-select-option px-3 py-2 rounded-lg text-sm font-medium text-slate-900 hover:bg-primary/10 cursor-pointer flex items-center gap-2" data-value="<?php echo htmlspecialchars($key); ?>" data-color="<?php echo htmlspecialchars($cat['baseColor']); ?>">
@@ -418,6 +418,7 @@ endforeach; ?>
     <style>
         #add-modal.active, #add-category-modal.active { opacity: 1; pointer-events: auto; }
         #add-modal.active .modal-content, #add-category-modal.active .modal-content { transform: scale(1); }
+        .action-menu.active, #category-select-menu.active { opacity: 1 !important; visibility: visible !important; transform: translateY(0) !important; }
         .action-menu.active { display: block; }
         .toast { pointer-events: auto; display: flex; align-items: center; gap: 12px; padding: 12px 20px; border-radius: 12px; background: white; border: 1px solid #e2e8f0; box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1); animation: slideIn 0.3s ease-out; }
         @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
