@@ -58,7 +58,7 @@ foreach ($links as $link) {
 <head>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>Bảng Điều Khiển Liên Kết</title>
+    <title>Quản lý liên kết</title>
     <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
@@ -211,20 +211,23 @@ foreach ($links as $link) {
     Tất cả
 </button>
 <?php foreach ($categories as $key => $cat): ?>
-<div class="relative group/pill shrink-0">
-    <button class="category-filter flex h-9 items-center justify-center rounded-full glass-card hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 pl-4 pr-3 text-sm font-medium transition-colors gap-1" data-filter="<?php echo htmlspecialchars($key); ?>">
+<div class="group/pill shrink-0 flex items-center h-9 rounded-full glass-card pl-3 pr-1.5 text-sm font-medium transition-all" style="cursor:default">
+    <button class="category-filter flex items-center gap-1 text-slate-700 dark:text-slate-300 bg-transparent border-none outline-none cursor-pointer" data-filter="<?php echo htmlspecialchars($key); ?>">
         <span class="material-symbols-outlined text-[15px]" style="color:<?php echo htmlspecialchars($cat['baseColor']); ?>"><?php echo htmlspecialchars($cat['icon']); ?></span>
-        <?php echo htmlspecialchars($cat['name']); ?>
+        <span><?php echo htmlspecialchars($cat['name']); ?></span>
     </button>
-    <!-- Hover action buttons -->
-    <div class="absolute -top-2 -right-1 hidden group-hover/pill:flex items-center gap-0.5 z-10">
-        <button title="Sửa" onclick="window.openEditCategory('<?php echo htmlspecialchars($key, ENT_QUOTES); ?>','<?php echo htmlspecialchars($cat['name'], ENT_QUOTES); ?>','<?php echo htmlspecialchars($cat['icon'], ENT_QUOTES); ?>','<?php echo htmlspecialchars($cat['baseColor'], ENT_QUOTES); ?>')" class="w-5 h-5 rounded-full bg-white border border-slate-200 shadow flex items-center justify-center text-slate-400 hover:text-primary hover:border-primary transition-colors">
-            <span class="material-symbols-outlined" style="font-size:11px">edit</span>
+    <span class="flex items-center gap-0.5 ml-1 opacity-0 group-hover/pill:opacity-100 transition-opacity duration-150">
+        <button title="Sửa" type="button"
+            onclick="event.stopPropagation(); window.openEditCategory('<?php echo htmlspecialchars($key, ENT_QUOTES); ?>','<?php echo htmlspecialchars($cat['name'], ENT_QUOTES); ?>','<?php echo htmlspecialchars($cat['icon'], ENT_QUOTES); ?>','<?php echo htmlspecialchars($cat['baseColor'], ENT_QUOTES); ?>')"
+            class="w-6 h-6 rounded-full flex items-center justify-center text-slate-400 hover:text-primary hover:bg-primary/10 transition-colors">
+            <span class="material-symbols-outlined" style="font-size:13px">edit</span>
         </button>
-        <button title="Xóa" onclick="window.deleteCategory('<?php echo htmlspecialchars($key, ENT_QUOTES); ?>','<?php echo htmlspecialchars($cat['name'], ENT_QUOTES); ?>', event)" class="w-5 h-5 rounded-full bg-white border border-slate-200 shadow flex items-center justify-center text-slate-400 hover:text-red-500 hover:border-red-400 transition-colors">
-            <span class="material-symbols-outlined" style="font-size:11px">delete</span>
+        <button title="Xóa" type="button"
+            onclick="event.stopPropagation(); window.deleteCategory('<?php echo htmlspecialchars($key, ENT_QUOTES); ?>','<?php echo htmlspecialchars($cat['name'], ENT_QUOTES); ?>', event)"
+            class="w-6 h-6 rounded-full flex items-center justify-center text-slate-400 hover:text-red-500 hover:bg-red-50 transition-colors">
+            <span class="material-symbols-outlined" style="font-size:13px">delete</span>
         </button>
-    </div>
+    </span>
 </div>
 <?php
 endforeach; ?>
