@@ -231,35 +231,62 @@ window.showToast = function (message, type = 'success') {
 
     // Auto remove
     setTimeout(() => {
-        toast.style.animation = 'fadeOut 0.3s forwards';
-        setTimeout(() => toast.remove(), 300);
+        if (toast.parentElement) {
+            toast.style.animation = 'fadeOut 0.3s forwards';
+            setTimeout(() => toast.remove(), 300);
+        }
     }, 3000);
 };
 
-window.deleteLink = function (id) {
-    if (!confirm("Bạn có chắc chắn muốn xóa liên kết này không?")) return;
+window.showConfirm = function (message, onConfirm) {
+    const modal = document.getElementById('confirm-modal');
+    const msgEl = document.getElementById('confirm-message');
+    const okBtn = document.getElementById('confirm-ok-btn');
 
-    fetch(`api/links.php?id=${id}`, {
-        method: 'DELETE'
-    })
-        .then(res => res.json())
-        .then(data => {
-            if (data.success) {
-                // Remove element from DOM
-                const card = document.querySelector(`.link-card[data-id="${id}"]`);
-                if (card) {
-                    card.style.transform = 'scale(0.8)';
-                    card.style.opacity = '0';
-                    setTimeout(() => card.remove(), 300);
-                }
-                showToast('Xóa liên kết thành công');
-            } else {
-                showToast(data.error || 'Xóa thất bại', 'error');
-            }
+    if (!modal || !msgEl || !okBtn) {
+        // Fallback to native
+        if (confirm(message)) onConfirm();
+        return;
+    }
+
+    // Support multiline message by replacing \n with <br>
+    msgEl.innerHTML = message.replace(/\n/g, '<br>');
+
+    // Clear old clone to remove old event listeners
+    const newBtn = okBtn.cloneNode(true);
+    okBtn.parentNode.replaceChild(newBtn, okBtn);
+
+    newBtn.addEventListener('click', function () {
+        modal.classList.remove('active');
+        onConfirm();
+    });
+
+    modal.classList.add('active');
+};
+
+window.deleteLink = function (id) {
+    window.showConfirm("Bạn có chắc chắn muốn xóa liên kết này không?", function () {
+        fetch(`api/links.php?id=${id}`, {
+            method: 'DELETE'
         })
-        .catch(err => {
-            showToast('Lỗi kết nối mạng', 'error');
-        });
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    const card = document.querySelector(`.link-card[data-id="${id}"]`);
+                    if (card) {
+                        card.style.transform = 'scale(0.8)';
+                        card.style.opacity = '0';
+                        setTimeout(() => card.remove(), 300);
+                    }
+                    showToast('Xóa liên kết thành công');
+                } else {
+                    showToast(data.error || 'Xóa thất bại', 'error');
+                }
+            })
+            .catch(err => {
+                showToast('Lỗi kết nối mạng', 'error');
+            });
+    });
 };
 
 window.editLink = function (link, event) {
@@ -304,23 +331,23 @@ window.editLink = function (link, event) {
 window.deleteCategory = function (id, name, event) {
     if (event) event.stopPropagation();
 
-    if (!confirm(`Bạn có chắc chắn muốn xóa danh mục: "${name}" không?\nCác liên kết trong danh mục này sẽ không bị xóa.`)) return;
-
-    fetch(`api/categories.php?id=${id}`, {
-        method: 'DELETE'
-    })
-        .then(res => res.json())
-        .then(data => {
-            if (data.success) {
-                showToast('Xóa danh mục thành công');
-                setTimeout(() => window.location.reload(), 500);
-            } else {
-                showToast(data.error || 'Xóa danh mục thất bại', 'error');
-            }
+    window.showConfirm(`Bạn có chắc chắn muốn xóa danh mục: "${name}" không?\nCác liên kết trong danh mục này sẽ không bị xóa.`, function () {
+        fetch(`api/categories.php?id=${id}`, {
+            method: 'DELETE'
         })
-        .catch(err => {
-            showToast('Lỗi kết nối mạng', 'error');
-        });
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    showToast('Xóa danh mục thành công');
+                    setTimeout(() => window.location.reload(), 500);
+                } else {
+                    showToast(data.error || 'Xóa danh mục thất bại', 'error');
+                }
+            })
+            .catch(err => {
+                showToast('Lỗi kết nối mạng', 'error');
+            });
+    });
 };
 
 window.openEditCategory = function (id, name, icon, color) {

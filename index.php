@@ -243,14 +243,15 @@ endforeach; ?>
 <div class="flex items-center gap-3">
 <?php $titleInitial = strtoupper(mb_substr($link['title'] ?? 'L', 0, 1));
     $catColor = $categories[$link['theme']]['baseColor'] ?? '#ec5b13';
-    $storedLogo = $link['logoUrl'] ?? ''; // Only auto-favicon via JS attribute, not PHP (API always returns 200 even for placeholder globe)    $lhost = parse_url($link['url'] ?? '', PHP_URL_HOST);
+    $storedLogo = $link['logoUrl'] ?? '';
+    // Only auto-favicon via JS attribute, not PHP (API always returns 200 even for placeholder globe)
+    $lhost = parse_url($link['url'] ?? '', PHP_URL_HOST);
 ?>
-<div class="w-10 h-10 rounded-xl flex items-center justify-center overflow-hidden relative flex-shrink-0 card-logo-box"
-     style="background:linear-gradient(135deg,<?php echo htmlspecialchars($catColor); ?>28,<?php echo htmlspecialchars($catColor); ?>55)"
+<div class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center border border-slate-200 dark:border-slate-700 overflow-hidden relative flex-shrink-0 card-logo-box"
      data-host="<?php echo htmlspecialchars($lhost ?? ''); ?>"
      data-logo="<?php echo htmlspecialchars($storedLogo); ?>">
-    <!-- Initial letter always visible underneath -->
-    <span class="text-base font-black select-none" style="color:<?php echo htmlspecialchars($catColor); ?>"><?php echo htmlspecialchars($titleInitial); ?></span>
+    <!-- Initial letter showing like the preview -->
+    <span class="text-[20px] font-black select-none bg-clip-text text-transparent" style="background-image:linear-gradient(to bottom right, <?php echo htmlspecialchars($catColor); ?>, <?php echo htmlspecialchars($catColor); ?>)"><?php echo htmlspecialchars($titleInitial); ?></span>
 </div>
 
 <div>
@@ -473,12 +474,28 @@ echo json_encode($optArr);
                 </div>
             </form>
         </div>
+        </div>
+    </div>
+
+    <!-- Confirm Modal -->
+    <div class="fixed inset-0 z-[200] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 opacity-0 pointer-events-none transition-all duration-300" id="confirm-modal">
+        <div class="bg-white w-full max-w-sm rounded-3xl shadow-2xl border border-slate-200 overflow-hidden transform scale-95 transition-all duration-300 modal-content relative p-8">
+            <div class="w-16 h-16 bg-red-100 text-red-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                <span class="material-symbols-outlined text-3xl">warning</span>
+            </div>
+            <h3 class="text-xl font-bold text-slate-900 text-center mb-2">Xác Nhận</h3>
+            <p class="text-slate-500 text-center text-sm mb-8" id="confirm-message">Bạn có chắc chắn muốn thực hiện hành động này?</p>
+            <div class="flex items-center gap-3">
+                <button class="flex-1 px-4 py-3 bg-slate-100 text-slate-700 font-bold rounded-xl hover:bg-slate-200 transition-colors" onclick="document.getElementById('confirm-modal').classList.remove('active')" id="confirm-cancel-btn">Hủy</button>
+                <button class="flex-1 px-4 py-3 bg-red-500 text-white font-bold rounded-xl hover:bg-red-600 shadow-lg shadow-red-500/30 hover:scale-105 transition-all" id="confirm-ok-btn">Đồng Ý</button>
+            </div>
+        </div>
     </div>
 
     <script src="js/script.js"></script>
     <style>
-        #add-modal.active, #add-category-modal.active, #edit-category-modal.active { opacity: 1; pointer-events: auto; }
-        #add-modal.active .modal-content, #add-category-modal.active .modal-content, #edit-category-modal.active .modal-content { transform: scale(1); }
+        #add-modal.active, #add-category-modal.active, #edit-category-modal.active, #confirm-modal.active { opacity: 1; pointer-events: auto; }
+        #add-modal.active .modal-content, #add-category-modal.active .modal-content, #edit-category-modal.active .modal-content, #confirm-modal.active .modal-content { transform: scale(1); }
         .action-menu.active { display: block; }
         .toast { pointer-events: auto; display: flex; align-items: center; gap: 12px; padding: 12px 20px; border-radius: 12px; background: white; border: 1px solid #e2e8f0; box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1); animation: slideIn 0.3s ease-out; }
         @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
