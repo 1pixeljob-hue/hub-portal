@@ -148,10 +148,9 @@ foreach ($links as $link) {
 <input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-full rounded-l-none bg-transparent text-slate-900 dark:text-white focus:outline-0 focus:ring-0 border-none h-full placeholder:text-slate-400 px-2 text-sm font-normal leading-normal" placeholder="Search links..." value=""/>
 </div>
 </label>
-<button class="sm:hidden text-slate-600 dark:text-slate-400">
-<span class="material-symbols-outlined">search</span>
+<button onclick="window.openAddLinkModal()" class="flex h-10 items-center justify-center gap-2 rounded-full bg-primary text-white hover:bg-orange-600 transition-colors px-4 text-sm font-medium">
+    <span class="material-symbols-outlined text-[20px]">add</span> Add Link
 </button>
-<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 border-2 border-primary/20" data-alt="User profile picture" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCFYLUbE1FZSMh-3udwV3q_JF1UUj7QCErnKR1Sf1ZaC2SLlIIYb2C6zorgkgRg4kGg3VSJoKTp5G588EqIjCnWN0BaveeHgEaRKFXri-xbMBh82yz0DI4wPtbH033qJOBSon5InGo0vGG8Kx87q3NzrkpZSqjJwxQs24Fd61gCdzLylVNh-hc-mbF3Qwnlmrq9PgPvsZx0xfvc7ct9X_mjJhy9PRe85Fyo2gVuFtESHewyqhcmenwCeHT8pm7RO314xt2JKZgJfXMA");'></div>
 </div>
 </header>
 <main class="flex-1 max-w-[1200px] w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -222,28 +221,48 @@ endforeach; ?>
 </button>
 </div>
 <!-- Link Cards Grid -->
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="links-container">
 <?php foreach ($links as $link): ?>
-<div class="glass-card rounded-2xl p-5 flex flex-col group hover:-translate-y-1 transition-transform duration-300">
-<div class="flex justify-between items-start mb-4">
+<div class="glass-card rounded-2xl p-5 flex flex-col group hover:-translate-y-1 transition-transform duration-300 link-card filter-item" data-id="<?php echo $link['id']; ?>" data-category="<?php echo $link['theme'] ?? 'indigo'; ?>">
+<div class="flex justify-between items-start mb-4 relative z-0">
 <div class="flex items-center gap-3">
-<div class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-primary border border-slate-200 dark:border-slate-700">
-    <?php if ($link['logoUrl']): ?>
-        <img src="<?php echo htmlspecialchars($link['logoUrl']); ?>" class="w-6 h-6 object-contain" />
+<div class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-primary border border-slate-200 dark:border-slate-700 overflow-hidden relative">
     <?php
-    else: ?>
-        <span class="material-symbols-outlined"><?php echo htmlspecialchars($categories[$link['theme']]['icon'] ?? 'link'); ?></span>
+    $computedLogoUrl = $link['logoUrl'];
+    if ((empty($computedLogoUrl) || strpos($computedLogoUrl, 's2/favicons') !== false) && !empty($link['url'])) {
+        $host = parse_url($link['url'], PHP_URL_HOST);
+        if (!empty($host)) {
+            $computedLogoUrl = "https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://" . $host . "&size=128";
+        }
+    }
+    if ($computedLogoUrl): ?>
+        <img src="<?php echo htmlspecialchars($computedLogoUrl); ?>" class="w-10 h-10 object-contain absolute z-10" onerror="this.style.display='none'" />
     <?php
     endif; ?>
+    <span class="material-symbols-outlined opacity-50 absolute"><?php echo htmlspecialchars($categories[$link['theme']]['icon'] ?? 'link'); ?></span>
 </div>
 <div>
 <h3 class="text-slate-900 dark:text-white font-semibold line-clamp-1"><?php echo htmlspecialchars($link['title']); ?></h3>
 <p class="text-slate-500 dark:text-slate-400 text-xs mt-0.5"><?php echo htmlspecialchars(parse_url($link['url'], PHP_URL_HOST) ?? $link['url']); ?></p>
 </div>
 </div>
-<button class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-1 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
-<span class="material-symbols-outlined text-[20px]">more_vert</span>
-</button>
+<div class="relative z-20">
+    <button class="text-slate-400 hover:text-slate-600 p-1 rounded-full hover:bg-slate-100 transition-colors" onclick="window.toggleMenu('menu-<?php echo $link['id']; ?>', event)">
+        <span class="material-symbols-outlined text-[20px]">more_vert</span>
+    </button>
+    <div id="menu-<?php echo $link['id']; ?>" class="action-menu hidden absolute right-0 mt-1 w-36 origin-top-right rounded-lg bg-white shadow-xl ring-1 ring-black/5 overflow-hidden z-30 border border-slate-200">
+        <button class="flex w-full items-center gap-2 px-3 py-2 text-sm text-slate-700 hover:bg-slate-50 transition-colors" onclick='window.editLink(<?php echo json_encode($link, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP); ?>, event)'>
+            <span class="material-symbols-outlined text-[18px]">edit</span> Edit
+        </button>
+        <button class="flex w-full items-center gap-2 px-3 py-2 text-sm text-slate-700 hover:bg-slate-50 transition-colors" onclick="window.copyUrl('<?php echo htmlspecialchars($link['url'], ENT_QUOTES); ?>'); window.toggleMenu('menu-<?php echo $link['id']; ?>', event)">
+            <span class="material-symbols-outlined text-[18px]">content_copy</span> Copy
+        </button>
+        <div class="h-px w-full bg-slate-200 border-0"></div>
+        <button class="flex w-full items-center gap-2 px-3 py-2 text-sm text-red-500 hover:bg-red-50 transition-colors" onclick="window.deleteLink('<?php echo $link['id']; ?>')">
+            <span class="material-symbols-outlined text-[18px]">delete</span> Delete
+        </button>
+    </div>
+</div>
 </div>
 <div class="flex flex-wrap gap-2 mb-5 mt-auto">
     <?php foreach (getTags($link['tags']) as $tag): ?>
@@ -251,7 +270,7 @@ endforeach; ?>
     <?php
     endforeach; ?>
 </div>
-<a href="<?php echo htmlspecialchars($link['url']); ?>" target="_blank" class="w-full flex items-center justify-center gap-2 bg-transparent hover:bg-primary/5 text-primary border border-primary/20 hover:border-primary/50 py-2.5 rounded-xl text-sm font-semibold transition-all">
+<a href="<?php echo htmlspecialchars($link['url']); ?>" target="_blank" class="w-full flex items-center justify-center gap-2 bg-transparent hover:bg-primary/5 text-primary border border-primary/20 hover:border-primary/50 py-2.5 rounded-xl text-sm font-semibold transition-all group-hover:bg-primary group-hover:text-white">
     Open Link <span class="material-symbols-outlined text-[18px]">open_in_new</span>
 </a>
 </div>
@@ -261,5 +280,148 @@ endforeach; ?>
 </main>
 </div>
 </div>
+
+    <!-- Add Link Modal -->
+    <div class="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 opacity-0 pointer-events-none transition-all duration-300" id="add-modal">
+        <div class="bg-white w-full max-w-4xl rounded-3xl shadow-2xl border border-slate-200 overflow-hidden transform scale-95 transition-all duration-300 modal-content flex flex-col md:flex-row">
+            
+            <!-- Left Side: Live Preview -->
+            <div class="w-full md:w-5/12 bg-slate-50 p-8 flex flex-col border-b md:border-b-0 md:border-r border-slate-200 relative overflow-hidden">
+                <h3 class="text-sm font-bold uppercase tracking-wider text-slate-500 mb-6 relative z-10 flex items-center gap-2">
+                    <span class="material-symbols-outlined text-[18px]">visibility</span> Preview
+                </h3>
+                
+                <div class="flex-1 flex items-center justify-center relative z-10 w-full" id="preview-card-container">
+                    <div class="w-full glass-card p-5 rounded-2xl flex flex-col group transition-all duration-300 bg-white shadow-md border border-slate-200" id="preview-card-inner">
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-primary border border-slate-200 overflow-hidden relative">
+                                     <span class="text-xl font-black text-primary absolute z-0" id="preview-initial">N</span>
+                                     <img src="" class="w-10 h-10 object-contain absolute z-10 hidden" id="preview-logo" alt="Logo">
+                                </div>
+                                <div>
+                                    <h3 class="text-slate-900 font-semibold line-clamp-1" id="preview-title">New Link</h3>
+                                    <p class="text-slate-500 text-xs mt-0.5" id="preview-url">example.com</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex flex-wrap gap-2 mt-auto" id="preview-tags-container">
+                             <span class="px-2.5 py-1 rounded-md bg-slate-100 text-slate-600 text-xs font-medium border border-slate-200">WORK</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Side: Input Form -->
+            <div class="w-full md:w-7/12 flex flex-col bg-white">
+                <form id="add-link-form" onsubmit="window.submitForm(event)" class="h-full flex flex-col">
+                    <div class="px-8 py-6 border-b border-slate-200 flex justify-between items-center">
+                        <div>
+                            <h3 class="text-2xl font-bold text-slate-900" id="modal-title">Thêm Liên Kết Mới</h3>
+                        </div>
+                        <button type="button" class="rounded-full p-2 text-slate-400 hover:bg-slate-100 transition-colors" onclick="document.getElementById('add-modal').classList.remove('active')">
+                            <span class="material-symbols-outlined text-[24px]">close</span>
+                        </button>
+                    </div>
+                    
+                    <div class="p-8 space-y-6 flex-1 overflow-y-auto">
+                        <input type="hidden" id="link-id" name="id" value="">
+                         <div class="group">
+                            <label class="block text-sm font-bold text-slate-900 mb-2">Tiêu Đề <span class="text-red-500">*</span></label>
+                            <input id="link-title" class="w-full bg-slate-50 border-2 border-transparent focus:border-primary rounded-xl px-4 py-3.5 text-sm outline-none transition-all text-slate-900 font-medium" required placeholder="vd: Không gian làm việc..." type="text"/>
+                        </div>
+                        
+                        <div class="group">
+                            <label class="block text-sm font-bold text-slate-900 mb-2">Đường Dẫn URL <span class="text-red-500">*</span></label>
+                            <input id="link-url" class="w-full bg-slate-50 border-2 border-transparent focus:border-primary rounded-xl px-4 py-3.5 text-sm outline-none transition-all text-slate-900 font-medium" required placeholder="example.com" type="text"/>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                            <div class="group relative custom-select-container">
+                                <label class="block text-sm font-bold text-slate-900 mb-2">Danh Mục</label>
+                                <button type="button" id="category-select-btn" class="w-full flex items-center justify-between bg-slate-50 border-2 border-transparent focus:border-primary rounded-xl px-4 py-3.5 text-sm outline-none transition-all text-slate-900 font-medium">
+                                    <span id="category-select-text">Chọn Danh Mục...</span>
+                                    <span class="material-symbols-outlined text-[20px]" id="category-select-icon">expand_more</span>
+                                </button>
+                                
+                                <div id="category-select-menu" class="absolute z-[100] top-full left-0 w-full mt-1.5 bg-white border border-slate-200 rounded-xl shadow-2xl opacity-0 invisible transition-all duration-200 overflow-hidden">
+                                    <ul class="max-h-60 overflow-y-auto p-1.5 space-y-0.5">
+                                        <?php foreach ($categories as $key => $cat): ?>
+                                        <li class="custom-select-option px-3 py-2 rounded-lg text-sm font-medium text-slate-900 hover:bg-primary/10 cursor-pointer flex items-center gap-2" data-value="<?php echo htmlspecialchars($key); ?>" data-color="<?php echo htmlspecialchars($cat['baseColor']); ?>">
+                                            <span class="material-symbols-outlined text-[18px]"><?php echo htmlspecialchars($cat['icon']); ?></span> 
+                                            <?php echo htmlspecialchars($cat['name']); ?>
+                                        </li>
+                                        <?php
+endforeach; ?>
+                                    </ul>
+                                </div>
+                                <input type="hidden" id="link-category" name="theme" value="<?php echo htmlspecialchars(array_key_first($categories) ?? 'indigo'); ?>" data-color="indigo">
+                            </div>
+                            <div class="group">
+                                <label class="block text-sm font-bold text-slate-900 mb-2">Thẻ Phân Loại</label>
+                                <input id="link-tags" class="w-full bg-slate-50 border-2 border-transparent focus:border-primary rounded-xl px-4 py-3.5 text-sm outline-none transition-all text-slate-900 font-medium" placeholder="vd: dev, design..."/>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-slate-50 px-8 py-5 flex items-center justify-end gap-3 border-t border-slate-200 mt-auto">
+                        <button class="px-6 py-2.5 text-sm font-bold text-slate-500 hover:text-slate-900 transition-colors" onclick="document.getElementById('add-modal').classList.remove('active')" type="button">Hủy</button>
+                        <button class="bg-primary px-8 py-2.5 rounded-xl text-sm font-bold text-white shadow-lg shadow-primary/25 hover:scale-105 transition-transform" type="submit" id="submit-btn-text">Lưu Liên Kết</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Category Modal -->
+    <div class="fixed inset-0 z-[110] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 opacity-0 pointer-events-none transition-all duration-300" id="add-category-modal">
+        <div class="bg-white w-full max-w-lg rounded-3xl shadow-2xl overflow-hidden transform scale-95 transition-all duration-300 modal-content relative">
+            <form id="add-category-form" onsubmit="window.submitCategoryForm(event)" class="relative z-10 flex flex-col h-full">
+                <div class="px-8 py-6 border-b border-slate-200 flex justify-between items-center relative">
+                    <div class="absolute top-0 left-0 h-1 w-full bg-primary"></div>
+                    <div>
+                        <h3 class="text-2xl font-bold text-slate-900">Danh Mục Mới</h3>
+                    </div>
+                    <button type="button" class="rounded-full p-2 text-slate-400 hover:bg-slate-100 transition-colors" onclick="document.getElementById('add-category-modal').classList.remove('active')">
+                        <span class="material-symbols-outlined text-[24px]">close</span>
+                    </button>
+                </div>
+                <div class="p-8 space-y-6 flex-1">
+                    <div class="group">
+                        <label class="block text-sm font-bold text-slate-900 mb-2">Tên Danh Mục <span class="text-red-500">*</span></label>
+                        <input id="cat-title" class="w-full bg-slate-50 border-2 border-transparent focus:border-primary rounded-xl px-4 py-3.5 text-sm outline-none transition-all text-slate-900 font-medium" required placeholder="vd: Thiết Kế, Công Việc..." type="text"/>
+                    </div>
+                    <div class="grid grid-cols-2 gap-6">
+                        <div class="group">
+                            <label class="block text-sm font-bold text-slate-900 mb-2">Mã Biểu Tượng</label>
+                            <input id="cat-icon" class="w-full bg-slate-50 border-2 border-transparent focus:border-primary rounded-xl px-4 py-3.5 text-sm outline-none transition-all text-slate-900 font-medium" placeholder="folder" value="folder" type="text"/>
+                            <p class="text-[11px] font-bold text-primary mt-2"><a href="https://fonts.google.com/icons" target="_blank">Thư Viện Icon</a></p>
+                        </div>
+                        <div class="group">
+                            <label class="block text-sm font-bold text-slate-900 mb-2">Màu Sắc</label>
+                            <input id="cat-color" class="w-full h-[52px] bg-slate-50 border-2 border-transparent focus:border-primary rounded-xl px-2 py-1 outline-none transition-all cursor-pointer p-0" type="color" value="#ec5b13"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-slate-50 border-t border-slate-200 px-8 py-5 flex items-center justify-end gap-3 mt-auto">
+                    <button class="px-6 py-2.5 text-sm font-bold text-slate-500 hover:text-slate-900 transition-colors" onclick="document.getElementById('add-category-modal').classList.remove('active')" type="button">Hủy</button>
+                    <button class="bg-primary px-8 py-2.5 rounded-xl text-sm font-bold text-white shadow-lg shadow-primary/25 hover:scale-105 transition-transform" type="submit">Lưu Danh Mục</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toast-container" class="fixed bottom-6 right-6 z-[200] flex flex-col gap-3 pointer-events-none"></div>
+
+    <script src="js/script.js"></script>
+    <style>
+        #add-modal.active, #add-category-modal.active { opacity: 1; pointer-events: auto; }
+        #add-modal.active .modal-content, #add-category-modal.active .modal-content { transform: scale(1); }
+        .action-menu.active { display: block; }
+        .toast { pointer-events: auto; display: flex; align-items: center; gap: 12px; padding: 12px 20px; border-radius: 12px; background: white; border: 1px solid #e2e8f0; box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1); animation: slideIn 0.3s ease-out; }
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        @keyframes fadeOut { to { opacity: 0; transform: scale(0.95); } }
+    </style>
 </body>
 </html>
