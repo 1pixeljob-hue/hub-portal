@@ -248,12 +248,16 @@ document.addEventListener('DOMContentLoaded', () => {
             const filterName = btn.innerText.replace(/[0-9]+$/, '').trim(); // Lấy tên text và loại bỏ số count
 
             linkCards.forEach(card => {
+                if (card.hideTimeout) clearTimeout(card.hideTimeout);
+
                 if (filterValue === 'all' || card.getAttribute('data-category') === filterValue) {
-                    card.style.display = 'block';
-                    setTimeout(() => card.style.opacity = '1', 50);
+                    card.style.display = 'flex';
+                    setTimeout(() => card.style.opacity = '1', 10);
                 } else {
                     card.style.opacity = '0';
-                    setTimeout(() => card.style.display = 'none', 300);
+                    card.hideTimeout = setTimeout(() => {
+                        card.style.display = 'none';
+                    }, 300);
                 }
             });
 
