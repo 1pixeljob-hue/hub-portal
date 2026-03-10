@@ -7,7 +7,7 @@
 </FilesMatch>
 
 # 2. Ngoại trừ các file cần thiết cho web chạy
-<FilesMatch "^(index|links|categories)\.php$">
+<FilesMatch "^(index|links|categories|login|logout)\.php$">
     Order deny,allow
     Allow from all
 </FilesMatch>
