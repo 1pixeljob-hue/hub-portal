@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . '/auth.php';
+require_login();
 require_once __DIR__ . '/api/db.php';
 
 // Fetch links from database
@@ -148,8 +150,11 @@ foreach ($links as $link) {
 <input id="link-search" class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-full rounded-l-none bg-transparent text-slate-900 dark:text-white focus:outline-0 focus:ring-0 border-none h-full placeholder:text-slate-400 px-2 text-sm font-normal leading-normal" placeholder="Tìm kiếm liên kết..." value=""/>
 </div>
 </label>
-<button onclick="window.openAddLinkModal()" class="flex h-10 items-center justify-center gap-2 rounded-full bg-primary text-white hover:bg-orange-600 transition-colors px-4 text-sm font-medium">
-    <span class="material-symbols-outlined text-[20px]">add</span> Thêm Liên Kết
+<a href="logout.php" title="Đăng xuất" class="flex h-10 w-10 items-center justify-center rounded-full glass-card text-slate-500 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 dark:hover:text-red-400 transition-colors shrink-0">
+    <span class="material-symbols-outlined text-[20px]">logout</span>
+</a>
+<button onclick="window.openAddLinkModal()" class="flex h-10 items-center justify-center gap-2 rounded-full bg-primary text-white hover:bg-orange-600 transition-colors px-4 text-sm font-medium shrink-0">
+    <span class="material-symbols-outlined text-[20px]">add</span> <span class="hidden sm:inline">Thêm Liên Kết</span>
 </button>
 </div>
 </header>

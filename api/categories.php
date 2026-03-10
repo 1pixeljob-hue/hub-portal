@@ -1,5 +1,7 @@
 <?php
 require_once 'db.php';
+require_once __DIR__ . '/../auth.php';
+require_api_login();
 header('Content-Type: application/json');
 
 $method = $_SERVER['REQUEST_METHOD'];
