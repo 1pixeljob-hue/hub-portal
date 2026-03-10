@@ -70,67 +70,13 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Custom Category Select Logic
-    const catSelectBtn = document.getElementById('category-select-btn');
-    const catSelectMenu = document.getElementById('category-select-menu');
-    const catSelectText = document.getElementById('category-select-text');
-    const catSelectIcon = document.getElementById('category-select-icon');
-    const catHiddenInput = document.getElementById('link-category');
-    const catOptions = document.querySelectorAll('.custom-select-option');
-
-    if (catSelectBtn && catSelectMenu && catHiddenInput) {
-        let prevCategoryValue = catHiddenInput.value;
-
-        // Khởi tạo text hiển thị theo giá trị mặc định lúc load
-        const activeOption = document.querySelector(`.custom-select-option[data-value="${prevCategoryValue}"]`);
-        if (activeOption) {
-            catSelectText.textContent = getOptionLabel(activeOption);
-        }
-
-        function openSelectMenu() {
-            catSelectMenu.classList.add('active');
-            catSelectMenu.classList.remove('hidden');
-            if (catSelectIcon) catSelectIcon.style.transform = 'rotate(180deg)';
-        }
-
-        function closeSelectMenu() {
-            catSelectMenu.classList.remove('active');
-            catSelectMenu.classList.add('hidden');
-            if (catSelectIcon) catSelectIcon.style.transform = 'rotate(0deg)';
-        }
-
-        // Toggle menu
-        catSelectBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            const isOpen = catSelectMenu.classList.contains('active');
-            if (isOpen) closeSelectMenu();
-            else openSelectMenu();
-        });
-
-        // Close when clicking outside
-        document.addEventListener('click', (e) => {
-            if (!catSelectBtn.contains(e.target) && !catSelectMenu.contains(e.target)) {
-                closeSelectMenu();
-            }
-        });
-
-        // Option click
-        catOptions.forEach(option => {
-            option.addEventListener('click', () => {
-                const value = option.getAttribute('data-value');
-                const label = getOptionLabel(option);
-                const color = option.getAttribute('data-color') || 'indigo';
-
-                // Update value
-                catHiddenInput.value = value;
-                catHiddenInput.setAttribute('data-color', color);
-                catSelectText.textContent = label;
-                prevCategoryValue = value;
-                updatePreview();
-
-                closeSelectMenu();
-            });
+    // 3b. Native Category Select Logic
+    const catSelect = document.getElementById('link-category');
+    if (catSelect) {
+        catSelect.addEventListener('change', () => {
+            const selectedOption = catSelect.options[catSelect.selectedIndex];
+            catSelect.setAttribute('data-color', selectedOption?.getAttribute('data-color') || 'indigo');
+            if (typeof window.updatePreview === 'function') window.updatePreview();
         });
     }
 

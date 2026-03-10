@@ -228,18 +228,22 @@ endforeach; ?>
 <div class="flex items-center gap-3">
 <div class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-primary border border-slate-200 dark:border-slate-700 overflow-hidden relative">
     <?php
-    $computedLogoUrl = $link['logoUrl'];
+    $computedLogoUrl = $link['logoUrl'] ?? '';
     if ((empty($computedLogoUrl) || strpos($computedLogoUrl, 's2/favicons') !== false) && !empty($link['url'])) {
         $host = parse_url($link['url'], PHP_URL_HOST);
         if (!empty($host)) {
             $computedLogoUrl = "https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://" . $host . "&size=128";
         }
     }
-    if ($computedLogoUrl): ?>
-        <img src="<?php echo htmlspecialchars($computedLogoUrl); ?>" class="w-10 h-10 object-contain absolute z-10" onerror="this.style.display='none'" />
+    $titleInitial = strtoupper(mb_substr($link['title'] ?? 'L', 0, 1));
+    $catColor = $categories[$link['theme']]['baseColor'] ?? '#ec5b13';
+?>
+    <!-- Initial letter fallback (always shown, hidden by JS/CSS if logo loads) -->
+    <span class="link-initial text-sm font-black absolute z-0" style="color: <?php echo htmlspecialchars($catColor); ?>"><?php echo htmlspecialchars($titleInitial); ?></span>
+    <?php if ($computedLogoUrl): ?>
+        <img src="<?php echo htmlspecialchars($computedLogoUrl); ?>" class="w-10 h-10 object-contain absolute z-10" onerror="this.style.display='none'; this.previousElementSibling.style.display='flex';" loading="lazy" />
     <?php
     endif; ?>
-    <span class="material-symbols-outlined opacity-50 absolute"><?php echo htmlspecialchars($categories[$link['theme']]['icon'] ?? 'link'); ?></span>
 </div>
 <div>
 <h3 class="text-slate-900 dark:text-white font-semibold line-clamp-1"><?php echo htmlspecialchars($link['title']); ?></h3>
@@ -338,25 +342,17 @@ endforeach; ?>
                             </div>
                             
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                                <div class="group relative custom-select-container" style="z-index: 50;">
+                                <div class="group">
                                     <label class="block text-sm font-bold text-slate-900 mb-2">Danh Mục</label>
-                                    <button type="button" id="category-select-btn" class="w-full flex items-center justify-between bg-slate-50 border-2 border-transparent focus:border-primary rounded-xl px-4 py-3.5 text-sm outline-none transition-all text-slate-900 font-medium">
-                                        <span id="category-select-text">Chọn Danh Mục...</span>
-                                        <span class="material-symbols-outlined text-[20px]" id="category-select-icon">expand_more</span>
-                                    </button>
-                                    
-                                    <div id="category-select-menu" class="absolute z-[200] top-full left-0 w-full mt-1.5 bg-white border border-slate-200 rounded-xl shadow-2xl hidden overflow-hidden">
-                                        <ul class="max-h-60 overflow-y-auto p-1.5 space-y-0.5">
+                                    <div class="relative">
+                                        <select id="link-category" name="theme" class="w-full appearance-none bg-slate-50 border-2 border-transparent focus:border-primary rounded-xl px-4 py-3.5 text-sm outline-none transition-all text-slate-900 font-medium cursor-pointer pr-10">
                                             <?php foreach ($categories as $key => $cat): ?>
-                                            <li class="custom-select-option px-3 py-2 rounded-lg text-sm font-medium text-slate-900 hover:bg-primary/10 cursor-pointer flex items-center gap-2" data-value="<?php echo htmlspecialchars($key); ?>" data-color="<?php echo htmlspecialchars($cat['baseColor']); ?>">
-                                                <span class="material-symbols-outlined text-[18px]"><?php echo htmlspecialchars($cat['icon']); ?></span> 
-                                                <?php echo htmlspecialchars($cat['name']); ?>
-                                            </li>
+                                            <option value="<?php echo htmlspecialchars($key); ?>" data-color="<?php echo htmlspecialchars($cat['baseColor']); ?>"><?php echo htmlspecialchars($cat['name']); ?></option>
                                             <?php
 endforeach; ?>
-                                        </ul>
+                                        </select>
+                                        <span class="material-symbols-outlined text-[20px] absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400">expand_more</span>
                                     </div>
-                                    <input type="hidden" id="link-category" name="theme" value="<?php echo htmlspecialchars(array_key_first($categories) ?? 'indigo'); ?>" data-color="indigo">
                                 </div>
                                 <div class="group">
                                     <label class="block text-sm font-bold text-slate-900 mb-2">Thẻ Phân Loại</label>
