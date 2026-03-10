@@ -54,557 +54,212 @@ foreach ($links as $link) {
 }
 ?>
 <!DOCTYPE html>
-<html class="dark" lang="en">
+<html lang="en">
 <head>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>Vibrant Link Manager Dashboard</title>
-    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+    <title>Link Manager Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <script id="tailwind-config">
         tailwind.config = {
             darkMode: "class",
             theme: {
                 extend: {
                     colors: {
-                        "primary": "#00DDB3",
-                        "secondary": "#0066FF",
-                        "accent": "#00b4d8",
-                        "background-light": "#f8fafc",
-                        "background-dark": "#0b1120",
-                        "surface-light": "#ffffff",
-                        "surface-dark": "#111827",
-                        "surface-light-highlight": "#f1f5f9",
-                        "surface-dark-highlight": "#1f2937",
-                        "border-light": "#e2e8f0",
-                        "border-dark": "#1f2937",
-                        "text-primary-light": "#0f172a",
-                        "text-primary-dark": "#f8fafc",
-                        "text-secondary-light": "#64748b",
-                        "text-secondary-dark": "#94a3b8",
-                        // Redefine standard colors to match logo theme
-                        "indigo": {
-                            50: "#eafefb",
-                            100: "#cafdf4",
-                            200: "#96fbed",
-                            300: "#5df6e3",
-                            400: "#2eead3",
-                            500: "#00DDB3",
-                            600: "#00bfa3",
-                            700: "#009d89",
-                            800: "#007c6f",
-                            900: "#00665b"
-                        },
-                        "purple": {
-                            50: "#e6f0ff",
-                            100: "#ccdeff",
-                            200: "#99beff",
-                            300: "#669eff",
-                            400: "#337eff",
-                            500: "#0066FF",
-                            600: "#0052cc",
-                            700: "#003e99",
-                            800: "#002a66",
-                            900: "#001633"
-                        },
-                        "pink": {
-                            50: "#eafefb", 100: "#cafdf4", 200: "#96fbed", 300: "#5df6e3", 400: "#2eead3", 500: "#00DDB3", 600: "#00bfa3", 700: "#009d89", 800: "#007c6f", 900: "#00665b"
-                        },
-                        "emerald": {
-                            50: "#eafefb", 100: "#cafdf4", 200: "#96fbed", 300: "#5df6e3", 400: "#2eead3", 500: "#00DDB3", 600: "#00bfa3", 700: "#009d89", 800: "#007c6f", 900: "#00665b"
-                        },
-                        "rose": {
-                            50: "#e6f0ff", 100: "#ccdeff", 200: "#99beff", 300: "#669eff", 400: "#337eff", 500: "#0066FF", 600: "#0052cc", 700: "#003e99", 800: "#002a66", 900: "#001633"
-                        },
-                        "amber": {
-                            50: "#eafefb", 100: "#cafdf4", 200: "#96fbed", 300: "#5df6e3", 400: "#2eead3", 500: "#00DDB3", 600: "#00bfa3", 700: "#009d89", 800: "#007c6f", 900: "#00665b"
-                        },
-                        "cyan": {
-                            50: "#e6f8fc", 100: "#cdedf9", 200: "#9cdaf3", 300: "#6bc7ed", 400: "#3ab4e7", 500: "#00b4d8", 600: "#0090ad", 700: "#006c82", 800: "#004856", 900: "#00242b"
-                        },
-                        "teal": {
-                            50: "#eafefb", 100: "#cafdf4", 200: "#96fbed", 300: "#5df6e3", 400: "#2eead3", 500: "#00DDB3", 600: "#00bfa3", 700: "#009d89", 800: "#007c6f", 900: "#00665b"
-                        }
+                        "primary": "#ec5b13",
+                        "background-light": "#f8f6f6",
+                        "background-dark": "#221610",
                     },
                     fontFamily: {
-                        "display": ["Inter", "sans-serif"]
+                        "display": ["Public Sans", "sans-serif"]
                     },
-                    backgroundImage: {
-                        'mesh-light': 'radial-gradient(at 0% 0%, hsla(168,100%,70%,0.1) 0, transparent 50%), radial-gradient(at 50% 0%, hsla(217,100%,50%,0.1) 0, transparent 50%), radial-gradient(at 100% 0%, hsla(180,100%,50%,0.1) 0, transparent 50%)',
-                        'mesh-dark': 'radial-gradient(at 0% 0%, hsla(168,100%,10%,0.4) 0, transparent 50%), radial-gradient(at 50% 0%, hsla(217,100%,10%,0.4) 0, transparent 50%), radial-gradient(at 100% 0%, hsla(180,100%,10%,0.4) 0, transparent 50%)',
-                        'mesh-vibrant': 'radial-gradient(at 40% 20%, hsla(168,100%,70%,0.1) 0px, transparent 50%), radial-gradient(at 80% 0%, hsla(217,100%,56%,0.1) 0px, transparent 50%), radial-gradient(at 0% 50%, hsla(189,100%,76%,0.1) 0px, transparent 50%)',
-                        'gradient-border': 'linear-gradient(to right, #00DDB3, #0066FF)',
-                        'logo-gradient': 'linear-gradient(135deg, #00DDB3 0%, #0066FF 100%)',
-                        'card-gradient': 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%)'
-                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
                 },
             },
         }
     </script>
     <style>
-        .glass-panel { backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
-        .gradient-text { background-clip: text; -webkit-background-clip: text; color: transparent; background-image: linear-gradient(to right, #00DDB3, #0066FF); }
-        .interactive-card { position: relative; z-index: 1; border-radius: 1rem; padding: 1px; background: transparent; transition: transform 0.3s ease, box-shadow 0.3s ease; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1); }
-        .interactive-card::before { content: ""; position: absolute; inset: 0; border-radius: 1rem; padding: 1px; background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05)); -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); -webkit-mask-composite: xor; mask-composite: exclude; pointer-events: none; transition: background 0.3s ease; }
-        .interactive-card:hover { transform: scale(1.02); box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1); }
-        .interactive-card:hover::before { background: linear-gradient(45deg, #00DDB3, #0066FF, #00b4d8, #3b82f6); opacity: 1; }
-        .interactive-card-inner { height: 100%; border-radius: calc(1rem - 1px); background-color: rgb(255 255 255 / 0.8); backdrop-filter: blur(12px); transition: all 0.3s ease; border: 1px solid rgba(255, 255, 255, 0.5); }
-        .dark .interactive-card-inner { background-color: rgb(30 41 59 / 0.6); border: 1px solid rgba(255, 255, 255, 0.05); }
-        .interactive-card:hover .interactive-card-inner { background-color: rgb(255 255 255 / 0.95); box-shadow: inset 0 0 20px rgba(0, 221, 179, 0.15); border-color: transparent; }
-        .dark .interactive-card:hover .interactive-card-inner { background-color: rgb(15 23 42 / 0.9); box-shadow: inset 0 0 20px rgba(0, 221, 179, 0.15); border-color: transparent; }
-        .refined-btn { position: relative; overflow: hidden; z-index: 10; }
-        .refined-btn::after { content: ''; position: absolute; inset: 0; background: linear-gradient(45deg, #00DDB3, #0066FF); opacity: 0; transition: opacity 0.3s ease; z-index: -1; border-radius: inherit; }
-        .refined-btn:hover::after { opacity: 1; }
-        .refined-btn:hover { color: white !important; box-shadow: 0 4px 12px rgba(0, 221, 179, 0.3); }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        
-        /* Tùy chỉnh thanh cuộn nhỏ gọn */
-        .custom-scrollbar::-webkit-scrollbar {
-            width: 2px;
+        .glass-card {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
         }
-        .custom-scrollbar::-webkit-scrollbar-track {
-            margin-top: 10px;
-            margin-bottom: 10px;
-            background: transparent;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: rgba(156, 163, 175, 0.5); 
-            border-radius: 9999px;
+        .dark .glass-card {
+            background: rgba(34, 22, 16, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.1);
         }
     </style>
+    <script>
+        function updateTime() {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            
+            document.getElementById('clock-hours').textContent = hours;
+            document.getElementById('clock-minutes').textContent = minutes;
+            document.getElementById('clock-seconds').textContent = seconds;
+
+            const greetingElement = document.getElementById('greeting-text');
+            const h = now.getHours();
+            let greeting = 'Good morning';
+            if (h >= 12 && h < 18) {
+                greeting = 'Good afternoon';
+            } else if (h >= 18) {
+                greeting = 'Good evening';
+            }
+            if(greetingElement) greetingElement.textContent = `${greeting}, Alex`;
+        }
+        setInterval(updateTime, 1000);
+        window.addEventListener('load', updateTime);
+    </script>
 </head>
-<body class="bg-background-light dark:bg-background-dark font-display text-text-primary-light dark:text-text-primary-dark antialiased overflow-hidden transition-colors duration-300 selection:bg-primary selection:text-white">
-    <div class="fixed inset-0 pointer-events-none bg-mesh-vibrant z-0 opacity-100 dark:opacity-40"></div>
-    <div class="flex h-screen w-full relative z-10">
-        <!-- Sidebar -->
-        <aside class="hidden md:flex w-72 flex-col border-r border-border-light/80 dark:border-border-dark/80 bg-surface-light/80 dark:bg-surface-dark/80 backdrop-blur-xl transition-colors duration-300 z-20">
-            <div class="flex h-20 items-center gap-3 px-6 border-b border-border-light/50 dark:border-border-dark/50">
-                <div class="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-[#00DDB3] to-[#0066FF] shadow-lg shadow-[#00DDB3]/20 transition-transform hover:scale-105">
-                    <span class="material-symbols-outlined text-[28px] text-white">hub</span>
-                </div>
-                <h1 class="text-xl font-bold tracking-tight bg-gradient-to-r from-[#00DDB3] to-[#0066FF] bg-clip-text text-transparent">1Pixel</h1>
-            </div>
-            
-            <div class="flex flex-1 flex-col overflow-y-auto py-6 px-4 custom-scrollbar">
-                <div class="mb-6">
-                    <p class="px-3 mb-2 text-xs font-bold uppercase tracking-wider text-text-secondary-light dark:text-text-secondary-dark/70">Tổng quan</p>
-                    <nav class="space-y-1">
-                        <button class="category-filter active group flex w-full items-center justify-between rounded-xl px-3 py-2.5 text-sm font-medium transition-all hover:bg-surface-light-highlight dark:hover:bg-surface-dark-highlight" data-filter="all">
-                            <div class="flex items-center gap-3 text-text-primary-light dark:text-text-primary-dark">
-                                <span class="material-symbols-outlined text-[20px] text-primary">dashboard</span>
-                                Tất cả liên kết
-                            </div>
-                            <span class="flex h-6 min-w-[24px] items-center justify-center rounded-full bg-primary/10 px-2 text-xs font-bold text-primary dark:bg-primary/20 dark:text-primary"><?php echo $totalLinks; ?></span>
-                        </button>
-                    </nav>
-                </div>
-                
-                <div>
-                    <div class="flex items-center justify-between px-3 mb-2">
-                        <p class="text-xs font-bold uppercase tracking-wider text-text-secondary-light dark:text-text-secondary-dark/70">Danh Mục</p>
-                        <button onclick="document.getElementById('add-category-modal').classList.add('active')" class="text-text-secondary-light hover:text-primary transition-colors" title="Thêm danh mục mới">
-                            <span class="material-symbols-outlined text-[16px]">add_circle</span>
-                        </button>
-                    </div>
-                    <nav class="space-y-1" id="category-nav">
-                        <?php foreach ($categories as $key => $cat): ?>
-                        <div class="category-filter relative group flex w-full items-center justify-between rounded-xl px-3 py-2.5 text-sm font-medium transition-all hover:bg-surface-light-highlight dark:hover:bg-surface-dark-highlight cursor-pointer" data-filter="<?php echo htmlspecialchars($key); ?>">
-                            <div class="flex items-center gap-3 text-text-secondary-light dark:text-text-secondary-dark group-hover:text-text-primary-light dark:group-hover:text-text-primary-dark transition-colors">
-                                <div class="flex h-7 w-7 items-center justify-center rounded-lg <?php echo htmlspecialchars($cat['color']); ?> shadow-sm">
-                                    <span class="material-symbols-outlined text-[16px]"><?php echo htmlspecialchars($cat['icon']); ?></span>
-                                </div>
-                                <?php echo htmlspecialchars($cat['name']); ?>
-                            </div>
-                            <div class="flex items-center gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
-                                <?php if ($cat['count'] > 0): ?>
-                                <span class="flex h-5 min-w-[20px] items-center justify-center rounded-full bg-border-light dark:bg-border-dark px-1.5 text-[10px] font-bold text-text-secondary-light dark:text-text-secondary-dark group-hover:bg-primary/10 group-hover:text-primary dark:group-hover:bg-primary/20 dark:group-hover:text-primary transition-colors">
-                                    <?php echo $cat['count']; ?>
-                                </span>
-                                <?php
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden">
+<div class="layout-container flex h-full grow flex-col">
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-slate-200 dark:border-slate-800 px-6 lg:px-10 py-3 bg-white/80 dark:bg-background-dark/80 backdrop-blur-md sticky top-0 z-10">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-4 text-primary">
+<div class="size-6">
+<svg fill="currentColor" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path clip-rule="evenodd" d="M24 4H6V17.3333V30.6667H24V44H42V30.6667V17.3333H24V4Z" fill-rule="evenodd"></path>
+</svg>
+</div>
+<h2 class="text-slate-900 dark:text-white text-lg font-bold leading-tight tracking-[-0.015em]">Link Manager</h2>
+</div>
+<div class="hidden md:flex items-center gap-9">
+<a class="text-primary text-sm font-medium leading-normal" href="#">Dashboard</a>
+<a class="text-slate-600 dark:text-slate-400 hover:text-primary transition-colors text-sm font-medium leading-normal" href="#">Links</a>
+<a class="text-slate-600 dark:text-slate-400 hover:text-primary transition-colors text-sm font-medium leading-normal" href="#">Tags</a>
+<a class="text-slate-600 dark:text-slate-400 hover:text-primary transition-colors text-sm font-medium leading-normal" href="#">Settings</a>
+</div>
+</div>
+<div class="flex flex-1 justify-end gap-6 items-center">
+<label class="hidden sm:flex flex-col min-w-40 !h-10 max-w-64">
+<div class="flex w-full flex-1 items-stretch rounded-full h-full glass-card border-none">
+<div class="text-slate-400 flex items-center justify-center pl-4 pr-2">
+<span class="material-symbols-outlined text-[20px]">search</span>
+</div>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-full rounded-l-none bg-transparent text-slate-900 dark:text-white focus:outline-0 focus:ring-0 border-none h-full placeholder:text-slate-400 px-2 text-sm font-normal leading-normal" placeholder="Search links..." value=""/>
+</div>
+</label>
+<button class="sm:hidden text-slate-600 dark:text-slate-400">
+<span class="material-symbols-outlined">search</span>
+</button>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 border-2 border-primary/20" data-alt="User profile picture" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCFYLUbE1FZSMh-3udwV3q_JF1UUj7QCErnKR1Sf1ZaC2SLlIIYb2C6zorgkgRg4kGg3VSJoKTp5G588EqIjCnWN0BaveeHgEaRKFXri-xbMBh82yz0DI4wPtbH033qJOBSon5InGo0vGG8Kx87q3NzrkpZSqjJwxQs24Fd61gCdzLylVNh-hc-mbF3Qwnlmrq9PgPvsZx0xfvc7ct9X_mjJhy9PRe85Fyo2gVuFtESHewyqhcmenwCeHT8pm7RO314xt2JKZgJfXMA");'></div>
+</div>
+</header>
+<main class="flex-1 max-w-[1200px] w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+<!-- Header Section -->
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+<div>
+<h1 class="text-slate-900 dark:text-white text-3xl font-bold leading-tight tracking-[-0.015em]" id="greeting-text">Good morning, Alex</h1>
+<p class="text-slate-500 dark:text-slate-400 mt-1">Here's an overview of your links.</p>
+</div>
+<!-- Digital Clock -->
+<div class="flex gap-3 glass-card rounded-xl p-3">
+<div class="flex flex-col items-center">
+<span class="text-slate-900 dark:text-white text-xl font-bold font-mono" id="clock-hours">10</span>
+<span class="text-slate-500 dark:text-slate-400 text-[10px] uppercase tracking-wider">Hours</span>
+</div>
+<span class="text-slate-300 dark:text-slate-600 font-bold self-start mt-1">:</span>
+<div class="flex flex-col items-center">
+<span class="text-slate-900 dark:text-white text-xl font-bold font-mono" id="clock-minutes">30</span>
+<span class="text-slate-500 dark:text-slate-400 text-[10px] uppercase tracking-wider">Minutes</span>
+</div>
+<span class="text-slate-300 dark:text-slate-600 font-bold self-start mt-1">:</span>
+<div class="flex flex-col items-center">
+<span class="text-primary text-xl font-bold font-mono" id="clock-seconds">45</span>
+<span class="text-slate-500 dark:text-slate-400 text-[10px] uppercase tracking-wider">Seconds</span>
+</div>
+</div>
+</div>
+<!-- Stats Summary -->
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+<div class="glass-card rounded-xl p-5 flex flex-col gap-2 relative overflow-hidden group">
+<div class="absolute top-0 right-0 w-24 h-24 bg-primary/10 rounded-full blur-2xl -mr-10 -mt-10 transition-transform group-hover:scale-150"></div>
+<div class="flex items-center gap-2 mb-1">
+<span class="material-symbols-outlined text-slate-400 text-[20px]">link</span>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium">Total Links</p>
+</div>
+<p class="text-slate-900 dark:text-white text-3xl font-bold"><?php echo $totalLinks; ?></p>
+</div>
+<div class="glass-card rounded-xl p-5 flex flex-col gap-2 relative overflow-hidden group">
+<div class="absolute top-0 right-0 w-24 h-24 bg-primary/10 rounded-full blur-2xl -mr-10 -mt-10 transition-transform group-hover:scale-150"></div>
+<div class="flex items-center gap-2 mb-1">
+<span class="material-symbols-outlined text-slate-400 text-[20px]">sell</span>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium">Active Tags</p>
+</div>
+<p class="text-slate-900 dark:text-white text-3xl font-bold"><?php echo count($categories); ?></p>
+</div>
+<div class="glass-card rounded-xl p-5 flex flex-col gap-2 relative overflow-hidden group">
+<div class="absolute top-0 right-0 w-24 h-24 bg-primary/10 rounded-full blur-2xl -mr-10 -mt-10 transition-transform group-hover:scale-150"></div>
+<div class="flex items-center gap-2 mb-1">
+<span class="material-symbols-outlined text-slate-400 text-[20px]">touch_app</span>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium">Clicks This Week</p>
+</div>
+<p class="text-slate-900 dark:text-white text-3xl font-bold">342</p>
+</div>
+</div>
+<!-- Filters -->
+<div class="flex gap-2 overflow-x-auto pb-4 mb-4 scrollbar-hide">
+<button class="flex h-9 shrink-0 items-center justify-center rounded-full bg-primary text-white px-5 text-sm font-medium transition-transform hover:scale-105">
+    All
+</button>
+<?php foreach ($categories as $cat): ?>
+<button class="flex h-9 shrink-0 items-center justify-center rounded-full glass-card hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 px-5 text-sm font-medium transition-colors">
+    <?php echo htmlspecialchars($cat['name']); ?>
+</button>
+<?php
+endforeach; ?>
+<button onclick="document.getElementById('add-category-modal').classList.add('active')" class="flex h-9 shrink-0 items-center justify-center rounded-full glass-card hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 px-5 text-sm font-medium transition-colors border-dashed border-slate-300 dark:border-slate-700">
+<span class="material-symbols-outlined text-[18px] mr-1">add</span> New Filter
+</button>
+</div>
+<!-- Link Cards Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+<?php foreach ($links as $link): ?>
+<div class="glass-card rounded-2xl p-5 flex flex-col group hover:-translate-y-1 transition-transform duration-300">
+<div class="flex justify-between items-start mb-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-primary border border-slate-200 dark:border-slate-700">
+    <?php if ($link['logoUrl']): ?>
+        <img src="<?php echo htmlspecialchars($link['logoUrl']); ?>" class="w-6 h-6 object-contain" />
+    <?php
+    else: ?>
+        <span class="material-symbols-outlined"><?php echo htmlspecialchars($categories[$link['theme']]['icon'] ?? 'link'); ?></span>
+    <?php
     endif; ?>
-                                <button type="button" class="flex h-5 w-5 items-center justify-center rounded text-red-500 hover:bg-red-500/10 hover:text-red-600 transition-colors pointer-events-auto" onclick="window.deleteCategory('<?php echo htmlspecialchars($key); ?>', '<?php echo htmlspecialchars($cat['name']); ?>', event)" title="Xoá Danh Mục">
-                                    <span class="material-symbols-outlined text-[14px]">delete</span>
-                                </button>
-                            </div>
-                        </div>
-                        <?php
-endforeach; ?>
-                    </nav>
-                </div>
-            </div>
-            
-            <div class="mt-auto border-t border-border-light/50 dark:border-border-dark/50 p-4">
-                <div class="rounded-2xl border border-primary/20 dark:border-primary/20 bg-gradient-to-b from-primary/5 to-white dark:from-primary/5 dark:to-surface-dark p-4 shadow-sm">
-                    <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary">
-                        <span class="material-symbols-outlined text-[20px]">bolt</span>
-                    </div>
-                    <h4 class="mb-1 text-sm font-bold text-text-primary-light dark:text-text-primary-dark">Pro Workspace</h4>
-                    <p class="text-xs text-text-secondary-light dark:text-text-secondary-dark">Manage all your essential portals and links effortlessly.</p>
-                </div>
-            </div>
-        </aside>
-
-        <!-- Main Content -->
-        <main class="flex h-full flex-1 flex-col overflow-hidden bg-transparent transition-colors duration-300">
-            <header class="flex h-16 shrink-0 items-center justify-between border-b border-border-light/50 dark:border-border-dark/50 bg-surface-light/80 dark:bg-surface-dark/80 backdrop-blur-md px-6 transition-colors duration-300">
-                <div class="flex flex-1 items-center max-w-md">
-                    <div class="relative w-full group">
-                        <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-text-secondary-light dark:text-text-secondary-dark group-focus-within:text-primary transition-colors">
-                            <span class="material-symbols-outlined text-[20px]">search</span>
-                        </div>
-                        <input id="link-search" class="block w-full rounded-full border-2 border-transparent bg-surface-light-highlight dark:bg-surface-dark-highlight py-2 pl-10 pr-3 text-sm text-text-primary-light dark:text-white placeholder-text-secondary-light dark:placeholder-text-secondary-dark focus:border-primary focus:bg-white dark:focus:bg-surface-dark focus:outline-none focus:ring-0 transition-all shadow-inner" placeholder="Tìm liên kết, thẻ..." type="text"/>
-                    </div>
-                </div>
-                <div class="flex items-center gap-3">
-                    <button class="relative rounded-lg p-2 text-text-secondary-light dark:text-text-secondary-dark hover:bg-surface-light-highlight dark:hover:bg-surface-dark-highlight hover:text-primary transition-colors" id="theme-toggle" title="Toggle Theme">
-                        <span class="material-symbols-outlined text-[24px]">light_mode</span>
-                    </button>
-                    <button class="flex items-center gap-2 rounded-lg bg-surface-light-highlight dark:bg-surface-dark-highlight border border-border-light/50 dark:border-border-dark/50 px-3.5 py-2 text-sm font-semibold text-text-primary-light dark:text-white hover:border-primary/50 hover:text-primary transition-all" onclick="document.getElementById('add-category-modal').classList.add('active')">
-                        <span class="material-symbols-outlined text-[18px]">create_new_folder</span>
-                        Danh Mục
-                    </button>
-                    <button class="flex items-center gap-2 rounded-lg bg-gradient-to-r from-primary to-secondary px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-primary/25 hover:shadow-primary/40 hover:scale-[1.02] transition-all" onclick="window.openAddLinkModal()">
-                        <span class="material-symbols-outlined text-[20px]">add</span>
-                        Thêm Liên Kết
-                    </button>
-                </div>
-            </header>
-
-            <div class="flex-1 overflow-y-auto p-4 md:p-8">
-                <div class="mx-auto max-w-7xl">
-                    <!-- Greeting Section -->
-                    <div class="relative mb-8 overflow-hidden rounded-2xl p-[2px] bg-gradient-to-r from-[#00DDB3] via-[#0066FF] to-[#00b4d8] shadow-xl shadow-[#00DDB3]/10">
-                        <div class="relative flex flex-col md:flex-row md:items-end justify-between gap-4 rounded-2xl bg-white/90 dark:bg-surface-dark/90 backdrop-blur-xl p-6 md:p-8">
-                            <div class="z-10">
-                                <h2 id="greeting-text" class="text-3xl md:text-4xl font-extrabold tracking-tight bg-gradient-to-r from-[#00DDB3] to-[#0066FF] bg-clip-text text-transparent drop-shadow-sm">Chào buổi sáng, Sếp</h2>
-                                <p class="text-text-secondary-light dark:text-text-secondary-dark mt-2 font-medium">Quản lý các liên kết của bạn hiệu quả.</p>
-                            </div>
-                            <div class="z-10 flex items-center gap-3 rounded-xl bg-surface-light-highlight/50 dark:bg-surface-dark-highlight/50 p-3 backdrop-blur-md border border-white/20 dark:border-white/5">
-                                <span id="clock-display" class="text-4xl font-light tracking-tight text-text-primary-light dark:text-white tabular-nums">00:00</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Grid of Links -->
-                    <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4" id="links-container">
-                        <?php if (empty($links)): ?>
-                            <div class="col-span-full py-16 text-center flex flex-col items-center justify-center">
-                                <div class="mb-4 flex h-20 w-20 items-center justify-center rounded-3xl bg-surface-light-highlight dark:bg-surface-dark-highlight shadow-inner">
-                                    <span class="material-symbols-outlined text-4xl text-text-secondary-light/40 dark:text-text-secondary-dark/40">link_off</span>
-                                </div>
-                                <h3 class="text-xl font-bold text-text-primary-light dark:text-white mb-2">Chưa Có Liên Kết Nào</h3>
-                                <p class="text-text-secondary-light dark:text-text-secondary-dark max-w-sm">Bạn chưa thêm liên kết nào. Bấm "Thêm Liên Kết" ở góc trên để bắt đầu.</p>
-                            </div>
-                        <?php
-else: ?>
-                            <?php foreach ($links as $link):
-        $cardTheme = $link['theme'] ?? 'indigo';
-        $catColor = $categories[$cardTheme]['baseColor'] ?? 'indigo';
-        if (strpos($catColor, '#') === 0) {
-            $gClass = "from-[{$catColor}] to-[{$catColor}] hover:shadow-[{$catColor}]/20 text-[{$catColor}] dark:text-[{$catColor}] bg-[{$catColor}]/10 dark:bg-[{$catColor}]/20 border-[{$catColor}]/30 dark:border-[{$catColor}]/30";
-            $colorName = $catColor;
-        }
-        else {
-            $gradients = [
-                'indigo' => 'from-[#00DDB3] to-[#0066FF] hover:shadow-[#00DDB3]/20 text-[#0066FF] dark:text-[#00DDB3] bg-[#00DDB3]/5 dark:bg-[#00DDB3]/10 border-[#00DDB3]/20 dark:border-[#00DDB3]/30',
-                'purple' => 'from-[#0066FF] to-[#00b4d8] hover:shadow-[#0066FF]/20 text-[#0066FF] dark:text-[#00b4d8] bg-[#0066FF]/5 dark:bg-[#0066FF]/10 border-[#0066FF]/20 dark:border-[#0066FF]/30',
-                'pink' => 'from-[#00DDB3] to-[#00b4d8] hover:shadow-[#00DDB3]/20 text-[#00DDB3] dark:text-[#00b4d8] bg-[#00b4d8]/5 dark:bg-[#00b4d8]/10 border-[#00b4d8]/20 dark:border-[#00b4d8]/30',
-                'emerald' => 'from-emerald-500 to-emerald-600 hover:shadow-emerald-500/20 text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 border-emerald-100 dark:border-emerald-800/30'
-            ];
-            $gClass = $gradients[$cardTheme] ?? $gradients['indigo'];
-            preg_match('/text-([a-z]+)-600/', $gClass, $matches);
-            $colorName = $matches[1] ?? 'indigo';
-        }
-?>
-                                <div class="group interactive-card link-card filter-item transition-all duration-300 transform" data-id="<?php echo $link['id']; ?>" data-category="<?php echo $cardTheme; ?>">
-                                    <div class="interactive-card-inner flex flex-col justify-between p-5">
-                                        <div class="absolute top-0 left-0 h-1.5 w-full bg-gradient-to-r <?php echo preg_replace('/hover:shadow-.*?\s.*/', '', $gClass); ?> opacity-0 group-hover:opacity-100 transition-opacity rounded-t-xl z-10"></div>
-                                        <div>
-                                            <div class="mb-5 flex items-start justify-between">
-                                                <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-white dark:bg-surface-dark-highlight p-2 border border-border-light/80 dark:border-white/10 shadow-sm relative z-10 overflow-hidden shrink-0 group-hover:scale-105 transition-transform">
-                                                    <?php
-        $computedLogoUrl = $link['logoUrl'];
-        if ((empty($computedLogoUrl) || strpos($computedLogoUrl, 's2/favicons') !== false) && !empty($link['url'])) {
-            $host = parse_url($link['url'], PHP_URL_HOST);
-            if (!empty($host)) {
-                $computedLogoUrl = "https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://" . $host . "&size=128";
-            }
-        }
-        if ($computedLogoUrl):
-?>
-                                                        <img src="<?php echo htmlspecialchars($computedLogoUrl); ?>" class="h-10 w-10 object-contain" alt="Logo">
-                                                    <?php
-        else: ?>
-                                                        <span class="text-2xl font-black bg-gradient-to-br <?php echo preg_replace('/hover:shadow-.*?\s.*/', '', $gClass); ?> bg-clip-text text-transparent"><?php echo htmlspecialchars($link['initial']); ?></span>
-                                                    <?php
-        endif; ?>
-                                                </div>
-                                                <div class="relative z-20">
-                                                    <button class="rounded-lg p-1.5 text-text-secondary-light dark:text-text-secondary-dark hover:bg-surface-light-highlight dark:hover:bg-surface-dark-highlight transition-all" onclick="window.toggleMenu('menu-<?php echo $link['id']; ?>', event)">
-                                                        <span class="material-symbols-outlined text-[20px]">more_vert</span>
-                                                    </button>
-                                                    <div id="menu-<?php echo $link['id']; ?>" class="action-menu hidden absolute right-0 mt-1 w-36 origin-top-right rounded-lg bg-white dark:bg-surface-dark shadow-xl ring-1 ring-black/5 dark:ring-white/10 overflow-hidden z-30 border border-border-light dark:border-border-dark">
-                                                        <button class="flex w-full items-center gap-2 px-3 py-2 text-sm text-text-primary-light dark:text-text-primary-dark hover:bg-surface-light-highlight dark:hover:bg-surface-dark-highlight transition-colors" onclick='window.editLink(<?php echo json_encode($link, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP); ?>, event)'>
-                                                            <span class="material-symbols-outlined text-[18px]">edit</span>
-                                                            Sửa Link
-                                                        </button>
-                                                        <button class="flex w-full items-center gap-2 px-3 py-2 text-sm text-text-primary-light dark:text-text-primary-dark hover:bg-surface-light-highlight dark:hover:bg-surface-dark-highlight transition-colors" onclick="window.copyUrl('<?php echo htmlspecialchars($link['url'], ENT_QUOTES); ?>'); window.toggleMenu('menu-<?php echo $link['id']; ?>', event)">
-                                                            <span class="material-symbols-outlined text-[18px]">content_copy</span>
-                                                            Sao chép
-                                                        </button>
-                                                        <div class="h-px w-full bg-border-light dark:bg-border-dark border-0"></div>
-                                                        <button class="flex w-full items-center gap-2 px-3 py-2 text-sm text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors" onclick="window.deleteLink('<?php echo $link['id']; ?>')">
-                                                            <span class="material-symbols-outlined text-[18px]">delete</span>
-                                                            Xóa
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <h3 class="mb-1 text-lg font-bold text-text-primary-light dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors"><?php echo htmlspecialchars($link['title']); ?></h3>
-                                            <p class="mb-4 truncate text-sm text-text-secondary-light dark:text-text-secondary-dark"><?php echo htmlspecialchars(parse_url($link['url'], PHP_URL_HOST)); ?></p>
-                                            <div class="flex flex-wrap gap-2 mt-auto">
-                                                <?php foreach (getTags($link['tags']) as $tag):
-            if (strpos($colorName, '#') === 0) {
-                $tagClass = "bg-[{$colorName}]/10 dark:bg-[{$colorName}]/20 text-[{$colorName}] dark:text-[{$colorName}] border-[{$colorName}]/30 dark:border-[{$colorName}]/30";
-            }
-            else {
-                $tagClass = "bg-{$colorName}-50 dark:bg-{$colorName}-900/20 text-{$colorName}-600 dark:text-{$colorName}-400 border-{$colorName}-200/50 dark:border-{$colorName}-800/30";
-            }
-?>
-                                                    <span class="rounded-full <?php echo $tagClass; ?> px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wide border">
-                                                        <?php echo htmlspecialchars($tag['name'] ?? $tag); ?>
-                                                    </span>
-                                                <?php
-        endforeach; ?>
-                                            </div>
-                                        </div>
-                                        <div class="mt-4 border-t border-border-light dark:border-white/5 pt-4 relative z-10">
-                                            <a class="refined-btn flex w-full items-center justify-center gap-2 rounded-lg bg-surface-light-highlight dark:bg-surface-dark-highlight py-2 text-sm font-medium text-text-primary-light dark:text-white transition-all opacity-40 group-hover:opacity-100 bg-white/10 backdrop-blur-sm" href="<?php echo htmlspecialchars($link['url']); ?>" target="_blank">
-                                                Mở Liên Kết
-                                                <span class="material-symbols-outlined text-[16px]">open_in_new</span>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            <?php
+</div>
+<div>
+<h3 class="text-slate-900 dark:text-white font-semibold line-clamp-1"><?php echo htmlspecialchars($link['title']); ?></h3>
+<p class="text-slate-500 dark:text-slate-400 text-xs mt-0.5"><?php echo htmlspecialchars(parse_url($link['url'], PHP_URL_HOST) ?? $link['url']); ?></p>
+</div>
+</div>
+<button class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-1 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+</div>
+<div class="flex flex-wrap gap-2 mb-5 mt-auto">
+    <?php foreach (getTags($link['tags']) as $tag): ?>
+        <span class="px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs font-medium border border-slate-200 dark:border-slate-700"><?php echo htmlspecialchars($tag['name'] ?? $tag); ?></span>
+    <?php
     endforeach; ?>
-                        <?php
-endif; ?>
-                    </div>
-                </div>
-            </div>
-        </main>
-    </div>
-
-    <!-- Add Link Modal (Side-by-side Layout) -->
-    <div class="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 opacity-0 pointer-events-none transition-all duration-300" id="add-modal">
-        <div class="bg-surface-light dark:bg-surface-dark w-full max-w-4xl rounded-3xl shadow-2xl border border-border-light/50 dark:border-border-dark/50 overflow-hidden transform scale-95 transition-all duration-300 modal-content flex flex-col md:flex-row">
-            
-            <!-- Left Side: Live Preview -->
-            <div class="w-full md:w-5/12 bg-surface-light-highlight/50 dark:bg-black/20 p-8 flex flex-col border-b md:border-b-0 md:border-r border-border-light/50 dark:border-border-dark/50 relative overflow-hidden">
-                <div class="absolute inset-0 bg-mesh-vibrant opacity-20 pointer-events-none"></div>
-                <div class="absolute inset-0 bg-gradient-to-b from-transparent to-surface-light/80 dark:to-surface-dark/80 pointer-events-none"></div>
-                
-                <h3 class="text-sm font-bold uppercase tracking-wider text-text-secondary-light dark:text-text-secondary-dark mb-6 relative z-10 flex items-center gap-2">
-                    <span class="material-symbols-outlined text-[18px]">visibility</span>
-                    Xem Trước
-                </h3>
-                
-                <div class="flex-1 flex items-center justify-center relative z-10">
-                    <!-- The Preview Card -->
-                    <div class="w-full interactive-card" id="preview-card-container">
-                        <div class="interactive-card-inner flex flex-col justify-between p-5 bg-white dark:bg-surface-dark/90 transition-all duration-300" id="preview-card-inner">
-                            <div class="absolute top-0 left-0 h-1.5 w-full bg-gradient-to-r from-indigo-500 to-indigo-600 rounded-t-xl z-20" id="preview-gradient"></div>
-                            <div>
-                                <div class="mb-5 flex items-start justify-between">
-                                    <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-white dark:bg-surface-dark-highlight p-2 border border-border-light/80 dark:border-white/10 shadow-sm relative z-10 overflow-hidden shrink-0">
-                                        <span class="text-2xl font-black bg-gradient-to-br from-indigo-500 to-indigo-600 bg-clip-text text-transparent" id="preview-initial">N</span>
-                                        <img src="" class="h-10 w-10 object-contain hidden" id="preview-logo" alt="Logo">
-                                    </div>
-                                    <div class="relative z-20">
-                                        <button type="button" class="rounded-lg p-1.5 text-text-secondary-light dark:text-text-secondary-dark opacity-50 cursor-not-allowed">
-                                            <span class="material-symbols-outlined text-[20px]">more_vert</span>
-                                        </button>
-                                    </div>
-                                </div>
-                                <h3 class="mb-1 text-lg font-bold text-text-primary-light dark:text-white" id="preview-title">Liên Kết Mới</h3>
-                                <p class="mb-4 truncate text-sm text-text-secondary-light dark:text-text-secondary-dark" id="preview-url">example.com</p>
-                                <div class="flex flex-wrap gap-2 mt-auto" id="preview-tags-container">
-                                    <span class="rounded-full bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600 dark:text-indigo-400 border-indigo-200/50 dark:border-indigo-800/30 px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wide border">WORK</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Right Side: Input Form -->
-            <div class="w-full md:w-7/12 flex flex-col">
-                <form id="add-link-form" onsubmit="window.submitForm(event)" class="h-full flex flex-col">
-                    <div class="px-8 py-6 border-b border-border-light/50 dark:border-border-dark/50 flex justify-between items-center">
-                        <div>
-                            <h3 class="text-2xl font-bold text-text-primary-light dark:text-white" id="modal-title">Thêm Liên Kết Mới</h3>
-                            <p class="text-sm text-text-secondary-light tracking-wide mt-1">Tạo một thẻ tùy chỉnh mới cho bảng điều khiển.</p>
-                        </div>
-                        <button type="button" class="rounded-full p-2 text-text-secondary-light hover:bg-surface-light-highlight dark:hover:bg-surface-dark-highlight transition-colors" onclick="document.getElementById('add-modal').classList.remove('active')">
-                            <span class="material-symbols-outlined text-[24px]">close</span>
-                        </button>
-                    </div>
-                    
-                    <div class="p-8 space-y-6 flex-1 overflow-y-visible">
-                        <input type="hidden" id="link-id" name="id" value="">
-                         <div class="group">
-                            <label class="block text-sm font-bold text-text-primary-light dark:text-text-primary-dark mb-2 group-focus-within:text-primary transition-colors">Tiêu Đề (Title) <span class="text-red-500">*</span></label>
-                            <input id="link-title" class="w-full bg-surface-light-highlight dark:bg-surface-dark-highlight border-2 border-transparent focus:border-primary rounded-xl px-4 py-3.5 text-sm outline-none transition-all shadow-inner text-text-primary-light dark:text-white font-medium placeholder-text-secondary-light/60" required placeholder="vd: Không gian làm việc..." type="text"/>
-                        </div>
-                        
-                        <div class="group">
-                            <label class="block text-sm font-bold text-text-primary-light dark:text-text-primary-dark mb-2 group-focus-within:text-primary transition-colors">Đường Dẫn URL <span class="text-red-500">*</span></label>
-                            <div class="relative">
-                                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                                    <span class="material-symbols-outlined text-[18px] text-text-secondary-light">link</span>
-                                </div>
-                                <input id="link-url" class="w-full bg-surface-light-highlight dark:bg-surface-dark-highlight border-2 border-transparent focus:border-primary rounded-xl pl-11 pr-4 py-3.5 text-sm outline-none transition-all shadow-inner text-text-primary-light dark:text-white font-medium placeholder-text-secondary-light/60" required placeholder="e.g. google.com" type="text"/>
-                            </div>
-                        </div>
-                        
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                            <div class="group">
-                                <label class="block text-sm font-bold text-text-primary-light dark:text-text-primary-dark mb-2 group-focus-within:text-primary transition-colors">Danh Mục</label>
-                                <div class="relative custom-select-container">
-                                    <button type="button" id="category-select-btn" class="w-full flex items-center justify-between text-left appearance-none bg-surface-light-highlight dark:bg-surface-dark-highlight border-2 border-transparent focus:border-primary focus:ring-[3px] focus:ring-primary/20 rounded-xl pl-4 pr-3 py-3 text-sm outline-none transition-all shadow-inner text-text-primary-light dark:text-white font-medium cursor-pointer relative z-10">
-                                        <span id="category-select-text">Chọn Danh Mục...</span>
-                                        <span class="material-symbols-outlined text-[20px] text-text-secondary-light transition-transform duration-200" id="category-select-icon">expand_more</span>
-                                    </button>
-                                    
-                                    <div id="category-select-menu" class="absolute z-[100] bottom-full left-0 w-full mb-1.5 bg-white dark:bg-surface-dark border border-indigo-500/30 rounded-xl shadow-2xl opacity-0 invisible transform translate-y-2 transition-all duration-200 overflow-hidden origin-bottom">
-                                        <ul class="max-h-60 overflow-y-auto custom-scrollbar p-1.5 space-y-0.5 bg-surface-light-highlight/20 dark:bg-surface-dark-highlight/20 backdrop-blur-md">
-                                            <?php foreach ($categories as $key => $cat): ?>
-                                            <li class="custom-select-option px-3 py-2 rounded-lg text-sm font-medium text-text-primary-light dark:text-text-primary-dark hover:bg-indigo-500 hover:text-white dark:hover:bg-indigo-600 dark:hover:text-white cursor-pointer flex items-center gap-2 transition-all" data-value="<?php echo htmlspecialchars($key); ?>" data-color="<?php echo htmlspecialchars($cat['baseColor']); ?>">
-                                                <span class="material-symbols-outlined text-[18px] opacity-70"><?php echo htmlspecialchars($cat['icon']); ?></span> 
-                                                <?php echo htmlspecialchars($cat['name']); ?>
-                                            </li>
-                                            <?php
+</div>
+<a href="<?php echo htmlspecialchars($link['url']); ?>" target="_blank" class="w-full flex items-center justify-center gap-2 bg-transparent hover:bg-primary/5 text-primary border border-primary/20 hover:border-primary/50 py-2.5 rounded-xl text-sm font-semibold transition-all">
+    Open Link <span class="material-symbols-outlined text-[18px]">open_in_new</span>
+</a>
+</div>
+<?php
 endforeach; ?>
-                                        </ul>
-                                    </div>
-                                    <input type="hidden" id="link-category" name="theme" value="<?php echo htmlspecialchars(array_key_first($categories) ?? 'indigo'); ?>" data-color="indigo">
-                                </div>
-                            </div>
-                            <div class="group">
-                                <label class="block text-sm font-bold text-text-primary-light dark:text-text-primary-dark mb-2 group-focus-within:text-primary transition-colors">Thẻ Phân Loại (Tags)</label>
-                                <input id="link-tags" class="w-full bg-surface-light-highlight dark:bg-surface-dark-highlight border-2 border-transparent focus:border-primary rounded-xl px-4 py-3.5 text-sm outline-none transition-all shadow-inner text-text-primary-light dark:text-white font-medium placeholder-text-secondary-light/60" placeholder="vd: dev, design, tool..."/>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="bg-surface-light-highlight/50 dark:bg-surface-dark-highlight/20 px-8 py-5 flex items-center justify-end gap-3 mt-auto border-t border-border-light/50 dark:border-border-dark/50">
-                        <button class="px-6 py-2.5 text-sm font-bold text-text-secondary-light dark:text-text-secondary-dark hover:text-text-primary-light dark:hover:text-white transition-colors" onclick="document.getElementById('add-modal').classList.remove('active')" type="button">Trở Về</button>
-                        <button class="bg-gradient-to-r from-primary to-secondary px-8 py-2.5 rounded-xl text-sm font-bold text-white shadow-lg shadow-primary/25 hover:shadow-primary/40 hover:-translate-y-0.5 transition-all" type="submit" id="submit-btn-text">Lưu Liên Kết</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <!-- Add Category Modal -->
-    <div class="fixed inset-0 z-[110] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 opacity-0 pointer-events-none transition-all duration-300" id="add-category-modal">
-        <div class="bg-surface-light dark:bg-surface-dark w-full max-w-lg rounded-3xl shadow-2xl border border-border-light/50 dark:border-border-dark/50 overflow-hidden transform scale-95 transition-all duration-300 modal-content relative">
-            <div class="absolute inset-0 bg-mesh-vibrant opacity-10 pointer-events-none"></div>
-            <div class="absolute inset-0 bg-gradient-to-b from-transparent to-surface-light/80 dark:to-surface-dark/80 pointer-events-none"></div>
-
-            <form id="add-category-form" onsubmit="window.submitCategoryForm(event)" class="relative z-10 flex flex-col h-full">
-                <div class="px-8 py-6 border-b border-border-light/50 dark:border-border-dark/50 flex justify-between items-center relative">
-                    <div class="absolute top-0 left-0 h-1 w-full bg-gradient-to-r from-[#00DDB3] via-[#0066FF] to-[#00b4d8]"></div>
-                    <div>
-                        <h3 class="text-2xl font-bold bg-gradient-to-r from-[#00DDB3] to-[#0066FF] bg-clip-text text-transparent drop-shadow-sm">Danh Mục Mới</h3>
-                        <p class="text-sm text-text-secondary-light tracking-wide mt-1">Phân loại hiển thị cho giao diện trực quan.</p>
-                    </div>
-                    <button type="button" class="rounded-full p-2 text-text-secondary-light hover:bg-surface-light-highlight dark:hover:bg-surface-dark-highlight transition-colors" onclick="document.getElementById('add-category-modal').classList.remove('active')">
-                        <span class="material-symbols-outlined text-[24px]">close</span>
-                    </button>
-                </div>
-                <div class="p-8 space-y-6 flex-1">
-                    <div class="group">
-                        <label class="block text-sm font-bold text-text-primary-light dark:text-text-primary-dark mb-2 group-focus-within:text-primary transition-colors">Tên Danh Mục <span class="text-red-500">*</span></label>
-                        <input id="cat-title" class="w-full bg-surface-light-highlight dark:bg-surface-dark-highlight border-2 border-transparent focus:border-primary rounded-xl px-4 py-3.5 text-sm outline-none transition-all shadow-inner text-text-primary-light dark:text-white font-medium placeholder-text-secondary-light/60" required placeholder="vd: Thiết Kế, Phần Mềm..." type="text"/>
-                    </div>
-                    <div class="grid grid-cols-2 gap-6">
-                        <div class="group">
-                            <label class="block text-sm font-bold text-text-primary-light dark:text-text-primary-dark mb-2 group-focus-within:text-primary transition-colors">Mã Biểu Tượng</label>
-                            <input id="cat-icon" class="w-full bg-surface-light-highlight dark:bg-surface-dark-highlight border-2 border-transparent focus:border-primary rounded-xl px-4 py-3.5 text-sm outline-none transition-all shadow-inner text-text-primary-light dark:text-white font-medium placeholder-text-secondary-light/60" placeholder="vd: code, star..." value="folder" type="text"/>
-                            <p class="text-[11px] font-bold text-primary hover:text-secondary transition-colors mt-2"><a href="https://fonts.google.com/icons" target="_blank" class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">open_in_new</span> Thư Viện Biểu Tượng</a></p>
-                        </div>
-                        <div class="group">
-                            <label class="block text-sm font-bold text-text-primary-light dark:text-text-primary-dark mb-2 group-focus-within:text-primary transition-colors">Màu Sắc</label>
-                            <div class="relative custom-select-container">
-                                <button type="button" id="color-select-btn" class="w-full flex items-center justify-between text-left appearance-none bg-surface-light-highlight dark:bg-surface-dark-highlight border-2 border-transparent focus:border-primary focus:ring-[3px] focus:ring-primary/20 rounded-xl pl-4 pr-3 py-3.5 text-sm outline-none transition-all shadow-inner text-text-primary-light dark:text-white font-medium cursor-pointer relative z-10">
-                                    <div class="flex items-center gap-2" id="color-select-display">
-                                        <div class="w-4 h-4 rounded-full bg-primary"></div>
-                                        <span id="color-select-text">Màu 1Pixel (Default)</span>
-                                    </div>
-                                    <span class="material-symbols-outlined text-[20px] text-text-secondary-light transition-transform duration-200" id="color-select-icon">expand_more</span>
-                                </button>
-                                
-                                <div id="color-select-menu" class="absolute z-[100] bottom-full left-0 w-full mb-1.5 bg-white dark:bg-surface-dark border border-primary/30 rounded-xl shadow-2xl opacity-0 invisible transform translate-y-2 transition-all duration-200 overflow-hidden origin-bottom">
-                                    <ul class="max-h-60 overflow-y-auto custom-scrollbar p-1.5 space-y-0.5 bg-surface-light-highlight/20 dark:bg-surface-dark-highlight/20 backdrop-blur-md">
-                                        <li class="custom-color-option px-3 py-2 rounded-lg text-sm font-medium text-text-primary-light dark:text-text-primary-dark hover:bg-primary/5 dark:hover:bg-primary/10 cursor-pointer flex items-center gap-2 transition-all" data-value="indigo">
-                                            <div class="w-4 h-4 rounded-full bg-primary"></div> Teal Primary (Brand)
-                                        </li>
-                                        <li class="custom-color-option px-3 py-2 rounded-lg text-sm font-medium text-text-primary-light dark:text-text-primary-dark hover:bg-secondary/5 dark:hover:bg-secondary/10 cursor-pointer flex items-center gap-2 transition-all" data-value="purple">
-                                            <div class="w-4 h-4 rounded-full bg-secondary"></div> Blue Secondary (Brand)
-                                        </li>
-                                        <li class="custom-color-option px-3 py-2 rounded-lg text-sm font-medium text-text-primary-light dark:text-text-primary-dark hover:bg-accent/5 dark:hover:bg-accent/10 cursor-pointer flex items-center gap-2 transition-all" data-value="pink">
-                                            <div class="w-4 h-4 rounded-full bg-accent"></div> Cyan Accent (Brand)
-                                        </li>
-                                        <li class="custom-color-option px-3 py-2 rounded-lg text-sm font-medium text-text-primary-light dark:text-text-primary-dark hover:bg-primary/5 dark:hover:bg-primary/10 cursor-pointer flex items-center gap-2 transition-all" data-value="emerald">
-                                            <div class="w-4 h-4 rounded-full bg-emerald-500"></div> Emerald Brand
-                                        </li>
-                                        <li class="custom-color-option px-3 py-2 rounded-lg text-sm font-medium text-text-primary-light dark:text-text-primary-dark hover:bg-secondary/5 dark:hover:bg-secondary/10 cursor-pointer flex items-center gap-2 transition-all" data-value="rose">
-                                            <div class="w-4 h-4 rounded-full bg-rose-500"></div> Rose Brand
-                                        </li>
-                                        <li class="custom-color-option px-3 py-2 rounded-lg text-sm font-medium text-text-primary-light dark:text-text-primary-dark hover:bg-primary/5 dark:hover:bg-primary/10 cursor-pointer flex items-center gap-2 transition-all" data-value="amber">
-                                            <div class="w-4 h-4 rounded-full bg-amber-500"></div> Amber Brand
-                                        </li>
-                                        <li class="custom-color-option px-3 py-2 rounded-lg text-sm font-medium text-text-primary-light dark:text-text-primary-dark hover:bg-accent/5 dark:hover:bg-accent/10 cursor-pointer flex items-center gap-2 transition-all" data-value="cyan">
-                                            <div class="w-4 h-4 rounded-full bg-cyan-500"></div> Cyan Brand
-                                        </li>
-                                        <li class="mt-1 pt-1 border-t border-indigo-500/10"></li>
-                                        <li class="custom-color-option px-3 py-2 rounded-lg text-sm font-medium text-text-primary-light dark:text-text-primary-dark hover:bg-gray-50 dark:hover:bg-gray-900/40 cursor-pointer flex items-center gap-2 transition-all relative overflow-hidden" data-value="#ec4899" id="custom-color-li">
-                                            <div class="relative flex items-center gap-2 w-full">
-                                                <input type="color" id="custom-color-picker" class="absolute opacity-0 w-full h-full cursor-pointer" style="left:0; top:0; z-index:10;" value="#ec4899" title="Chọn màu tùy chỉnh">
-                                                <div id="custom-color-preview" class="w-4 h-4 rounded-full border border-gray-300 pointer-events-none transition-colors" style="background-color: #ec4899;"></div>
-                                                <span class="pointer-events-none w-full flex-1">Tùy Chỉnh Màu</span>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <input type="hidden" id="cat-color" name="cat-color" value="indigo">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="bg-surface-light-highlight/30 dark:bg-surface-dark-highlight/20 border-t border-border-light/50 dark:border-border-dark/50 px-8 py-5 flex items-center justify-end gap-3 mt-auto">
-                    <button class="px-6 py-2.5 text-sm font-bold text-text-secondary-light dark:text-text-secondary-dark hover:text-text-primary-light dark:hover:text-white transition-colors" onclick="document.getElementById('add-category-modal').classList.remove('active')" type="button">Hủy</button>
-                    <button class="bg-gradient-to-r from-primary to-secondary px-8 py-2.5 rounded-xl text-sm font-bold text-white shadow-lg shadow-primary/25 hover:shadow-primary/40 hover:-translate-y-0.5 transition-all" type="submit">Lưu Danh Mục</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Toast Container -->
-    <div id="toast-container" class="fixed bottom-6 right-6 z-[200] flex flex-col gap-3"></div>
-
-    <script src="js/script.js"></script>
-    <style>
-        #add-modal.active, #add-category-modal.active { opacity: 1; pointer-events: auto; }
-        #add-modal.active .modal-content, #add-category-modal.active .modal-content { transform: scale(1); }
-        .action-menu.active { display: block; }
-        .toast { display: flex; align-items: center; gap: 12px; padding: 12px 20px; border-radius: 12px; background: white; border: 1px solid #e2e8f0; shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1); animation: slideIn 0.3s ease-out; }
-        .dark .toast { background: #1e293b; border-color: #334155; }
-        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-        @keyframes fadeOut { to { opacity: 0; transform: scale(0.95); } }
-    </style>
+</div>
+</main>
+</div>
+</div>
 </body>
 </html>
