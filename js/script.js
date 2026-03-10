@@ -89,11 +89,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
         function openSelectMenu() {
             catSelectMenu.classList.add('active');
+            catSelectMenu.classList.remove('hidden');
             if (catSelectIcon) catSelectIcon.style.transform = 'rotate(180deg)';
         }
 
         function closeSelectMenu() {
             catSelectMenu.classList.remove('active');
+            catSelectMenu.classList.add('hidden');
             if (catSelectIcon) catSelectIcon.style.transform = 'rotate(0deg)';
         }
 
@@ -101,10 +103,9 @@ document.addEventListener('DOMContentLoaded', () => {
         catSelectBtn.addEventListener('click', (e) => {
             e.preventDefault();
             e.stopPropagation();
-            catSelectMenu.classList.toggle('active');
-            if (catSelectIcon) {
-                catSelectIcon.style.transform = catSelectMenu.classList.contains('active') ? 'rotate(180deg)' : 'rotate(0deg)';
-            }
+            const isOpen = catSelectMenu.classList.contains('active');
+            if (isOpen) closeSelectMenu();
+            else openSelectMenu();
         });
 
         // Close when clicking outside
