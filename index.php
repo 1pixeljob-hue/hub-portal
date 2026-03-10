@@ -241,25 +241,28 @@ endforeach; ?>
 <div class="glass-card rounded-2xl p-5 flex flex-col group hover:-translate-y-1 transition-transform duration-300 link-card filter-item" data-id="<?php echo $link['id']; ?>" data-category="<?php echo $link['theme'] ?? 'indigo'; ?>">
 <div class="flex justify-between items-start mb-4 relative z-0">
 <div class="flex items-center gap-3">
-<div class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-primary border border-slate-200 dark:border-slate-700 overflow-hidden relative">
-    <?php
-    $computedLogoUrl = $link['logoUrl'] ?? '';
+<?php $computedLogoUrl = $link['logoUrl'] ?? '';
     if ((empty($computedLogoUrl) || strpos($computedLogoUrl, 's2/favicons') !== false) && !empty($link['url'])) {
-        $host = parse_url($link['url'], PHP_URL_HOST);
-        if (!empty($host)) {
-            $computedLogoUrl = "https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://" . $host . "&size=128";
+        $lhost = parse_url($link['url'], PHP_URL_HOST);
+        if (!empty($lhost)) {
+            $computedLogoUrl = "https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://" . $lhost . "&size=128";
         }
     }
     $titleInitial = strtoupper(mb_substr($link['title'] ?? 'L', 0, 1));
     $catColor = $categories[$link['theme']]['baseColor'] ?? '#ec5b13';
 ?>
-    <!-- Initial letter fallback (always shown, hidden by JS/CSS if logo loads) -->
-    <span class="link-initial text-sm font-black absolute z-0" style="color: <?php echo htmlspecialchars($catColor); ?>"><?php echo htmlspecialchars($titleInitial); ?></span>
+<div class="w-10 h-10 rounded-xl flex items-center justify-center overflow-hidden relative flex-shrink-0"
+     style="background:linear-gradient(135deg,<?php echo htmlspecialchars($catColor); ?>25,<?php echo htmlspecialchars($catColor); ?>50)">
+    <span class="text-base font-black select-none" style="color:<?php echo htmlspecialchars($catColor); ?>"><?php echo htmlspecialchars($titleInitial); ?></span>
     <?php if ($computedLogoUrl): ?>
-        <img src="<?php echo htmlspecialchars($computedLogoUrl); ?>" class="w-10 h-10 object-contain absolute z-10" onerror="this.style.display='none'; this.previousElementSibling.style.display='flex';" loading="lazy" />
+    <img src="<?php echo htmlspecialchars($computedLogoUrl); ?>"
+         class="w-7 h-7 object-contain absolute z-10 rounded"
+         loading="lazy"
+         onerror="this.remove()" />
     <?php
     endif; ?>
 </div>
+
 <div>
 <h3 class="text-slate-900 dark:text-white font-semibold line-clamp-1"><?php echo htmlspecialchars($link['title']); ?></h3>
 <p class="text-slate-500 dark:text-slate-400 text-xs mt-0.5"><?php echo htmlspecialchars(parse_url($link['url'], PHP_URL_HOST) ?? $link['url']); ?></p>
