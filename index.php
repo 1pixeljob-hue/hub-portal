@@ -206,14 +206,26 @@ foreach ($links as $link) {
 </div>
 </div>
 <!-- Filters -->
-<div class="flex gap-2 overflow-x-auto pb-4 mb-4 scrollbar-hide">
+<div class="flex gap-2 overflow-x-auto pb-4 mb-4 scrollbar-hide" id="filters-row">
 <button class="category-filter active flex h-9 shrink-0 items-center justify-center rounded-full bg-primary text-white px-5 text-sm font-medium transition-transform hover:scale-105" data-filter="all">
     Tất cả
 </button>
 <?php foreach ($categories as $key => $cat): ?>
-<button class="category-filter flex h-9 shrink-0 items-center justify-center rounded-full glass-card hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 px-5 text-sm font-medium transition-colors" data-filter="<?php echo htmlspecialchars($key); ?>">
-    <?php echo htmlspecialchars($cat['name']); ?>
-</button>
+<div class="relative group/pill shrink-0">
+    <button class="category-filter flex h-9 items-center justify-center rounded-full glass-card hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 pl-4 pr-3 text-sm font-medium transition-colors gap-1" data-filter="<?php echo htmlspecialchars($key); ?>">
+        <span class="material-symbols-outlined text-[15px]" style="color:<?php echo htmlspecialchars($cat['baseColor']); ?>"><?php echo htmlspecialchars($cat['icon']); ?></span>
+        <?php echo htmlspecialchars($cat['name']); ?>
+    </button>
+    <!-- Hover action buttons -->
+    <div class="absolute -top-2 -right-1 hidden group-hover/pill:flex items-center gap-0.5 z-10">
+        <button title="Sửa" onclick="window.openEditCategory('<?php echo htmlspecialchars($key, ENT_QUOTES); ?>','<?php echo htmlspecialchars($cat['name'], ENT_QUOTES); ?>','<?php echo htmlspecialchars($cat['icon'], ENT_QUOTES); ?>','<?php echo htmlspecialchars($cat['baseColor'], ENT_QUOTES); ?>')" class="w-5 h-5 rounded-full bg-white border border-slate-200 shadow flex items-center justify-center text-slate-400 hover:text-primary hover:border-primary transition-colors">
+            <span class="material-symbols-outlined" style="font-size:11px">edit</span>
+        </button>
+        <button title="Xóa" onclick="window.deleteCategory('<?php echo htmlspecialchars($key, ENT_QUOTES); ?>','<?php echo htmlspecialchars($cat['name'], ENT_QUOTES); ?>', event)" class="w-5 h-5 rounded-full bg-white border border-slate-200 shadow flex items-center justify-center text-slate-400 hover:text-red-500 hover:border-red-400 transition-colors">
+            <span class="material-symbols-outlined" style="font-size:11px">delete</span>
+        </button>
+    </div>
+</div>
 <?php
 endforeach; ?>
 <button onclick="document.getElementById('add-category-modal').classList.add('active')" class="flex h-9 shrink-0 items-center justify-center rounded-full glass-card hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 px-5 text-sm font-medium transition-colors border-dashed border-slate-300 dark:border-slate-700">
@@ -421,10 +433,49 @@ echo json_encode($optArr);
     <!-- Toast Container -->
     <div id="toast-container" class="fixed bottom-6 right-6 z-[200] flex flex-col gap-3 pointer-events-none"></div>
 
+    <!-- Edit Category Modal -->
+    <div class="fixed inset-0 z-[120] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 opacity-0 pointer-events-none transition-all duration-300" id="edit-category-modal">
+        <div class="bg-white w-full max-w-lg rounded-3xl shadow-2xl border border-slate-200 overflow-hidden transform scale-95 transition-all duration-300 modal-content relative">
+            <form id="edit-category-form" onsubmit="window.submitEditCategory(event)" class="relative z-10 flex flex-col h-full">
+                <input type="hidden" id="edit-cat-id">
+                <div class="px-8 py-6 border-b border-slate-200 flex justify-between items-center relative">
+                    <div class="absolute top-0 left-0 h-1 w-full bg-primary"></div>
+                    <div>
+                        <h3 class="text-2xl font-bold text-slate-900">Chỉnh Sửa Danh Mục</h3>
+                    </div>
+                    <button type="button" class="rounded-full p-2 text-slate-400 hover:bg-slate-100 transition-colors" onclick="document.getElementById('edit-category-modal').classList.remove('active')">
+                        <span class="material-symbols-outlined text-[24px]">close</span>
+                    </button>
+                </div>
+                <div class="p-8 space-y-6 flex-1">
+                    <div class="group">
+                        <label class="block text-sm font-bold text-slate-900 mb-2">Tên Danh Mục <span class="text-red-500">*</span></label>
+                        <input id="edit-cat-title" class="w-full bg-slate-50 border-2 border-transparent focus:border-primary rounded-xl px-4 py-3.5 text-sm outline-none transition-all text-slate-900 font-medium" required placeholder="vd: Thiết Kế, Công Việc..." type="text"/>
+                    </div>
+                    <div class="grid grid-cols-2 gap-6">
+                        <div class="group">
+                            <label class="block text-sm font-bold text-slate-900 mb-2">Mã Biểu Tượng</label>
+                            <input id="edit-cat-icon" class="w-full bg-slate-50 border-2 border-transparent focus:border-primary rounded-xl px-4 py-3.5 text-sm outline-none transition-all text-slate-900 font-medium" placeholder="folder" value="folder" type="text"/>
+                            <p class="text-[11px] font-bold text-primary mt-2"><a href="https://fonts.google.com/icons" target="_blank">Thư Viện Icon</a></p>
+                        </div>
+                        <div class="group">
+                            <label class="block text-sm font-bold text-slate-900 mb-2">Màu Sắc</label>
+                            <input id="edit-cat-color" class="w-full h-[52px] bg-slate-50 border-2 border-transparent focus:border-primary rounded-xl px-2 py-1 outline-none transition-all cursor-pointer" type="color" value="#ec5b13"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-slate-50 border-t border-slate-200 px-8 py-5 flex items-center justify-end gap-3">
+                    <button class="px-6 py-2.5 text-sm font-bold text-slate-500 hover:text-slate-900 transition-colors" onclick="document.getElementById('edit-category-modal').classList.remove('active')" type="button">Hủy</button>
+                    <button class="bg-primary px-8 py-2.5 rounded-xl text-sm font-bold text-white shadow-lg shadow-primary/25 hover:scale-105 transition-transform" type="submit">Cập Nhật</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script src="js/script.js"></script>
     <style>
-        #add-modal.active, #add-category-modal.active { opacity: 1; pointer-events: auto; }
-        #add-modal.active .modal-content, #add-category-modal.active .modal-content { transform: scale(1); }
+        #add-modal.active, #add-category-modal.active, #edit-category-modal.active { opacity: 1; pointer-events: auto; }
+        #add-modal.active .modal-content, #add-category-modal.active .modal-content, #edit-category-modal.active .modal-content { transform: scale(1); }
         .action-menu.active { display: block; }
         .toast { pointer-events: auto; display: flex; align-items: center; gap: 12px; padding: 12px 20px; border-radius: 12px; background: white; border: 1px solid #e2e8f0; box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1); animation: slideIn 0.3s ease-out; }
         @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }

@@ -84,6 +84,40 @@ switch ($method) {
         }
         break;
 
+    case 'PUT':
+        $id = $_GET['id'] ?? null;
+        if (!$id) {
+            http_response_code(400);
+            echo json_encode(['error' => 'Category ID is required']);
+            exit;
+        }
+        $input = json_decode(file_get_contents('php://input'), true);
+        $name = trim($input['name'] ?? '');
+        $icon = trim($input['icon'] ?? 'folder');
+        $color = trim($input['color'] ?? '#ec5b13');
+
+        if (empty($name)) {
+            http_response_code(400);
+            echo json_encode(['error' => 'Tên danh mục không được để trống']);
+            exit;
+        }
+
+        try {
+            $stmt = $pdo->prepare("UPDATE categories SET name = ?, icon = ?, color = ? WHERE id = ?");
+            $stmt->execute([$name, $icon, $color, $id]);
+            if ($stmt->rowCount() === 0) {
+                http_response_code(404);
+                echo json_encode(['error' => 'Danh mục không tồn tại']);
+                exit;
+            }
+            echo json_encode(['success' => true]);
+        }
+        catch (PDOException $e) {
+            http_response_code(500);
+            echo json_encode(['error' => 'Lỗi cập nhật: ' . $e->getMessage()]);
+        }
+        break;
+
     case 'DELETE':
         // Delete category
         $id = $_GET['id'] ?? null;

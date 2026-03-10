@@ -304,7 +304,7 @@ window.editLink = function (link, event) {
 window.deleteCategory = function (id, name, event) {
     if (event) event.stopPropagation();
 
-    if (!confirm(`Bạn có chắc chắn muốn xóa danh mục: "${name}" không?`)) return;
+    if (!confirm(`Bạn có chắc chắn muốn xóa danh mục: "${name}" không?\nCác liên kết trong danh mục này sẽ không bị xóa.`)) return;
 
     fetch(`api/categories.php?id=${id}`, {
         method: 'DELETE'
@@ -320,6 +320,45 @@ window.deleteCategory = function (id, name, event) {
         })
         .catch(err => {
             showToast('Lỗi kết nối mạng', 'error');
+        });
+};
+
+window.openEditCategory = function (id, name, icon, color) {
+    document.getElementById('edit-cat-id').value = id;
+    document.getElementById('edit-cat-title').value = name;
+    document.getElementById('edit-cat-icon').value = icon;
+    document.getElementById('edit-cat-color').value = color;
+    document.getElementById('edit-category-modal').classList.add('active');
+};
+
+window.submitEditCategory = function (event) {
+    event.preventDefault();
+    const id = document.getElementById('edit-cat-id').value;
+    const name = document.getElementById('edit-cat-title').value.trim();
+    const icon = document.getElementById('edit-cat-icon').value.trim();
+    const color = document.getElementById('edit-cat-color').value;
+
+    fetch(`api/categories.php?id=${encodeURIComponent(id)}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, icon, color })
+    })
+        .then(async res => {
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.error || 'Lỗi server');
+            return data;
+        })
+        .then(data => {
+            if (data.success) {
+                showToast('Cập nhật danh mục thành công!');
+                document.getElementById('edit-category-modal').classList.remove('active');
+                setTimeout(() => window.location.reload(), 600);
+            } else {
+                showToast(data.error || 'Cập nhật thất bại', 'error');
+            }
+        })
+        .catch(err => {
+            showToast(err.message || 'Lỗi kết nối', 'error');
         });
 };
 
