@@ -548,7 +548,7 @@ echo json_encode($optArr);
         </div>
     </div>
 
-    <script src="js/script.js"></script>
+    <script src="js/script.js?v=<?php echo time(); ?>"></script>
     <style>
         #add-modal.active, #add-category-modal.active, #edit-category-modal.active, #confirm-modal.active { opacity: 1; pointer-events: auto; }
         #add-modal.active .modal-content, #add-category-modal.active .modal-content, #edit-category-modal.active .modal-content, #confirm-modal.active .modal-content { transform: scale(1); }
