@@ -242,7 +242,9 @@ endforeach; ?>
 <div class="flex justify-between items-start mb-4 relative z-0">
 <div class="flex items-center gap-3">
 <?php $titleInitial = strtoupper(mb_substr($link['title'] ?? 'L', 0, 1));
-    $catColor = $categories[$link['theme']]['baseColor'] ?? '#ec5b13';
+    $catId = $link['theme'] ?? 'indigo';
+    $catData = $categories[$catId] ?? null;
+    $catColor = $catData['baseColor'] ?? '#ec5b13';
     $storedLogo = $link['logoUrl'] ?? '';
     $lhost = parse_url($link['url'] ?? '', PHP_URL_HOST);
 
@@ -305,6 +307,26 @@ endforeach; ?>
 </div>
 </div>
 <div class="flex flex-wrap gap-2 mb-5 mt-auto">
+    <!-- Category Badge -->
+    <?php if ($catData): ?>
+        <?php if ($isHex): ?>
+        <span class="px-2.5 py-1 rounded-md text-xs font-bold border flex items-center gap-1"
+              style="color:<?php echo htmlspecialchars($catColor); ?>;background:<?php echo htmlspecialchars($catColor); ?>15;border-color:<?php echo htmlspecialchars($catColor); ?>50">
+            <span class="material-symbols-outlined text-[13px]"><?php echo htmlspecialchars($catData['icon']); ?></span>
+            <?php echo htmlspecialchars($catData['name']); ?>
+        </span>
+        <?php
+        else: ?>
+        <span class="px-2.5 py-1 rounded-md text-xs font-bold border flex items-center gap-1 <?php echo $tagClassCache; ?>">
+            <span class="material-symbols-outlined text-[13px]"><?php echo htmlspecialchars($catData['icon']); ?></span>
+            <?php echo htmlspecialchars($catData['name']); ?>
+        </span>
+        <?php
+        endif; ?>
+    <?php
+    endif; ?>
+    
+    <!-- Tags Badges -->
     <?php
     foreach (getTags($link['tags']) as $tag):
         $tagName = htmlspecialchars($tag['name'] ?? $tag);
@@ -602,7 +624,9 @@ echo json_encode($optArr);
 
             options.forEach(function(opt, idx) {
                 const row = document.createElement('div');
-                row.className = 'cat-dd-option';
+                row.className = 'cat-dd-option custom-select-option';
+                row.setAttribute('data-value', opt.value);
+                row.setAttribute('data-color', opt.color);
                 row.style.cssText = [
                     'display:flex', 'align-items:center', 'gap:10px',
                     'padding:9px 10px', 'border-radius:10px',

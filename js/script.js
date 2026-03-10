@@ -166,14 +166,40 @@ document.addEventListener('DOMContentLoaded', () => {
         btn.addEventListener('click', () => {
             // Update active state
             filterBtns.forEach(b => {
-                b.classList.remove('active', 'bg-primary', 'text-white');
-                b.classList.add('glass-card', 'hover:bg-slate-100', 'dark:hover:bg-slate-800', 'text-slate-700', 'dark:text-slate-300');
+                const target = b.closest('.group\\/pill') || b;
+                target.classList.remove('active', 'bg-primary', 'text-white');
+                b.classList.remove('active');
+                target.classList.add('glass-card', 'hover:bg-slate-100', 'dark:hover:bg-slate-800');
+                if (target !== b) {
+                    b.classList.remove('text-white');
+                    b.classList.add('text-slate-700', 'dark:text-slate-300');
+                } else {
+                    target.classList.add('text-slate-700', 'dark:text-slate-300');
+                }
             });
-            btn.classList.add('active', 'bg-primary', 'text-white');
-            btn.classList.remove('glass-card', 'hover:bg-slate-100', 'dark:hover:bg-slate-800', 'text-slate-700', 'dark:text-slate-300');
+            const selectedTarget = btn.closest('.group\\/pill') || btn;
+            // Also ensure the button itself has the 'active' class for easier finding later
+            btn.classList.add('active');
+
+            selectedTarget.classList.add('active', 'bg-primary', 'text-white');
+            selectedTarget.classList.remove('glass-card', 'hover:bg-slate-100', 'dark:hover:bg-slate-800');
+            if (selectedTarget !== btn) {
+                btn.classList.add('text-white');
+                btn.classList.remove('text-slate-700', 'dark:text-slate-300');
+            } else {
+                selectedTarget.classList.remove('text-slate-700', 'dark:text-slate-300');
+            }
 
             const filterValue = btn.getAttribute('data-filter');
-            const filterName = btn.innerText.replace(/[0-9]+$/, '').trim(); // Lấy tên text và loại bỏ số count
+            // Get text only, excluding icon
+            let filterName = "";
+            btn.childNodes.forEach(node => {
+                if (node.nodeType === Node.TEXT_NODE) filterName += node.textContent;
+                else if (node.tagName === 'SPAN' && !node.classList.contains('material-symbols-outlined')) {
+                    filterName += node.textContent;
+                }
+            });
+            filterName = filterName.replace(/[0-9]+$/, '').trim() || btn.innerText.trim();
 
             linkCards.forEach(card => {
                 if (card.hideTimeout) clearTimeout(card.hideTimeout);
