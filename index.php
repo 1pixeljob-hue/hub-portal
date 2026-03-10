@@ -283,7 +283,7 @@ endforeach; ?>
 
     <!-- Add Link Modal -->
     <div class="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 opacity-0 pointer-events-none transition-all duration-300" id="add-modal">
-        <div class="bg-white w-full max-w-4xl rounded-3xl shadow-2xl border border-slate-200 transform scale-95 transition-all duration-300 modal-content flex flex-col md:flex-row">
+        <div class="bg-white w-full max-w-4xl rounded-3xl shadow-2xl border border-slate-200 overflow-hidden transform scale-95 transition-all duration-300 modal-content flex flex-col md:flex-row">
             
             <!-- Left Side: Live Preview -->
             <div class="w-full md:w-5/12 bg-slate-50 p-8 flex flex-col border-b md:border-b-0 md:border-r border-slate-200 relative overflow-hidden">
@@ -292,7 +292,7 @@ endforeach; ?>
                 </h3>
                 
                 <div class="flex-1 flex items-center justify-center relative z-10 w-full" id="preview-card-container">
-                    <div class="w-full glass-card p-5 rounded-2xl flex flex-col group transition-all duration-300 bg-white shadow-md border border-slate-200" id="preview-card-inner">
+                    <div class="w-full bg-white shadow-md border border-slate-200 p-5 rounded-2xl flex flex-col group transition-all duration-300" id="preview-card-inner">
                         <div class="flex justify-between items-start mb-4">
                             <div class="flex items-center gap-3">
                                 <div class="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-primary border border-slate-200 overflow-hidden relative">
@@ -324,47 +324,48 @@ endforeach; ?>
                         </button>
                     </div>
                     
-                    <div class="p-8 pb-32 space-y-6 flex-1 overflow-y-auto">
-                        <input type="hidden" id="link-id" name="id" value="">
-                         <div class="group">
-                            <label class="block text-sm font-bold text-slate-900 mb-2">Tiêu Đề <span class="text-red-500">*</span></label>
-                            <input id="link-title" class="w-full bg-slate-50 border-2 border-transparent focus:border-primary rounded-xl px-4 py-3.5 text-sm outline-none transition-all text-slate-900 font-medium" required placeholder="vd: Không gian làm việc..." type="text"/>
-                        </div>
-                        
-                        <div class="group">
-                            <label class="block text-sm font-bold text-slate-900 mb-2">Đường Dẫn URL <span class="text-red-500">*</span></label>
-                            <input id="link-url" class="w-full bg-slate-50 border-2 border-transparent focus:border-primary rounded-xl px-4 py-3.5 text-sm outline-none transition-all text-slate-900 font-medium" required placeholder="example.com" type="text"/>
-                        </div>
-                        
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                            <div class="group relative custom-select-container">
-                                <label class="block text-sm font-bold text-slate-900 mb-2">Danh Mục</label>
-                                <button type="button" id="category-select-btn" class="w-full flex items-center justify-between bg-slate-50 border-2 border-transparent focus:border-primary rounded-xl px-4 py-3.5 text-sm outline-none transition-all text-slate-900 font-medium">
-                                    <span id="category-select-text">Chọn Danh Mục...</span>
-                                    <span class="material-symbols-outlined text-[20px]" id="category-select-icon">expand_more</span>
-                                </button>
-                                
-                                <div id="category-select-menu" class="absolute z-[100] top-full left-0 w-full mt-1.5 bg-white border border-slate-200 rounded-xl shadow-2xl hidden overflow-hidden">
-                                    <ul class="max-h-60 overflow-y-auto p-1.5 space-y-0.5">
-                                        <?php foreach ($categories as $key => $cat): ?>
-                                        <li class="custom-select-option px-3 py-2 rounded-lg text-sm font-medium text-slate-900 hover:bg-primary/10 cursor-pointer flex items-center gap-2" data-value="<?php echo htmlspecialchars($key); ?>" data-color="<?php echo htmlspecialchars($cat['baseColor']); ?>">
-                                            <span class="material-symbols-outlined text-[18px]"><?php echo htmlspecialchars($cat['icon']); ?></span> 
-                                            <?php echo htmlspecialchars($cat['name']); ?>
-                                        </li>
-                                        <?php
-endforeach; ?>
-                                    </ul>
-                                </div>
-                                <input type="hidden" id="link-category" name="theme" value="<?php echo htmlspecialchars(array_key_first($categories) ?? 'indigo'); ?>" data-color="indigo">
-                            </div>
+                    <div class="flex-1 overflow-visible p-8 space-y-6">
+
+                            <input type="hidden" id="link-id" name="id" value="">
                             <div class="group">
-                                <label class="block text-sm font-bold text-slate-900 mb-2">Thẻ Phân Loại</label>
-                                <input id="link-tags" class="w-full bg-slate-50 border-2 border-transparent focus:border-primary rounded-xl px-4 py-3.5 text-sm outline-none transition-all text-slate-900 font-medium" placeholder="vd: dev, design..."/>
+                                <label class="block text-sm font-bold text-slate-900 mb-2">Tiêu Đề <span class="text-red-500">*</span></label>
+                                <input id="link-title" class="w-full bg-slate-50 border-2 border-transparent focus:border-primary rounded-xl px-4 py-3.5 text-sm outline-none transition-all text-slate-900 font-medium" required placeholder="vd: Không gian làm việc..." type="text"/>
                             </div>
-                        </div>
+                            
+                            <div class="group">
+                                <label class="block text-sm font-bold text-slate-900 mb-2">Đường Dẫn URL <span class="text-red-500">*</span></label>
+                                <input id="link-url" class="w-full bg-slate-50 border-2 border-transparent focus:border-primary rounded-xl px-4 py-3.5 text-sm outline-none transition-all text-slate-900 font-medium" required placeholder="example.com" type="text"/>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                                <div class="group relative custom-select-container" style="z-index: 50;">
+                                    <label class="block text-sm font-bold text-slate-900 mb-2">Danh Mục</label>
+                                    <button type="button" id="category-select-btn" class="w-full flex items-center justify-between bg-slate-50 border-2 border-transparent focus:border-primary rounded-xl px-4 py-3.5 text-sm outline-none transition-all text-slate-900 font-medium">
+                                        <span id="category-select-text">Chọn Danh Mục...</span>
+                                        <span class="material-symbols-outlined text-[20px]" id="category-select-icon">expand_more</span>
+                                    </button>
+                                    
+                                    <div id="category-select-menu" class="absolute z-[200] top-full left-0 w-full mt-1.5 bg-white border border-slate-200 rounded-xl shadow-2xl hidden overflow-hidden">
+                                        <ul class="max-h-60 overflow-y-auto p-1.5 space-y-0.5">
+                                            <?php foreach ($categories as $key => $cat): ?>
+                                            <li class="custom-select-option px-3 py-2 rounded-lg text-sm font-medium text-slate-900 hover:bg-primary/10 cursor-pointer flex items-center gap-2" data-value="<?php echo htmlspecialchars($key); ?>" data-color="<?php echo htmlspecialchars($cat['baseColor']); ?>">
+                                                <span class="material-symbols-outlined text-[18px]"><?php echo htmlspecialchars($cat['icon']); ?></span> 
+                                                <?php echo htmlspecialchars($cat['name']); ?>
+                                            </li>
+                                            <?php
+endforeach; ?>
+                                        </ul>
+                                    </div>
+                                    <input type="hidden" id="link-category" name="theme" value="<?php echo htmlspecialchars(array_key_first($categories) ?? 'indigo'); ?>" data-color="indigo">
+                                </div>
+                                <div class="group">
+                                    <label class="block text-sm font-bold text-slate-900 mb-2">Thẻ Phân Loại</label>
+                                    <input id="link-tags" class="w-full bg-slate-50 border-2 border-transparent focus:border-primary rounded-xl px-4 py-3.5 text-sm outline-none transition-all text-slate-900 font-medium" placeholder="vd: dev, design..."/>
+                                </div>
+                            </div>
                     </div>
                     
-                    <div class="bg-slate-50 px-8 py-5 flex items-center justify-end gap-3 border-t border-slate-200 mt-auto">
+                    <div class="bg-slate-50 px-8 py-5 flex items-center justify-end gap-3 border-t border-slate-200">
                         <button class="px-6 py-2.5 text-sm font-bold text-slate-500 hover:text-slate-900 transition-colors" onclick="document.getElementById('add-modal').classList.remove('active')" type="button">Hủy</button>
                         <button class="bg-primary px-8 py-2.5 rounded-xl text-sm font-bold text-white shadow-lg shadow-primary/25 hover:scale-105 transition-transform" type="submit" id="submit-btn-text">Lưu Liên Kết</button>
                     </div>
