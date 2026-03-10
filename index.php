@@ -283,7 +283,7 @@ endforeach; ?>
 
     <!-- Add Link Modal -->
     <div class="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 opacity-0 pointer-events-none transition-all duration-300" id="add-modal">
-        <div class="bg-white w-full max-w-4xl rounded-3xl shadow-2xl border border-slate-200 transform scale-95 transition-all duration-300 modal-content flex flex-col md:flex-row">
+        <div class="bg-white w-full max-w-4xl rounded-3xl shadow-2xl border border-slate-200 overflow-hidden transform scale-95 transition-all duration-300 modal-content flex flex-col md:flex-row">
             
             <!-- Left Side: Live Preview -->
             <div class="w-full md:w-5/12 bg-slate-50 p-8 flex flex-col border-b md:border-b-0 md:border-r border-slate-200 relative overflow-hidden">
@@ -375,7 +375,7 @@ endforeach; ?>
 
     <!-- Add Category Modal -->
     <div class="fixed inset-0 z-[110] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 opacity-0 pointer-events-none transition-all duration-300" id="add-category-modal">
-        <div class="bg-white w-full max-w-lg rounded-3xl shadow-2xl overflow-hidden transform scale-95 transition-all duration-300 modal-content relative">
+        <div class="bg-white w-full max-w-lg rounded-3xl shadow-2xl border border-slate-200 overflow-hidden transform scale-95 transition-all duration-300 modal-content relative">
             <form id="add-category-form" onsubmit="window.submitCategoryForm(event)" class="relative z-10 flex flex-col h-full">
                 <div class="px-8 py-6 border-b border-slate-200 flex justify-between items-center relative">
                     <div class="absolute top-0 left-0 h-1 w-full bg-primary"></div>
