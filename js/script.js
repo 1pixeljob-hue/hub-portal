@@ -158,65 +158,92 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (tagsInput) tagsInput.addEventListener('input', updatePreview);
 
-    // 5. Category Filtering
+    // 5. Combined Filtering (Category & Search)
     const filterBtns = document.querySelectorAll('.category-filter');
     const linkCards = document.querySelectorAll('.filter-item');
+    const searchInput = document.getElementById('link-search');
 
-    filterBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            // Update active state
-            filterBtns.forEach(b => {
-                const target = b.closest('.group\\/pill') || b;
-                target.classList.remove('active', 'bg-primary', 'text-white');
-                b.classList.remove('active');
-                target.classList.add('glass-card', 'hover:bg-slate-100', 'dark:hover:bg-slate-800');
-                if (target !== b) {
-                    b.classList.remove('text-white');
-                    b.classList.add('text-slate-700', 'dark:text-slate-300');
-                } else {
-                    target.classList.add('text-slate-700', 'dark:text-slate-300');
-                }
-            });
-            const selectedTarget = btn.closest('.group\\/pill') || btn;
-            // Also ensure the button itself has the 'active' class for easier finding later
-            btn.classList.add('active');
+    function applyFilters() {
+        const activeBtn = document.querySelector('.category-filter.active') || document.querySelector('[data-filter="all"]');
+        const filterValue = activeBtn ? activeBtn.getAttribute('data-filter') : 'all';
+        const searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : '';
 
-            selectedTarget.classList.add('active', 'bg-primary', 'text-white');
-            selectedTarget.classList.remove('glass-card', 'hover:bg-slate-100', 'dark:hover:bg-slate-800');
-            if (selectedTarget !== btn) {
-                btn.classList.add('text-white');
-                btn.classList.remove('text-slate-700', 'dark:text-slate-300');
+        linkCards.forEach(card => {
+            if (card.hideTimeout) clearTimeout(card.hideTimeout);
+
+            const cardCategory = card.getAttribute('data-category');
+            const cardTitleEls = card.querySelectorAll('h3, p.font-semibold, .text-slate-900'); // common title elements
+            let cardTitle = '';
+            cardTitleEls.forEach(el => cardTitle += el.textContent.toLowerCase() + ' ');
+
+            const matchesCategory = filterValue === 'all' || cardCategory === filterValue;
+            const matchesSearch = searchTerm === '' || cardTitle.includes(searchTerm);
+
+            if (matchesCategory && matchesSearch) {
+                card.style.display = 'flex';
+                setTimeout(() => card.style.opacity = '1', 10);
             } else {
-                selectedTarget.classList.remove('text-slate-700', 'dark:text-slate-300');
+                card.style.opacity = '0';
+                card.hideTimeout = setTimeout(() => {
+                    card.style.display = 'none';
+                }, 300);
             }
-
-            const filterValue = btn.getAttribute('data-filter');
-            // Get text only, excluding icon
-            let filterName = "";
-            btn.childNodes.forEach(node => {
-                if (node.nodeType === Node.TEXT_NODE) filterName += node.textContent;
-                else if (node.tagName === 'SPAN' && !node.classList.contains('material-symbols-outlined')) {
-                    filterName += node.textContent;
-                }
-            });
-            filterName = filterName.replace(/[0-9]+$/, '').trim() || btn.innerText.trim();
-
-            linkCards.forEach(card => {
-                if (card.hideTimeout) clearTimeout(card.hideTimeout);
-
-                if (filterValue === 'all' || card.getAttribute('data-category') === filterValue) {
-                    card.style.display = 'flex';
-                    setTimeout(() => card.style.opacity = '1', 10);
-                } else {
-                    card.style.opacity = '0';
-                    card.hideTimeout = setTimeout(() => {
-                        card.style.display = 'none';
-                    }, 300);
-                }
-            });
-
-            if (window.showToast) window.showToast(`Lọc theo: ${filterName}`, 'success');
         });
+    }
+
+    if (searchInput) {
+        searchInput.addEventListener('input', applyFilters);
+    }
+
+    // Attach robust listeners to category buttons
+    // Using document delegation in case buttons are re-rendered
+    document.addEventListener('click', function (e) {
+        const btn = e.target.closest('.category-filter');
+        if (!btn) return;
+
+        // Skip if clicking the edit/delete tools inside the pill
+        if (e.target.closest('button[title="Sửa"]') || e.target.closest('button[title="Xóa"]')) {
+            return;
+        }
+
+        // Clean up active states on all filters
+        document.querySelectorAll('.category-filter').forEach(b => {
+            const target = b.closest('.group\\/pill') || b;
+            target.classList.remove('active', 'bg-primary', 'text-white');
+            b.classList.remove('active');
+            target.classList.add('glass-card', 'hover:bg-slate-100', 'dark:hover:bg-slate-800');
+            if (target !== b) {
+                b.classList.remove('text-white');
+                b.classList.add('text-slate-700', 'dark:text-slate-300');
+            } else {
+                target.classList.add('text-slate-700', 'dark:text-slate-300');
+            }
+        });
+
+        // Set active state on clicked filter
+        const selectedTarget = btn.closest('.group\\/pill') || btn;
+        btn.classList.add('active');
+        selectedTarget.classList.add('active', 'bg-primary', 'text-white');
+        selectedTarget.classList.remove('glass-card', 'hover:bg-slate-100', 'dark:hover:bg-slate-800');
+        if (selectedTarget !== btn) {
+            btn.classList.add('text-white');
+            btn.classList.remove('text-slate-700', 'dark:text-slate-300');
+        } else {
+            selectedTarget.classList.remove('text-slate-700', 'dark:text-slate-300');
+        }
+
+        let filterName = "";
+        btn.childNodes.forEach(node => {
+            if (node.nodeType === Node.TEXT_NODE) filterName += node.textContent;
+            else if (node.tagName === 'SPAN' && !node.classList.contains('material-symbols-outlined')) {
+                filterName += node.textContent;
+            }
+        });
+        filterName = filterName.replace(/[0-9]+$/, '').trim() || btn.innerText.trim();
+
+        applyFilters();
+
+        if (window.showToast) window.showToast(`Lọc theo: ${filterName}`, 'success');
     });
 
 });
