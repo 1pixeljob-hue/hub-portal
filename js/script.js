@@ -17,26 +17,28 @@ document.addEventListener('DOMContentLoaded', () => {
     // Default is dark (set in HTML). Check localStorage if available
     if (localStorage.getItem('theme') === 'light') {
         htmlElement.classList.remove('dark');
-        updateThemeIcon('dark_mode');
+        if (themeToggleBtn) updateThemeIcon('dark_mode');
     }
 
-    themeToggleBtn.addEventListener('click', () => {
-        if (htmlElement.classList.contains('dark')) {
-            htmlElement.classList.remove('dark');
-            localStorage.setItem('theme', 'light');
-            updateThemeIcon('dark_mode');
-            if (window.showToast) window.showToast('Giao diện Sáng đã bật', 'success');
-        } else {
-            htmlElement.classList.add('dark');
-            localStorage.setItem('theme', 'dark');
-            updateThemeIcon('light_mode');
-            if (window.showToast) window.showToast('Giao diện Tối đã bật', 'success');
-        }
-    });
+    if (themeToggleBtn) {
+        themeToggleBtn.addEventListener('click', () => {
+            if (htmlElement.classList.contains('dark')) {
+                htmlElement.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+                updateThemeIcon('dark_mode');
+                if (window.showToast) window.showToast('Giao diện Sáng đã bật', 'success');
+            } else {
+                htmlElement.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+                updateThemeIcon('light_mode');
+                if (window.showToast) window.showToast('Giao diện Tối đã bật', 'success');
+            }
+        });
 
-    function updateThemeIcon(iconName) {
-        const iconSpan = themeToggleBtn.querySelector('.material-symbols-outlined');
-        if (iconSpan) iconSpan.textContent = iconName;
+        function updateThemeIcon(iconName) {
+            const iconSpan = themeToggleBtn.querySelector('.material-symbols-outlined');
+            if (iconSpan) iconSpan.textContent = iconName;
+        }
     }
 
     // 3. Action Menu (Click outside)
