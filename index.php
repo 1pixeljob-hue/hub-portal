@@ -244,14 +244,41 @@ endforeach; ?>
 <?php $titleInitial = strtoupper(mb_substr($link['title'] ?? 'L', 0, 1));
     $catColor = $categories[$link['theme']]['baseColor'] ?? '#ec5b13';
     $storedLogo = $link['logoUrl'] ?? '';
-    // Only auto-favicon via JS attribute, not PHP (API always returns 200 even for placeholder globe)
     $lhost = parse_url($link['url'] ?? '', PHP_URL_HOST);
+
+    $isHex = strpos($catColor, '#') === 0;
+    $gradMaps = [
+        'indigo' => 'from-[#00DDB3] to-[#0066FF]',
+        'purple' => 'from-[#0066FF] to-[#00b4d8]',
+        'pink' => 'from-[#00DDB3] to-[#00b4d8]',
+        'emerald' => 'from-[#00DDB3] to-[#00b4d8]',
+        'rose' => 'from-[#00DDB3] to-[#0066FF]',
+        'amber' => 'from-[#00DDB3] to-[#00b4d8]',
+        'cyan' => 'from-[#00DDB3] to-[#00b4d8]'
+    ];
+    $tcClasses = [
+        'indigo' => 'bg-primary/10 text-primary border-primary/30',
+        'purple' => 'bg-secondary/10 text-secondary border-secondary/30',
+        'pink' => 'bg-accent/10 text-accent border-accent/30',
+        'emerald' => 'bg-primary/10 text-primary border-primary/30',
+        'rose' => 'bg-secondary/10 text-secondary border-secondary/30',
+        'amber' => 'bg-primary/10 text-primary border-primary/30',
+        'cyan' => 'bg-accent/10 text-accent border-accent/30'
+    ];
+    $gradClass = $isHex ? '' : ($gradMaps[$catColor] ?? $gradMaps['indigo']);
+    $tagClassCache = $isHex ? '' : ($tcClasses[$catColor] ?? $tcClasses['indigo']);
 ?>
 <div class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center border border-slate-200 dark:border-slate-700 overflow-hidden relative flex-shrink-0 card-logo-box"
      data-host="<?php echo htmlspecialchars($lhost ?? ''); ?>"
      data-logo="<?php echo htmlspecialchars($storedLogo); ?>">
     <!-- Initial letter showing like the preview -->
-    <span class="text-[20px] font-black select-none bg-clip-text text-transparent" style="background-image:linear-gradient(to bottom right, <?php echo htmlspecialchars($catColor); ?>, <?php echo htmlspecialchars($catColor); ?>)"><?php echo htmlspecialchars($titleInitial); ?></span>
+    <?php if ($isHex): ?>
+        <span class="text-[20px] font-black select-none bg-clip-text text-transparent" style="background-image:linear-gradient(to bottom right, <?php echo htmlspecialchars($catColor); ?>, <?php echo htmlspecialchars($catColor); ?>)"><?php echo htmlspecialchars($titleInitial); ?></span>
+    <?php
+    else: ?>
+        <span class="text-[20px] font-black select-none bg-gradient-to-br <?php echo $gradClass; ?> bg-clip-text text-transparent"><?php echo htmlspecialchars($titleInitial); ?></span>
+    <?php
+    endif; ?>
 </div>
 
 <div>
@@ -279,14 +306,21 @@ endforeach; ?>
 </div>
 <div class="flex flex-wrap gap-2 mb-5 mt-auto">
     <?php
-    $catTagColor = $categories[$link['theme']]['baseColor'] ?? '#ec5b13';
     foreach (getTags($link['tags']) as $tag):
         $tagName = htmlspecialchars($tag['name'] ?? $tag);
 ?>
+        <?php if ($isHex): ?>
         <span class="px-2.5 py-1 rounded-md text-xs font-semibold border"
-              style="color:<?php echo htmlspecialchars($catTagColor); ?>;background:<?php echo htmlspecialchars($catTagColor); ?>15;border-color:<?php echo htmlspecialchars($catTagColor); ?>35">
+              style="color:<?php echo htmlspecialchars($catColor); ?>;background:<?php echo htmlspecialchars($catColor); ?>15;border-color:<?php echo htmlspecialchars($catColor); ?>40">
             <?php echo $tagName; ?>
         </span>
+        <?php
+        else: ?>
+        <span class="px-2.5 py-1 rounded-md text-xs font-semibold border <?php echo $tagClassCache; ?>">
+            <?php echo $tagName; ?>
+        </span>
+        <?php
+        endif; ?>
     <?php
     endforeach; ?>
 </div>
