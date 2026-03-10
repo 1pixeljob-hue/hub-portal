@@ -241,26 +241,16 @@ endforeach; ?>
 <div class="glass-card rounded-2xl p-5 flex flex-col group hover:-translate-y-1 transition-transform duration-300 link-card filter-item" data-id="<?php echo $link['id']; ?>" data-category="<?php echo $link['theme'] ?? 'indigo'; ?>">
 <div class="flex justify-between items-start mb-4 relative z-0">
 <div class="flex items-center gap-3">
-<?php $computedLogoUrl = $link['logoUrl'] ?? '';
-    if ((empty($computedLogoUrl) || strpos($computedLogoUrl, 's2/favicons') !== false) && !empty($link['url'])) {
-        $lhost = parse_url($link['url'], PHP_URL_HOST);
-        if (!empty($lhost)) {
-            $computedLogoUrl = "https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://" . $lhost . "&size=128";
-        }
-    }
-    $titleInitial = strtoupper(mb_substr($link['title'] ?? 'L', 0, 1));
+<?php $titleInitial = strtoupper(mb_substr($link['title'] ?? 'L', 0, 1));
     $catColor = $categories[$link['theme']]['baseColor'] ?? '#ec5b13';
+    $storedLogo = $link['logoUrl'] ?? ''; // Only auto-favicon via JS attribute, not PHP (API always returns 200 even for placeholder globe)    $lhost = parse_url($link['url'] ?? '', PHP_URL_HOST);
 ?>
-<div class="w-10 h-10 rounded-xl flex items-center justify-center overflow-hidden relative flex-shrink-0"
-     style="background:linear-gradient(135deg,<?php echo htmlspecialchars($catColor); ?>25,<?php echo htmlspecialchars($catColor); ?>50)">
+<div class="w-10 h-10 rounded-xl flex items-center justify-center overflow-hidden relative flex-shrink-0 card-logo-box"
+     style="background:linear-gradient(135deg,<?php echo htmlspecialchars($catColor); ?>28,<?php echo htmlspecialchars($catColor); ?>55)"
+     data-host="<?php echo htmlspecialchars($lhost ?? ''); ?>"
+     data-logo="<?php echo htmlspecialchars($storedLogo); ?>">
+    <!-- Initial letter always visible underneath -->
     <span class="text-base font-black select-none" style="color:<?php echo htmlspecialchars($catColor); ?>"><?php echo htmlspecialchars($titleInitial); ?></span>
-    <?php if ($computedLogoUrl): ?>
-    <img src="<?php echo htmlspecialchars($computedLogoUrl); ?>"
-         class="w-7 h-7 object-contain absolute z-10 rounded"
-         loading="lazy"
-         onerror="this.remove()" />
-    <?php
-    endif; ?>
 </div>
 
 <div>
@@ -287,8 +277,15 @@ endforeach; ?>
 </div>
 </div>
 <div class="flex flex-wrap gap-2 mb-5 mt-auto">
-    <?php foreach (getTags($link['tags']) as $tag): ?>
-        <span class="px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs font-medium border border-slate-200 dark:border-slate-700"><?php echo htmlspecialchars($tag['name'] ?? $tag); ?></span>
+    <?php
+    $catTagColor = $categories[$link['theme']]['baseColor'] ?? '#ec5b13';
+    foreach (getTags($link['tags']) as $tag):
+        $tagName = htmlspecialchars($tag['name'] ?? $tag);
+?>
+        <span class="px-2.5 py-1 rounded-md text-xs font-semibold border"
+              style="color:<?php echo htmlspecialchars($catTagColor); ?>;background:<?php echo htmlspecialchars($catTagColor); ?>15;border-color:<?php echo htmlspecialchars($catTagColor); ?>35">
+            <?php echo $tagName; ?>
+        </span>
     <?php
     endforeach; ?>
 </div>
@@ -664,6 +661,37 @@ echo json_encode($optArr);
         } else {
             initCatDropdown();
         }
+    })();
+    </script>
+    <script>
+    // Lazy-load favicons on card logo boxes
+    // Uses naturalWidth check: Google Favicon API returns 16x16 globe placeholder
+    // so we skip if the loaded image is too small (<=16px wide)
+    (function loadCardFavicons() {
+        function tryLoadFavicon(box) {
+            var host = box.dataset.host;
+            var storedLogo = box.dataset.logo;
+            var src = storedLogo || (host ? 'https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://' + host + '&size=128' : '');
+            if (!src) return;
+            var img = new Image();
+            img.onload = function() {
+                // Skip globe placeholder (≤16×16) or blank image
+                if (img.naturalWidth <= 16) return;
+                var el = document.createElement('img');
+                el.src = src;
+                el.className = 'w-7 h-7 object-contain absolute z-10 rounded';
+                el.style.cssText = 'top:50%;left:50%;transform:translate(-50%,-50%)';
+                el.onerror = function() { el.remove(); };
+                box.appendChild(el);
+            };
+            img.onerror = function() { /* leave initial letter */ };
+            img.src = src;
+        }
+        function init() {
+            document.querySelectorAll('.card-logo-box').forEach(tryLoadFavicon);
+        }
+        if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+        else init();
     })();
     </script>
 </body>
