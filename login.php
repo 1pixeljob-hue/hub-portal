@@ -76,7 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <path clip-rule="evenodd" d="M24 4H6V17.3333V30.6667H24V44H42V30.6667V17.3333H24V4Z" fill-rule="evenodd"></path>
                     </svg>
                 </div>
-                <h2 class="text-slate-900 dark:text-white text-2xl font-bold tracking-tight">Hub Portal</h2>
+                <h2 class="text-slate-900 dark:text-white text-2xl font-bold tracking-tight">Quản lý liên kết</h2>
             </div>
 
             <h3 class="text-xl font-semibold mb-6 text-center">Đăng nhập Quản trị</h3>

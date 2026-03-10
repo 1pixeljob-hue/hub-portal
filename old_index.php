@@ -1,0 +1,610 @@
+﻿<?php
+require_once __DIR__ . '/api/db.php';
+
+// Fetch links from database
+try {
+    $stmt = $pdo->query("SELECT * FROM links ORDER BY created_at DESC");
+    $links = $stmt->fetchAll();
+}
+catch (\PDOException $e) {
+    $links = [];
+    $dbError = $e->getMessage();
+}
+
+// Function to decode tags
+function getTags($tagStr)
+{
+    return json_decode($tagStr, true) ?? [];
+}
+
+// Fetch categories from database
+try {
+    $stmt = $pdo->query("SELECT * FROM categories ORDER BY created_at ASC");
+    $dbCategories = $stmt->fetchAll();
+
+    $categories = [];
+    foreach ($dbCategories as $cat) {
+        $color = $cat['color'];
+        if (strpos($color, '#') === 0) {
+            $catColorClass = "text-[{$color}] bg-[{$color}]/10 dark:bg-[{$color}]/20";
+        }
+        else {
+            $catColorClass = 'text-' . $color . '-500 bg-' . $color . '-50 dark:bg-' . $color . '-500/10';
+        }
+        $categories[$cat['id']] = [
+            'name' => $cat['name'],
+            'icon' => $cat['icon'],
+            'color' => $catColorClass,
+            'baseColor' => $color,
+            'count' => 0
+        ];
+    }
+}
+catch (\PDOException $e) {
+    $categories = [];
+}
+
+$totalLinks = 0;
+foreach ($links as $link) {
+    $theme = $link['theme'] ?? 'indigo';
+    if (isset($categories[$theme])) {
+        $categories[$theme]['count']++;
+    }
+    $totalLinks++;
+}
+?>
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Vibrant Link Manager Dashboard</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#00DDB3",
+                        "secondary": "#0066FF",
+                        "accent": "#00b4d8",
+                        "background-light": "#f8fafc",
+                        "background-dark": "#0b1120",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#111827",
+                        "surface-light-highlight": "#f1f5f9",
+                        "surface-dark-highlight": "#1f2937",
+                        "border-light": "#e2e8f0",
+                        "border-dark": "#1f2937",
+                        "text-primary-light": "#0f172a",
+                        "text-primary-dark": "#f8fafc",
+                        "text-secondary-light": "#64748b",
+                        "text-secondary-dark": "#94a3b8",
+                        // Redefine standard colors to match logo theme
+                        "indigo": {
+                            50: "#eafefb",
+                            100: "#cafdf4",
+                            200: "#96fbed",
+                            300: "#5df6e3",
+                            400: "#2eead3",
+                            500: "#00DDB3",
+                            600: "#00bfa3",
+                            700: "#009d89",
+                            800: "#007c6f",
+                            900: "#00665b"
+                        },
+                        "purple": {
+                            50: "#e6f0ff",
+                            100: "#ccdeff",
+                            200: "#99beff",
+                            300: "#669eff",
+                            400: "#337eff",
+                            500: "#0066FF",
+                            600: "#0052cc",
+                            700: "#003e99",
+                            800: "#002a66",
+                            900: "#001633"
+                        },
+                        "pink": {
+                            50: "#eafefb", 100: "#cafdf4", 200: "#96fbed", 300: "#5df6e3", 400: "#2eead3", 500: "#00DDB3", 600: "#00bfa3", 700: "#009d89", 800: "#007c6f", 900: "#00665b"
+                        },
+                        "emerald": {
+                            50: "#eafefb", 100: "#cafdf4", 200: "#96fbed", 300: "#5df6e3", 400: "#2eead3", 500: "#00DDB3", 600: "#00bfa3", 700: "#009d89", 800: "#007c6f", 900: "#00665b"
+                        },
+                        "rose": {
+                            50: "#e6f0ff", 100: "#ccdeff", 200: "#99beff", 300: "#669eff", 400: "#337eff", 500: "#0066FF", 600: "#0052cc", 700: "#003e99", 800: "#002a66", 900: "#001633"
+                        },
+                        "amber": {
+                            50: "#eafefb", 100: "#cafdf4", 200: "#96fbed", 300: "#5df6e3", 400: "#2eead3", 500: "#00DDB3", 600: "#00bfa3", 700: "#009d89", 800: "#007c6f", 900: "#00665b"
+                        },
+                        "cyan": {
+                            50: "#e6f8fc", 100: "#cdedf9", 200: "#9cdaf3", 300: "#6bc7ed", 400: "#3ab4e7", 500: "#00b4d8", 600: "#0090ad", 700: "#006c82", 800: "#004856", 900: "#00242b"
+                        },
+                        "teal": {
+                            50: "#eafefb", 100: "#cafdf4", 200: "#96fbed", 300: "#5df6e3", 400: "#2eead3", 500: "#00DDB3", 600: "#00bfa3", 700: "#009d89", 800: "#007c6f", 900: "#00665b"
+                        }
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    backgroundImage: {
+                        'mesh-light': 'radial-gradient(at 0% 0%, hsla(168,100%,70%,0.1) 0, transparent 50%), radial-gradient(at 50% 0%, hsla(217,100%,50%,0.1) 0, transparent 50%), radial-gradient(at 100% 0%, hsla(180,100%,50%,0.1) 0, transparent 50%)',
+                        'mesh-dark': 'radial-gradient(at 0% 0%, hsla(168,100%,10%,0.4) 0, transparent 50%), radial-gradient(at 50% 0%, hsla(217,100%,10%,0.4) 0, transparent 50%), radial-gradient(at 100% 0%, hsla(180,100%,10%,0.4) 0, transparent 50%)',
+                        'mesh-vibrant': 'radial-gradient(at 40% 20%, hsla(168,100%,70%,0.1) 0px, transparent 50%), radial-gradient(at 80% 0%, hsla(217,100%,56%,0.1) 0px, transparent 50%), radial-gradient(at 0% 50%, hsla(189,100%,76%,0.1) 0px, transparent 50%)',
+                        'gradient-border': 'linear-gradient(to right, #00DDB3, #0066FF)',
+                        'logo-gradient': 'linear-gradient(135deg, #00DDB3 0%, #0066FF 100%)',
+                        'card-gradient': 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%)'
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        .glass-panel { backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+        .gradient-text { background-clip: text; -webkit-background-clip: text; color: transparent; background-image: linear-gradient(to right, #00DDB3, #0066FF); }
+        .interactive-card { position: relative; z-index: 1; border-radius: 1rem; padding: 1px; background: transparent; transition: transform 0.3s ease, box-shadow 0.3s ease; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1); }
+        .interactive-card::before { content: ""; position: absolute; inset: 0; border-radius: 1rem; padding: 1px; background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05)); -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); -webkit-mask-composite: xor; mask-composite: exclude; pointer-events: none; transition: background 0.3s ease; }
+        .interactive-card:hover { transform: scale(1.02); box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1); }
+        .interactive-card:hover::before { background: linear-gradient(45deg, #00DDB3, #0066FF, #00b4d8, #3b82f6); opacity: 1; }
+        .interactive-card-inner { height: 100%; border-radius: calc(1rem - 1px); background-color: rgb(255 255 255 / 0.8); backdrop-filter: blur(12px); transition: all 0.3s ease; border: 1px solid rgba(255, 255, 255, 0.5); }
+        .dark .interactive-card-inner { background-color: rgb(30 41 59 / 0.6); border: 1px solid rgba(255, 255, 255, 0.05); }
+        .interactive-card:hover .interactive-card-inner { background-color: rgb(255 255 255 / 0.95); box-shadow: inset 0 0 20px rgba(0, 221, 179, 0.15); border-color: transparent; }
+        .dark .interactive-card:hover .interactive-card-inner { background-color: rgb(15 23 42 / 0.9); box-shadow: inset 0 0 20px rgba(0, 221, 179, 0.15); border-color: transparent; }
+        .refined-btn { position: relative; overflow: hidden; z-index: 10; }
+        .refined-btn::after { content: ''; position: absolute; inset: 0; background: linear-gradient(45deg, #00DDB3, #0066FF); opacity: 0; transition: opacity 0.3s ease; z-index: -1; border-radius: inherit; }
+        .refined-btn:hover::after { opacity: 1; }
+        .refined-btn:hover { color: white !important; box-shadow: 0 4px 12px rgba(0, 221, 179, 0.3); }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        /* T├╣y chß╗ënh thanh cuß╗Ön nhß╗Å gß╗ìn */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 2px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            margin-top: 10px;
+            margin-bottom: 10px;
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(156, 163, 175, 0.5); 
+            border-radius: 9999px;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-text-primary-light dark:text-text-primary-dark antialiased overflow-hidden transition-colors duration-300 selection:bg-primary selection:text-white">
+    <div class="fixed inset-0 pointer-events-none bg-mesh-vibrant z-0 opacity-100 dark:opacity-40"></div>
+    <div class="flex h-screen w-full relative z-10">
+        <!-- Sidebar -->
+        <aside class="hidden md:flex w-72 flex-col border-r border-border-light/80 dark:border-border-dark/80 bg-surface-light/80 dark:bg-surface-dark/80 backdrop-blur-xl transition-colors duration-300 z-20">
+            <div class="flex h-20 items-center gap-3 px-6 border-b border-border-light/50 dark:border-border-dark/50">
+                <div class="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-[#00DDB3] to-[#0066FF] shadow-lg shadow-[#00DDB3]/20 transition-transform hover:scale-105">
+                    <span class="material-symbols-outlined text-[28px] text-white">hub</span>
+                </div>
+                <h1 class="text-xl font-bold tracking-tight bg-gradient-to-r from-[#00DDB3] to-[#0066FF] bg-clip-text text-transparent">1Pixel</h1>
+            </div>
+            
+            <div class="flex flex-1 flex-col overflow-y-auto py-6 px-4 custom-scrollbar">
+                <div class="mb-6">
+                    <p class="px-3 mb-2 text-xs font-bold uppercase tracking-wider text-text-secondary-light dark:text-text-secondary-dark/70">Tß╗òng quan</p>
+                    <nav class="space-y-1">
+                        <button class="category-filter active group flex w-full items-center justify-between rounded-xl px-3 py-2.5 text-sm font-medium transition-all hover:bg-surface-light-highlight dark:hover:bg-surface-dark-highlight" data-filter="all">
+                            <div class="flex items-center gap-3 text-text-primary-light dark:text-text-primary-dark">
+                                <span class="material-symbols-outlined text-[20px] text-primary">dashboard</span>
+                                Tß║Ñt cß║ú li├¬n kß║┐t
+                            </div>
+                            <span class="flex h-6 min-w-[24px] items-center justify-center rounded-full bg-primary/10 px-2 text-xs font-bold text-primary dark:bg-primary/20 dark:text-primary"><?php echo $totalLinks; ?></span>
+                        </button>
+                    </nav>
+                </div>
+                
+                <div>
+                    <div class="flex items-center justify-between px-3 mb-2">
+                        <p class="text-xs font-bold uppercase tracking-wider text-text-secondary-light dark:text-text-secondary-dark/70">Danh Mß╗Ñc</p>
+                        <button onclick="document.getElementById('add-category-modal').classList.add('active')" class="text-text-secondary-light hover:text-primary transition-colors" title="Th├¬m danh mß╗Ñc mß╗¢i">
+                            <span class="material-symbols-outlined text-[16px]">add_circle</span>
+                        </button>
+                    </div>
+                    <nav class="space-y-1" id="category-nav">
+                        <?php foreach ($categories as $key => $cat): ?>
+                        <div class="category-filter relative group flex w-full items-center justify-between rounded-xl px-3 py-2.5 text-sm font-medium transition-all hover:bg-surface-light-highlight dark:hover:bg-surface-dark-highlight cursor-pointer" data-filter="<?php echo htmlspecialchars($key); ?>">
+                            <div class="flex items-center gap-3 text-text-secondary-light dark:text-text-secondary-dark group-hover:text-text-primary-light dark:group-hover:text-text-primary-dark transition-colors">
+                                <div class="flex h-7 w-7 items-center justify-center rounded-lg <?php echo htmlspecialchars($cat['color']); ?> shadow-sm">
+                                    <span class="material-symbols-outlined text-[16px]"><?php echo htmlspecialchars($cat['icon']); ?></span>
+                                </div>
+                                <?php echo htmlspecialchars($cat['name']); ?>
+                            </div>
+                            <div class="flex items-center gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                                <?php if ($cat['count'] > 0): ?>
+                                <span class="flex h-5 min-w-[20px] items-center justify-center rounded-full bg-border-light dark:bg-border-dark px-1.5 text-[10px] font-bold text-text-secondary-light dark:text-text-secondary-dark group-hover:bg-primary/10 group-hover:text-primary dark:group-hover:bg-primary/20 dark:group-hover:text-primary transition-colors">
+                                    <?php echo $cat['count']; ?>
+                                </span>
+                                <?php
+    endif; ?>
+                                <button type="button" class="flex h-5 w-5 items-center justify-center rounded text-red-500 hover:bg-red-500/10 hover:text-red-600 transition-colors pointer-events-auto" onclick="window.deleteCategory('<?php echo htmlspecialchars($key); ?>', '<?php echo htmlspecialchars($cat['name']); ?>', event)" title="Xo├í Danh Mß╗Ñc">
+                                    <span class="material-symbols-outlined text-[14px]">delete</span>
+                                </button>
+                            </div>
+                        </div>
+                        <?php
+endforeach; ?>
+                    </nav>
+                </div>
+            </div>
+            
+            <div class="mt-auto border-t border-border-light/50 dark:border-border-dark/50 p-4">
+                <div class="rounded-2xl border border-primary/20 dark:border-primary/20 bg-gradient-to-b from-primary/5 to-white dark:from-primary/5 dark:to-surface-dark p-4 shadow-sm">
+                    <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary">
+                        <span class="material-symbols-outlined text-[20px]">bolt</span>
+                    </div>
+                    <h4 class="mb-1 text-sm font-bold text-text-primary-light dark:text-text-primary-dark">Pro Workspace</h4>
+                    <p class="text-xs text-text-secondary-light dark:text-text-secondary-dark">Manage all your essential portals and links effortlessly.</p>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex h-full flex-1 flex-col overflow-hidden bg-transparent transition-colors duration-300">
+            <header class="flex h-16 shrink-0 items-center justify-between border-b border-border-light/50 dark:border-border-dark/50 bg-surface-light/80 dark:bg-surface-dark/80 backdrop-blur-md px-6 transition-colors duration-300">
+                <div class="flex flex-1 items-center max-w-md">
+                    <div class="relative w-full group">
+                        <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-text-secondary-light dark:text-text-secondary-dark group-focus-within:text-primary transition-colors">
+                            <span class="material-symbols-outlined text-[20px]">search</span>
+                        </div>
+                        <input id="link-search" class="block w-full rounded-full border-2 border-transparent bg-surface-light-highlight dark:bg-surface-dark-highlight py-2 pl-10 pr-3 text-sm text-text-primary-light dark:text-white placeholder-text-secondary-light dark:placeholder-text-secondary-dark focus:border-primary focus:bg-white dark:focus:bg-surface-dark focus:outline-none focus:ring-0 transition-all shadow-inner" placeholder="T├¼m li├¬n kß║┐t, thß║╗..." type="text"/>
+                    </div>
+                </div>
+                <div class="flex items-center gap-3">
+                    <button class="relative rounded-lg p-2 text-text-secondary-light dark:text-text-secondary-dark hover:bg-surface-light-highlight dark:hover:bg-surface-dark-highlight hover:text-primary transition-colors" id="theme-toggle" title="Toggle Theme">
+                        <span class="material-symbols-outlined text-[24px]">light_mode</span>
+                    </button>
+                    <button class="flex items-center gap-2 rounded-lg bg-surface-light-highlight dark:bg-surface-dark-highlight border border-border-light/50 dark:border-border-dark/50 px-3.5 py-2 text-sm font-semibold text-text-primary-light dark:text-white hover:border-primary/50 hover:text-primary transition-all" onclick="document.getElementById('add-category-modal').classList.add('active')">
+                        <span class="material-symbols-outlined text-[18px]">create_new_folder</span>
+                        Danh Mß╗Ñc
+                    </button>
+                    <button class="flex items-center gap-2 rounded-lg bg-gradient-to-r from-primary to-secondary px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-primary/25 hover:shadow-primary/40 hover:scale-[1.02] transition-all" onclick="window.openAddLinkModal()">
+                        <span class="material-symbols-outlined text-[20px]">add</span>
+                        Th├¬m Li├¬n Kß║┐t
+                    </button>
+                </div>
+            </header>
+
+            <div class="flex-1 overflow-y-auto p-4 md:p-8">
+                <div class="mx-auto max-w-7xl">
+                    <!-- Greeting Section -->
+                    <div class="relative mb-8 overflow-hidden rounded-2xl p-[2px] bg-gradient-to-r from-[#00DDB3] via-[#0066FF] to-[#00b4d8] shadow-xl shadow-[#00DDB3]/10">
+                        <div class="relative flex flex-col md:flex-row md:items-end justify-between gap-4 rounded-2xl bg-white/90 dark:bg-surface-dark/90 backdrop-blur-xl p-6 md:p-8">
+                            <div class="z-10">
+                                <h2 id="greeting-text" class="text-3xl md:text-4xl font-extrabold tracking-tight bg-gradient-to-r from-[#00DDB3] to-[#0066FF] bg-clip-text text-transparent drop-shadow-sm">Ch├áo buß╗òi s├íng, Sß║┐p</h2>
+                                <p class="text-text-secondary-light dark:text-text-secondary-dark mt-2 font-medium">Quß║ún l├╜ c├íc li├¬n kß║┐t cß╗ºa bß║ín hiß╗çu quß║ú.</p>
+                            </div>
+                            <div class="z-10 flex items-center gap-3 rounded-xl bg-surface-light-highlight/50 dark:bg-surface-dark-highlight/50 p-3 backdrop-blur-md border border-white/20 dark:border-white/5">
+                                <span id="clock-display" class="text-4xl font-light tracking-tight text-text-primary-light dark:text-white tabular-nums">00:00</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Grid of Links -->
+                    <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4" id="links-container">
+                        <?php if (empty($links)): ?>
+                            <div class="col-span-full py-16 text-center flex flex-col items-center justify-center">
+                                <div class="mb-4 flex h-20 w-20 items-center justify-center rounded-3xl bg-surface-light-highlight dark:bg-surface-dark-highlight shadow-inner">
+                                    <span class="material-symbols-outlined text-4xl text-text-secondary-light/40 dark:text-text-secondary-dark/40">link_off</span>
+                                </div>
+                                <h3 class="text-xl font-bold text-text-primary-light dark:text-white mb-2">Ch╞░a C├│ Li├¬n Kß║┐t N├áo</h3>
+                                <p class="text-text-secondary-light dark:text-text-secondary-dark max-w-sm">Bß║ín ch╞░a th├¬m li├¬n kß║┐t n├áo. Bß║Ñm "Th├¬m Li├¬n Kß║┐t" ß╗ƒ g├│c tr├¬n ─æß╗â bß║»t ─æß║ºu.</p>
+                            </div>
+                        <?php
+else: ?>
+                            <?php foreach ($links as $link):
+        $cardTheme = $link['theme'] ?? 'indigo';
+        $catColor = $categories[$cardTheme]['baseColor'] ?? 'indigo';
+        if (strpos($catColor, '#') === 0) {
+            $gClass = "from-[{$catColor}] to-[{$catColor}] hover:shadow-[{$catColor}]/20 text-[{$catColor}] dark:text-[{$catColor}] bg-[{$catColor}]/10 dark:bg-[{$catColor}]/20 border-[{$catColor}]/30 dark:border-[{$catColor}]/30";
+            $colorName = $catColor;
+        }
+        else {
+            $gradients = [
+                'indigo' => 'from-[#00DDB3] to-[#0066FF] hover:shadow-[#00DDB3]/20 text-[#0066FF] dark:text-[#00DDB3] bg-[#00DDB3]/5 dark:bg-[#00DDB3]/10 border-[#00DDB3]/20 dark:border-[#00DDB3]/30',
+                'purple' => 'from-[#0066FF] to-[#00b4d8] hover:shadow-[#0066FF]/20 text-[#0066FF] dark:text-[#00b4d8] bg-[#0066FF]/5 dark:bg-[#0066FF]/10 border-[#0066FF]/20 dark:border-[#0066FF]/30',
+                'pink' => 'from-[#00DDB3] to-[#00b4d8] hover:shadow-[#00DDB3]/20 text-[#00DDB3] dark:text-[#00b4d8] bg-[#00b4d8]/5 dark:bg-[#00b4d8]/10 border-[#00b4d8]/20 dark:border-[#00b4d8]/30',
+                'emerald' => 'from-emerald-500 to-emerald-600 hover:shadow-emerald-500/20 text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 border-emerald-100 dark:border-emerald-800/30'
+            ];
+            $gClass = $gradients[$cardTheme] ?? $gradients['indigo'];
+            preg_match('/text-([a-z]+)-600/', $gClass, $matches);
+            $colorName = $matches[1] ?? 'indigo';
+        }
+?>
+                                <div class="group interactive-card link-card filter-item transition-all duration-300 transform" data-id="<?php echo $link['id']; ?>" data-category="<?php echo $cardTheme; ?>">
+                                    <div class="interactive-card-inner flex flex-col justify-between p-5">
+                                        <div class="absolute top-0 left-0 h-1.5 w-full bg-gradient-to-r <?php echo preg_replace('/hover:shadow-.*?\s.*/', '', $gClass); ?> opacity-0 group-hover:opacity-100 transition-opacity rounded-t-xl z-10"></div>
+                                        <div>
+                                            <div class="mb-5 flex items-start justify-between">
+                                                <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-white dark:bg-surface-dark-highlight p-2 border border-border-light/80 dark:border-white/10 shadow-sm relative z-10 overflow-hidden shrink-0 group-hover:scale-105 transition-transform">
+                                                    <?php
+        $computedLogoUrl = $link['logoUrl'];
+        if ((empty($computedLogoUrl) || strpos($computedLogoUrl, 's2/favicons') !== false) && !empty($link['url'])) {
+            $host = parse_url($link['url'], PHP_URL_HOST);
+            if (!empty($host)) {
+                $computedLogoUrl = "https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://" . $host . "&size=128";
+            }
+        }
+        if ($computedLogoUrl):
+?>
+                                                        <img src="<?php echo htmlspecialchars($computedLogoUrl); ?>" class="h-10 w-10 object-contain" alt="Logo">
+                                                    <?php
+        else: ?>
+                                                        <span class="text-2xl font-black bg-gradient-to-br <?php echo preg_replace('/hover:shadow-.*?\s.*/', '', $gClass); ?> bg-clip-text text-transparent"><?php echo htmlspecialchars($link['initial']); ?></span>
+                                                    <?php
+        endif; ?>
+                                                </div>
+                                                <div class="relative z-20">
+                                                    <button class="rounded-lg p-1.5 text-text-secondary-light dark:text-text-secondary-dark hover:bg-surface-light-highlight dark:hover:bg-surface-dark-highlight transition-all" onclick="window.toggleMenu('menu-<?php echo $link['id']; ?>', event)">
+                                                        <span class="material-symbols-outlined text-[20px]">more_vert</span>
+                                                    </button>
+                                                    <div id="menu-<?php echo $link['id']; ?>" class="action-menu hidden absolute right-0 mt-1 w-36 origin-top-right rounded-lg bg-white dark:bg-surface-dark shadow-xl ring-1 ring-black/5 dark:ring-white/10 overflow-hidden z-30 border border-border-light dark:border-border-dark">
+                                                        <button class="flex w-full items-center gap-2 px-3 py-2 text-sm text-text-primary-light dark:text-text-primary-dark hover:bg-surface-light-highlight dark:hover:bg-surface-dark-highlight transition-colors" onclick='window.editLink(<?php echo json_encode($link, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP); ?>, event)'>
+                                                            <span class="material-symbols-outlined text-[18px]">edit</span>
+                                                            Sß╗¡a Link
+                                                        </button>
+                                                        <button class="flex w-full items-center gap-2 px-3 py-2 text-sm text-text-primary-light dark:text-text-primary-dark hover:bg-surface-light-highlight dark:hover:bg-surface-dark-highlight transition-colors" onclick="window.copyUrl('<?php echo htmlspecialchars($link['url'], ENT_QUOTES); ?>'); window.toggleMenu('menu-<?php echo $link['id']; ?>', event)">
+                                                            <span class="material-symbols-outlined text-[18px]">content_copy</span>
+                                                            Sao ch├⌐p
+                                                        </button>
+                                                        <div class="h-px w-full bg-border-light dark:bg-border-dark border-0"></div>
+                                                        <button class="flex w-full items-center gap-2 px-3 py-2 text-sm text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors" onclick="window.deleteLink('<?php echo $link['id']; ?>')">
+                                                            <span class="material-symbols-outlined text-[18px]">delete</span>
+                                                            X├│a
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <h3 class="mb-1 text-lg font-bold text-text-primary-light dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors"><?php echo htmlspecialchars($link['title']); ?></h3>
+                                            <p class="mb-4 truncate text-sm text-text-secondary-light dark:text-text-secondary-dark"><?php echo htmlspecialchars(parse_url($link['url'], PHP_URL_HOST)); ?></p>
+                                            <div class="flex flex-wrap gap-2 mt-auto">
+                                                <?php foreach (getTags($link['tags']) as $tag):
+            if (strpos($colorName, '#') === 0) {
+                $tagClass = "bg-[{$colorName}]/10 dark:bg-[{$colorName}]/20 text-[{$colorName}] dark:text-[{$colorName}] border-[{$colorName}]/30 dark:border-[{$colorName}]/30";
+            }
+            else {
+                $tagClass = "bg-{$colorName}-50 dark:bg-{$colorName}-900/20 text-{$colorName}-600 dark:text-{$colorName}-400 border-{$colorName}-200/50 dark:border-{$colorName}-800/30";
+            }
+?>
+                                                    <span class="rounded-full <?php echo $tagClass; ?> px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wide border">
+                                                        <?php echo htmlspecialchars($tag['name'] ?? $tag); ?>
+                                                    </span>
+                                                <?php
+        endforeach; ?>
+                                            </div>
+                                        </div>
+                                        <div class="mt-4 border-t border-border-light dark:border-white/5 pt-4 relative z-10">
+                                            <a class="refined-btn flex w-full items-center justify-center gap-2 rounded-lg bg-surface-light-highlight dark:bg-surface-dark-highlight py-2 text-sm font-medium text-text-primary-light dark:text-white transition-all opacity-40 group-hover:opacity-100 bg-white/10 backdrop-blur-sm" href="<?php echo htmlspecialchars($link['url']); ?>" target="_blank">
+                                                Mß╗ƒ Li├¬n Kß║┐t
+                                                <span class="material-symbols-outlined text-[16px]">open_in_new</span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php
+    endforeach; ?>
+                        <?php
+endif; ?>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Add Link Modal (Side-by-side Layout) -->
+    <div class="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 opacity-0 pointer-events-none transition-all duration-300" id="add-modal">
+        <div class="bg-surface-light dark:bg-surface-dark w-full max-w-4xl rounded-3xl shadow-2xl border border-border-light/50 dark:border-border-dark/50 overflow-hidden transform scale-95 transition-all duration-300 modal-content flex flex-col md:flex-row">
+            
+            <!-- Left Side: Live Preview -->
+            <div class="w-full md:w-5/12 bg-surface-light-highlight/50 dark:bg-black/20 p-8 flex flex-col border-b md:border-b-0 md:border-r border-border-light/50 dark:border-border-dark/50 relative overflow-hidden">
+                <div class="absolute inset-0 bg-mesh-vibrant opacity-20 pointer-events-none"></div>
+                <div class="absolute inset-0 bg-gradient-to-b from-transparent to-surface-light/80 dark:to-surface-dark/80 pointer-events-none"></div>
+                
+                <h3 class="text-sm font-bold uppercase tracking-wider text-text-secondary-light dark:text-text-secondary-dark mb-6 relative z-10 flex items-center gap-2">
+                    <span class="material-symbols-outlined text-[18px]">visibility</span>
+                    Xem Tr╞░ß╗¢c
+                </h3>
+                
+                <div class="flex-1 flex items-center justify-center relative z-10">
+                    <!-- The Preview Card -->
+                    <div class="w-full interactive-card" id="preview-card-container">
+                        <div class="interactive-card-inner flex flex-col justify-between p-5 bg-white dark:bg-surface-dark/90 transition-all duration-300" id="preview-card-inner">
+                            <div class="absolute top-0 left-0 h-1.5 w-full bg-gradient-to-r from-indigo-500 to-indigo-600 rounded-t-xl z-20" id="preview-gradient"></div>
+                            <div>
+                                <div class="mb-5 flex items-start justify-between">
+                                    <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-white dark:bg-surface-dark-highlight p-2 border border-border-light/80 dark:border-white/10 shadow-sm relative z-10 overflow-hidden shrink-0">
+                                        <span class="text-2xl font-black bg-gradient-to-br from-indigo-500 to-indigo-600 bg-clip-text text-transparent" id="preview-initial">N</span>
+                                        <img src="" class="h-10 w-10 object-contain hidden" id="preview-logo" alt="Logo">
+                                    </div>
+                                    <div class="relative z-20">
+                                        <button type="button" class="rounded-lg p-1.5 text-text-secondary-light dark:text-text-secondary-dark opacity-50 cursor-not-allowed">
+                                            <span class="material-symbols-outlined text-[20px]">more_vert</span>
+                                        </button>
+                                    </div>
+                                </div>
+                                <h3 class="mb-1 text-lg font-bold text-text-primary-light dark:text-white" id="preview-title">Li├¬n Kß║┐t Mß╗¢i</h3>
+                                <p class="mb-4 truncate text-sm text-text-secondary-light dark:text-text-secondary-dark" id="preview-url">example.com</p>
+                                <div class="flex flex-wrap gap-2 mt-auto" id="preview-tags-container">
+                                    <span class="rounded-full bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600 dark:text-indigo-400 border-indigo-200/50 dark:border-indigo-800/30 px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wide border">WORK</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Side: Input Form -->
+            <div class="w-full md:w-7/12 flex flex-col">
+                <form id="add-link-form" onsubmit="window.submitForm(event)" class="h-full flex flex-col">
+                    <div class="px-8 py-6 border-b border-border-light/50 dark:border-border-dark/50 flex justify-between items-center">
+                        <div>
+                            <h3 class="text-2xl font-bold text-text-primary-light dark:text-white" id="modal-title">Th├¬m Li├¬n Kß║┐t Mß╗¢i</h3>
+                            <p class="text-sm text-text-secondary-light tracking-wide mt-1">Tß║ío mß╗Öt thß║╗ t├╣y chß╗ënh mß╗¢i cho bß║úng ─æiß╗üu khiß╗ân.</p>
+                        </div>
+                        <button type="button" class="rounded-full p-2 text-text-secondary-light hover:bg-surface-light-highlight dark:hover:bg-surface-dark-highlight transition-colors" onclick="document.getElementById('add-modal').classList.remove('active')">
+                            <span class="material-symbols-outlined text-[24px]">close</span>
+                        </button>
+                    </div>
+                    
+                    <div class="p-8 space-y-6 flex-1 overflow-y-visible">
+                        <input type="hidden" id="link-id" name="id" value="">
+                         <div class="group">
+                            <label class="block text-sm font-bold text-text-primary-light dark:text-text-primary-dark mb-2 group-focus-within:text-primary transition-colors">Ti├¬u ─Éß╗ü (Title) <span class="text-red-500">*</span></label>
+                            <input id="link-title" class="w-full bg-surface-light-highlight dark:bg-surface-dark-highlight border-2 border-transparent focus:border-primary rounded-xl px-4 py-3.5 text-sm outline-none transition-all shadow-inner text-text-primary-light dark:text-white font-medium placeholder-text-secondary-light/60" required placeholder="vd: Kh├┤ng gian l├ám viß╗çc..." type="text"/>
+                        </div>
+                        
+                        <div class="group">
+                            <label class="block text-sm font-bold text-text-primary-light dark:text-text-primary-dark mb-2 group-focus-within:text-primary transition-colors">─É╞░ß╗¥ng Dß║½n URL <span class="text-red-500">*</span></label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                    <span class="material-symbols-outlined text-[18px] text-text-secondary-light">link</span>
+                                </div>
+                                <input id="link-url" class="w-full bg-surface-light-highlight dark:bg-surface-dark-highlight border-2 border-transparent focus:border-primary rounded-xl pl-11 pr-4 py-3.5 text-sm outline-none transition-all shadow-inner text-text-primary-light dark:text-white font-medium placeholder-text-secondary-light/60" required placeholder="e.g. google.com" type="text"/>
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                            <div class="group">
+                                <label class="block text-sm font-bold text-text-primary-light dark:text-text-primary-dark mb-2 group-focus-within:text-primary transition-colors">Danh Mß╗Ñc</label>
+                                <div class="relative custom-select-container">
+                                    <button type="button" id="category-select-btn" class="w-full flex items-center justify-between text-left appearance-none bg-surface-light-highlight dark:bg-surface-dark-highlight border-2 border-transparent focus:border-primary focus:ring-[3px] focus:ring-primary/20 rounded-xl pl-4 pr-3 py-3 text-sm outline-none transition-all shadow-inner text-text-primary-light dark:text-white font-medium cursor-pointer relative z-10">
+                                        <span id="category-select-text">Chß╗ìn Danh Mß╗Ñc...</span>
+                                        <span class="material-symbols-outlined text-[20px] text-text-secondary-light transition-transform duration-200" id="category-select-icon">expand_more</span>
+                                    </button>
+                                    
+                                    <div id="category-select-menu" class="absolute z-[100] bottom-full left-0 w-full mb-1.5 bg-white dark:bg-surface-dark border border-indigo-500/30 rounded-xl shadow-2xl opacity-0 invisible transform translate-y-2 transition-all duration-200 overflow-hidden origin-bottom">
+                                        <ul class="max-h-60 overflow-y-auto custom-scrollbar p-1.5 space-y-0.5 bg-surface-light-highlight/20 dark:bg-surface-dark-highlight/20 backdrop-blur-md">
+                                            <?php foreach ($categories as $key => $cat): ?>
+                                            <li class="custom-select-option px-3 py-2 rounded-lg text-sm font-medium text-text-primary-light dark:text-text-primary-dark hover:bg-indigo-500 hover:text-white dark:hover:bg-indigo-600 dark:hover:text-white cursor-pointer flex items-center gap-2 transition-all" data-value="<?php echo htmlspecialchars($key); ?>" data-color="<?php echo htmlspecialchars($cat['baseColor']); ?>">
+                                                <span class="material-symbols-outlined text-[18px] opacity-70"><?php echo htmlspecialchars($cat['icon']); ?></span> 
+                                                <?php echo htmlspecialchars($cat['name']); ?>
+                                            </li>
+                                            <?php
+endforeach; ?>
+                                        </ul>
+                                    </div>
+                                    <input type="hidden" id="link-category" name="theme" value="<?php echo htmlspecialchars(array_key_first($categories) ?? 'indigo'); ?>" data-color="indigo">
+                                </div>
+                            </div>
+                            <div class="group">
+                                <label class="block text-sm font-bold text-text-primary-light dark:text-text-primary-dark mb-2 group-focus-within:text-primary transition-colors">Thß║╗ Ph├ón Loß║íi (Tags)</label>
+                                <input id="link-tags" class="w-full bg-surface-light-highlight dark:bg-surface-dark-highlight border-2 border-transparent focus:border-primary rounded-xl px-4 py-3.5 text-sm outline-none transition-all shadow-inner text-text-primary-light dark:text-white font-medium placeholder-text-secondary-light/60" placeholder="vd: dev, design, tool..."/>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-surface-light-highlight/50 dark:bg-surface-dark-highlight/20 px-8 py-5 flex items-center justify-end gap-3 mt-auto border-t border-border-light/50 dark:border-border-dark/50">
+                        <button class="px-6 py-2.5 text-sm font-bold text-text-secondary-light dark:text-text-secondary-dark hover:text-text-primary-light dark:hover:text-white transition-colors" onclick="document.getElementById('add-modal').classList.remove('active')" type="button">Trß╗ƒ Vß╗ü</button>
+                        <button class="bg-gradient-to-r from-primary to-secondary px-8 py-2.5 rounded-xl text-sm font-bold text-white shadow-lg shadow-primary/25 hover:shadow-primary/40 hover:-translate-y-0.5 transition-all" type="submit" id="submit-btn-text">L╞░u Li├¬n Kß║┐t</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Category Modal -->
+    <div class="fixed inset-0 z-[110] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 opacity-0 pointer-events-none transition-all duration-300" id="add-category-modal">
+        <div class="bg-surface-light dark:bg-surface-dark w-full max-w-lg rounded-3xl shadow-2xl border border-border-light/50 dark:border-border-dark/50 overflow-hidden transform scale-95 transition-all duration-300 modal-content relative">
+            <div class="absolute inset-0 bg-mesh-vibrant opacity-10 pointer-events-none"></div>
+            <div class="absolute inset-0 bg-gradient-to-b from-transparent to-surface-light/80 dark:to-surface-dark/80 pointer-events-none"></div>
+
+            <form id="add-category-form" onsubmit="window.submitCategoryForm(event)" class="relative z-10 flex flex-col h-full">
+                <div class="px-8 py-6 border-b border-border-light/50 dark:border-border-dark/50 flex justify-between items-center relative">
+                    <div class="absolute top-0 left-0 h-1 w-full bg-gradient-to-r from-[#00DDB3] via-[#0066FF] to-[#00b4d8]"></div>
+                    <div>
+                        <h3 class="text-2xl font-bold bg-gradient-to-r from-[#00DDB3] to-[#0066FF] bg-clip-text text-transparent drop-shadow-sm">Danh Mß╗Ñc Mß╗¢i</h3>
+                        <p class="text-sm text-text-secondary-light tracking-wide mt-1">Ph├ón loß║íi hiß╗ân thß╗ï cho giao diß╗çn trß╗▒c quan.</p>
+                    </div>
+                    <button type="button" class="rounded-full p-2 text-text-secondary-light hover:bg-surface-light-highlight dark:hover:bg-surface-dark-highlight transition-colors" onclick="document.getElementById('add-category-modal').classList.remove('active')">
+                        <span class="material-symbols-outlined text-[24px]">close</span>
+                    </button>
+                </div>
+                <div class="p-8 space-y-6 flex-1">
+                    <div class="group">
+                        <label class="block text-sm font-bold text-text-primary-light dark:text-text-primary-dark mb-2 group-focus-within:text-primary transition-colors">T├¬n Danh Mß╗Ñc <span class="text-red-500">*</span></label>
+                        <input id="cat-title" class="w-full bg-surface-light-highlight dark:bg-surface-dark-highlight border-2 border-transparent focus:border-primary rounded-xl px-4 py-3.5 text-sm outline-none transition-all shadow-inner text-text-primary-light dark:text-white font-medium placeholder-text-secondary-light/60" required placeholder="vd: Thiß║┐t Kß║┐, Phß║ºn Mß╗üm..." type="text"/>
+                    </div>
+                    <div class="grid grid-cols-2 gap-6">
+                        <div class="group">
+                            <label class="block text-sm font-bold text-text-primary-light dark:text-text-primary-dark mb-2 group-focus-within:text-primary transition-colors">M├ú Biß╗âu T╞░ß╗úng</label>
+                            <input id="cat-icon" class="w-full bg-surface-light-highlight dark:bg-surface-dark-highlight border-2 border-transparent focus:border-primary rounded-xl px-4 py-3.5 text-sm outline-none transition-all shadow-inner text-text-primary-light dark:text-white font-medium placeholder-text-secondary-light/60" placeholder="vd: code, star..." value="folder" type="text"/>
+                            <p class="text-[11px] font-bold text-primary hover:text-secondary transition-colors mt-2"><a href="https://fonts.google.com/icons" target="_blank" class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">open_in_new</span> Th╞░ Viß╗çn Biß╗âu T╞░ß╗úng</a></p>
+                        </div>
+                        <div class="group">
+                            <label class="block text-sm font-bold text-text-primary-light dark:text-text-primary-dark mb-2 group-focus-within:text-primary transition-colors">M├áu Sß║»c</label>
+                            <div class="relative custom-select-container">
+                                <button type="button" id="color-select-btn" class="w-full flex items-center justify-between text-left appearance-none bg-surface-light-highlight dark:bg-surface-dark-highlight border-2 border-transparent focus:border-primary focus:ring-[3px] focus:ring-primary/20 rounded-xl pl-4 pr-3 py-3.5 text-sm outline-none transition-all shadow-inner text-text-primary-light dark:text-white font-medium cursor-pointer relative z-10">
+                                    <div class="flex items-center gap-2" id="color-select-display">
+                                        <div class="w-4 h-4 rounded-full bg-primary"></div>
+                                        <span id="color-select-text">M├áu 1Pixel (Default)</span>
+                                    </div>
+                                    <span class="material-symbols-outlined text-[20px] text-text-secondary-light transition-transform duration-200" id="color-select-icon">expand_more</span>
+                                </button>
+                                
+                                <div id="color-select-menu" class="absolute z-[100] bottom-full left-0 w-full mb-1.5 bg-white dark:bg-surface-dark border border-primary/30 rounded-xl shadow-2xl opacity-0 invisible transform translate-y-2 transition-all duration-200 overflow-hidden origin-bottom">
+                                    <ul class="max-h-60 overflow-y-auto custom-scrollbar p-1.5 space-y-0.5 bg-surface-light-highlight/20 dark:bg-surface-dark-highlight/20 backdrop-blur-md">
+                                        <li class="custom-color-option px-3 py-2 rounded-lg text-sm font-medium text-text-primary-light dark:text-text-primary-dark hover:bg-primary/5 dark:hover:bg-primary/10 cursor-pointer flex items-center gap-2 transition-all" data-value="indigo">
+                                            <div class="w-4 h-4 rounded-full bg-primary"></div> Teal Primary (Brand)
+                                        </li>
+                                        <li class="custom-color-option px-3 py-2 rounded-lg text-sm font-medium text-text-primary-light dark:text-text-primary-dark hover:bg-secondary/5 dark:hover:bg-secondary/10 cursor-pointer flex items-center gap-2 transition-all" data-value="purple">
+                                            <div class="w-4 h-4 rounded-full bg-secondary"></div> Blue Secondary (Brand)
+                                        </li>
+                                        <li class="custom-color-option px-3 py-2 rounded-lg text-sm font-medium text-text-primary-light dark:text-text-primary-dark hover:bg-accent/5 dark:hover:bg-accent/10 cursor-pointer flex items-center gap-2 transition-all" data-value="pink">
+                                            <div class="w-4 h-4 rounded-full bg-accent"></div> Cyan Accent (Brand)
+                                        </li>
+                                        <li class="custom-color-option px-3 py-2 rounded-lg text-sm font-medium text-text-primary-light dark:text-text-primary-dark hover:bg-primary/5 dark:hover:bg-primary/10 cursor-pointer flex items-center gap-2 transition-all" data-value="emerald">
+                                            <div class="w-4 h-4 rounded-full bg-emerald-500"></div> Emerald Brand
+                                        </li>
+                                        <li class="custom-color-option px-3 py-2 rounded-lg text-sm font-medium text-text-primary-light dark:text-text-primary-dark hover:bg-secondary/5 dark:hover:bg-secondary/10 cursor-pointer flex items-center gap-2 transition-all" data-value="rose">
+                                            <div class="w-4 h-4 rounded-full bg-rose-500"></div> Rose Brand
+                                        </li>
+                                        <li class="custom-color-option px-3 py-2 rounded-lg text-sm font-medium text-text-primary-light dark:text-text-primary-dark hover:bg-primary/5 dark:hover:bg-primary/10 cursor-pointer flex items-center gap-2 transition-all" data-value="amber">
+                                            <div class="w-4 h-4 rounded-full bg-amber-500"></div> Amber Brand
+                                        </li>
+                                        <li class="custom-color-option px-3 py-2 rounded-lg text-sm font-medium text-text-primary-light dark:text-text-primary-dark hover:bg-accent/5 dark:hover:bg-accent/10 cursor-pointer flex items-center gap-2 transition-all" data-value="cyan">
+                                            <div class="w-4 h-4 rounded-full bg-cyan-500"></div> Cyan Brand
+                                        </li>
+                                        <li class="mt-1 pt-1 border-t border-indigo-500/10"></li>
+                                        <li class="custom-color-option px-3 py-2 rounded-lg text-sm font-medium text-text-primary-light dark:text-text-primary-dark hover:bg-gray-50 dark:hover:bg-gray-900/40 cursor-pointer flex items-center gap-2 transition-all relative overflow-hidden" data-value="#ec4899" id="custom-color-li">
+                                            <div class="relative flex items-center gap-2 w-full">
+                                                <input type="color" id="custom-color-picker" class="absolute opacity-0 w-full h-full cursor-pointer" style="left:0; top:0; z-index:10;" value="#ec4899" title="Chß╗ìn m├áu t├╣y chß╗ënh">
+                                                <div id="custom-color-preview" class="w-4 h-4 rounded-full border border-gray-300 pointer-events-none transition-colors" style="background-color: #ec4899;"></div>
+                                                <span class="pointer-events-none w-full flex-1">T├╣y Chß╗ënh M├áu</span>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <input type="hidden" id="cat-color" name="cat-color" value="indigo">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-surface-light-highlight/30 dark:bg-surface-dark-highlight/20 border-t border-border-light/50 dark:border-border-dark/50 px-8 py-5 flex items-center justify-end gap-3 mt-auto">
+                    <button class="px-6 py-2.5 text-sm font-bold text-text-secondary-light dark:text-text-secondary-dark hover:text-text-primary-light dark:hover:text-white transition-colors" onclick="document.getElementById('add-category-modal').classList.remove('active')" type="button">Hß╗ºy</button>
+                    <button class="bg-gradient-to-r from-primary to-secondary px-8 py-2.5 rounded-xl text-sm font-bold text-white shadow-lg shadow-primary/25 hover:shadow-primary/40 hover:-translate-y-0.5 transition-all" type="submit">L╞░u Danh Mß╗Ñc</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toast-container" class="fixed bottom-6 right-6 z-[200] flex flex-col gap-3"></div>
+
+    <script src="js/script.js"></script>
+    <style>
+        #add-modal.active, #add-category-modal.active { opacity: 1; pointer-events: auto; }
+        #add-modal.active .modal-content, #add-category-modal.active .modal-content { transform: scale(1); }
+        .action-menu.active { display: block; }
+        .toast { display: flex; align-items: center; gap: 12px; padding: 12px 20px; border-radius: 12px; background: white; border: 1px solid #e2e8f0; shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1); animation: slideIn 0.3s ease-out; }
+        .dark .toast { background: #1e293b; border-color: #334155; }
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        @keyframes fadeOut { to { opacity: 0; transform: scale(0.95); } }
+    </style>
+</body>
+</html>
